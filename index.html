@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sport Ergebnis-Rechner & Simulator</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Arial, sans-serif; 
+            text-align: center; 
+            background: #000000; 
+            color: #ffffff; 
+            padding: 20px; 
+            margin: 0;
+        }
+        .main-layout {
+            display: flex !important;
+            max-width: 950px;
+            margin: 0 auto;
+            gap: 30px;
+            align-items: flex-start;
+            text-align: left;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .content-area {
+            flex: 1 !important;
+            min-width: 320px;
+            text-align: center;
+        }
+        h1 {
+            font-size: 24px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #f5f5f7;
+            margin-bottom: 25px;
+        }
+        .box { 
+            background: #1a1a1a !important; 
+            border: 1px solid #2d2d2d !important;
+            padding: 20px; 
+            border-radius: 12px; 
+            max-width: 650px; 
+            margin: 0 auto 25px auto; 
+        }
+        .input-row { 
+            display: flex !important; 
+            justify-content: space-between !important; 
+            margin-bottom: 12px; 
+            align-items: flex-end !important; 
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .field-group {
+            display: flex !important;
+            flex-direction: column !important;
+            text-align: left;
+        }
+        .field-group label {
+            font-size: 11px;
+            color: #888;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+            font-weight: bold;
+        }
+        input[type="text"] { 
+            width: 100px; 
+            padding: 8px; 
+            background: #2b2b2b !important; 
+            color: #ffffff !important; 
+            border: 1px solid #404040 !important; 
+            border-radius: 6px;
+            font-weight: bold;
+        }
+        input[type="text"].url-input {
+            width: 200px; 
+            font-weight: normal;
+            font-size: 12px;
+        }
+        input[type="text"]:disabled { background: #1f1f1f !important; color: #777777 !important; border: 1px solid #2a2a2a !important; }
+        input[type="number"] { 
+            width: 55px; 
+            padding: 8px; 
+            background: #2b2b2b !important; 
+            color: #ffffff !important; 
+            border: 1px solid #404040 !important; 
+            border-radius: 6px; 
+            font-weight: bold;
+            text-align: center;
+        }
+        input[type="color"] { width: 45px; height: 34px; border: 1px solid #404040 !important; border-radius: 6px; cursor: pointer; background: transparent; }
+
+        #spin-btn { 
+            width: 100%; 
+            padding: 16px; 
+            margin-top: 15px; 
+            font-weight: bold; 
+            font-size: 16px; 
+            cursor: pointer; 
+            border-radius: 8px; 
+            border: none; 
+            background: #2f855a !important; 
+            color: white !important; 
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        #spin-btn:hover { background: #276749 !important; }
+        #spin-btn:disabled { background: #4a5568 !important; cursor: not-allowed; opacity: 0.5; }
+
+        #error { color: #f56565; font-weight: bold; margin-bottom: 15px; display: none; font-size: 14px; text-align: center; }
+
+        .dashboard {
+            max-width: 460px;
+            margin: 20px auto;
+            background: #1a1a1a !important;
+            border: 1px solid #2d2d2d !important;
+            border-radius: 12px;
+            padding: 15px;
+            display: flex !important;
+            justify-content: space-around !important;
+        }
+        .dash-item { text-align: center; flex: 1; padding: 5px; }
+        .dash-item:not(:last-child) { border-right: 1px solid #2d2d2d !important; }
+        .dash-name { font-size: 12px; color: #a0aec0; text-transform: uppercase; margin-bottom: 4px; font-weight: 600; }
+        .dash-pct { font-size: 22px; font-weight: bold; }
+
+        .scoreboard-bundesliga {
+            max-width: 460px;
+            height: 200px;
+            margin: 25px auto;
+            background: #000000;
+            border: 4px solid #b8860b !important; 
+            box-shadow: 0 0 15px rgba(184, 134, 11, 0.4);
+            display: flex !important;
+            flex-direction: row !important;
+            overflow: hidden;
+        }
+        .team-block {
+            flex: 1 !important;
+            width: 150px !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            justify-content: flex-start !important;
+            padding: 15px 5px !important;
+            box-sizing: border-box !important;
+        }
+        #block-home { background-color: #00a37e; }
+        #block-away { background-color: #facc15; }
+
+        .team-name {
+            font-size: 38px !important;
+            font-weight: 900 !important;
+            color: #ffffff;
+            letter-spacing: 1px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+            font-family: Arial, sans-serif;
+        }
+        #block-away .team-name { color: #000000 !important; text-shadow: none !important; }
+
+        .logo-wrapper {
+            width: 90px;
+            height: 90px;
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .logo-wrapper img { max-width: 100%; max-height: 100%; object-fit: contain; }
+
+        .center-block {
+            width: 160px !important;
+            background: #ffffff !important; 
+            display: flex !important;
+            flex-direction: column !important;
+            box-sizing: border-box !important;
+            border-left: 2px solid #000 !important;
+            border-right: 2px solid #000 !important;
+        }
+        .score-row {
+            height: 100px !important;
+            line-height: 100px !important;
+            font-size: 55px !important;
+            font-weight: 900 !important;
+            color: #000000 !important;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #ffffff 0%, #e0e0e0 100%) !important;
+            border-bottom: 2px solid #666 !important;
+            text-align: center;
+        }
+        .time-row {
+            flex: 1 !important;
+            line-height: 95px !important;
+            font-size: 48px !important;
+            font-weight: bold !important;
+            color: #000000 !important;
+            background: #cccccc !important; 
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        .sidebar-slots {
+            width: 200px;
+            background: #141414;
+            border: 1px solid #2d2d2d;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            margin: 0 auto;
+        }
+        .sidebar-slots h2 {
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 0;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #2d2d2d;
+            padding-bottom: 8px;
+            color: #a0aec0;
+            text-align: center;
+        }
+        .slot-buttons { display: flex; flex-direction: column; gap: 10px; }
+        .slot-btn {
+            width: 100%;
+            padding: 12px;
+            background: #222222;
+            color: #fff;
+            border: 1px solid #3a3a3a;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: center;
+        }
+        .slot-btn:hover { background: #333333; border-color: #555; }
+        .slot-btn.active { background: #2b6cb0 !important; border-color: #4299e1 !important; }
+        .slot-info { margin-top: 15px; font-size: 12px; color: #718096; font-weight: bold; text-align: center; }
+    </style>
+</head>
+<body>
+
+<div class="main-layout">
+    <div class="content-area">
+        <h1>Sport Ergebnis-Rechner & Simulator</h1>
+        <div class="box">
+            <div id="error">⚠️ Die Prozentwerte müssen zusammen genau 100% ergeben!</div>
+            <div class="input-row">
+                <div class="field-group"><label>Heim-Name</label><input type="text" id="name1" value="SVW"></div>
+                <div class="field-group"><label>Logo-Link (URL)</label><input type="text" id="logo-url-home" class="url-input" value="https://wikimedia.org"></div>
+                <div class="field-group"><label>Chance</label><span><input type="number" id="pct1" value="64"> %</span></div>
+                <div class="field-group"><label>Farbe</label><input type="color" id="col1" value="#00a37e"></div>
+            </div>
+            <div class="input-row">
+                <div class="field-group"><label>Remis</label><input type="text" id="name2" value="Unentschieden" disabled></div>
+                <div class="field-group" style="visibility: hidden;"><input type="text" class="url-input"></div>
+                <div class="field-group"><label>Chance</label><span><input type="number" id="pct2" value="16"> %</span></div>
+                <div class="field-group"><label>Farbe</label><input type="color" id="col2" value="#718096"></div>
+            </div>
+            <div class="input-row">
+                <div class="field-group"><label>Gast-Name</label><input type="text" id="name3" value="BVB"></div>
