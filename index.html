@@ -1,65 +1,274 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sport Ergebnis-Rechner & Simulator</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Arial, sans-serif; 
+            text-align: center; 
+            background: #000000; 
+            color: #ffffff; 
+            padding: 20px; 
+            margin: 0;
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 24px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #f5f5f7;
+            margin-bottom: 25px;
+        }
+        .box { 
+            background: #1a1a1a; 
+            border: 1px solid #2d2d2d;
+            padding: 20px; 
+            border-radius: 12px; 
+            margin-bottom: 25px; 
+        }
+        .input-row { 
+            display: flex; 
+            justify-content: space-between; 
+            margin-bottom: 12px; 
+            align-items: flex-end; 
+            gap: 15px;
+        }
+        .field-group {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+        .field-group label {
+            font-size: 11px;
+            color: #888;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+            font-weight: bold;
+        }
+        input[type="text"] { 
+            width: 140px; 
+            padding: 8px; 
+            background: #2b2b2b; 
+            color: #ffffff; 
+            border: 1px solid #404040; 
+            border-radius: 6px;
+            font-weight: bold;
+        }
+        input[type="text"]:disabled { background: #1f1f1f; color: #777777; border: 1px solid #2a2a2a; }
+        input[type="number"] { 
+            width: 65px; 
+            padding: 8px; 
+            background: #2b2b2b; 
+            color: #ffffff; 
+            border: 1px solid #404040; 
+            border-radius: 6px; 
+            font-weight: bold;
+            text-align: center;
+        }
+        input[type="color"] { width: 45px; height: 34px; border: 1px solid #404040; border-radius: 6px; cursor: pointer; background: transparent; padding: 0; }
 
-<!DOCTYPE html><html lang="de"><head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Profi Sport Simulator</title>
-<style>
-body{margin:0;background:#0b0b0b;color:#fff;font-family:Segoe UI,sans-serif}
-.wrap{max-width:760px;margin:30px auto;padding:20px}
-.card{background:#181818;border:1px solid #333;border-radius:14px;padding:18px;margin-bottom:20px}
-.row{display:flex;gap:12px;flex-wrap:wrap;align-items:end}
-.field{display:flex;flex-direction:column}.field label{font-size:12px;color:#aaa}
-input{padding:8px;border-radius:8px;border:1px solid #444;background:#222;color:#fff}
-input[type=color]{padding:0;width:50px;height:40px}
-button{padding:12px 18px;border:0;border-radius:8px;font-weight:bold;cursor:pointer}
-#sim{background:#1f9d55;color:#fff}#reset{background:#444;color:#fff}
-.board{display:flex;height:170px;border:4px solid #b8860b}
-.team{flex:1;display:flex;align-items:center;justify-content:center;font-size:42px;font-weight:900}
-.mid{width:190px;background:#fff;color:#000;text-align:center}
-.score{font-size:54px;padding:25px 0;border-bottom:2px solid #888}.time{padding:20px;font-size:34px;background:#ddd}
-#ticker{text-align:center;color:#bbb;margin-top:12px;font-weight:bold}
-</style></head><body><div class=wrap>
-<div class=card>
-<div class=row>
-<div class=field><label>Heim</label><input id=h value="FCB"></div>
-<div class=field><label>%</label><input id=hp type=number value=60></div>
-<div class=field><label>Farbe</label><input id=hc type=color value="#cc0000"></div>
+        .btn-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        #spin-btn { 
+            flex: 3;
+            padding: 16px; 
+            font-weight: bold; 
+            font-size: 16px; 
+            cursor: pointer; 
+            border-radius: 8px; 
+            border: none; 
+            background: #2f855a; 
+            color: white; 
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        #spin-btn:hover { background: #276749; }
+        #spin-btn:disabled { background: #4a5568; cursor: not-allowed; opacity: 0.6; }
+
+        #reset-btn {
+            flex: 1;
+            padding: 16px;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 8px;
+            border: 1px solid #404040;
+            background: #2b2b2b;
+            color: #ef4444;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        #reset-btn:hover { background: #3f3f46; border-color: #ef4444; }
+
+        #error { color: #f56565; font-weight: bold; margin-bottom: 15px; display: none; font-size: 14px; text-align: center; }
+
+        .dashboard {
+            background: #1a1a1a;
+            border: 1px solid #2d2d2d;
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+        .dash-item { text-align: center; flex: 1; padding: 5px; }
+        .dash-item:not(:last-child) { border-right: 1px solid #2d2d2d; }
+        .dash-name { font-size: 12px; color: #a0aec0; text-transform: uppercase; margin-bottom: 4px; font-weight: 600; }
+        .dash-pct { font-size: 22px; font-weight: bold; }
+
+        .scoreboard-bundesliga {
+            height: 150px;
+            background: #000000;
+            border: 4px solid #b8860b; 
+            box-shadow: 0 0 15px rgba(184, 134, 11, 0.4);
+            display: flex;
+            flex-direction: row;
+            overflow: hidden;
+        }
+        .team-block {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        #block-home { background-color: #dd0000; }
+        #block-away { background-color: #1a1a1a; }
+
+        .team-name {
+            font-size: 42px;
+            font-weight: 900;
+            color: #ffffff;
+            letter-spacing: 1px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+            font-family: Arial, sans-serif;
+        }
+
+        .center-block {
+            width: 160px;
+            background: #ffffff; 
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+            border-left: 2px solid #000;
+            border-right: 2px solid #000;
+        }
+        .score-row {
+            height: 80px;
+            line-height: 80px;
+            font-size: 50px;
+            font-weight: 900;
+            color: #000000;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #ffffff 0%, #e0e0e0 100%);
+            border-bottom: 2px solid #666;
+            text-align: center;
+        }
+        .time-row {
+            flex: 1;
+            line-height: 65px;
+            font-size: 36px;
+            font-weight: bold;
+            color: #000000;
+            background: #cccccc; 
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Sport Ergebnis-Rechner & Simulator</h1>
+    
+    <div class="box">
+        <div id="error">Die Prozentwerte müssen genau 100 ergeben.</div>
+        <div class="input-row">
+            <div class="field-group"><label>Heim-Name</label><input type="text" id="name1" value="FCB"></div>
+            <div class="field-group"><label>Chance</label><span><input type="number" id="pct1" value="68"> %</span></div>
+            <div class="field-group"><label>Farbe</label><input type="color" id="col1" value="#dd0000"></div>
+        </div>
+        <div class="input-row">
+            <div class="field-group"><label>Remis</label><input type="text" value="Unentschieden" disabled></div>
+            <div class="field-group"><label>Chance</label><span><input type="number" id="pct2" value="20"> %</span></div>
+            <div class="field-group"><label>Farbe</label><input type="color" id="col2" value="#718096"></div>
+        </div>
+        <div class="input-row">
+            <div class="field-group"><label>Gast-Name</label><input type="text" id="name3" value="SGE"></div>
+            <div class="field-group"><label>Chance</label><span><input type="number" id="pct3" value="12"> %</span></div>
+            <div class="field-group"><label>Farbe</label><input type="color" id="col3" value="#1a1a1a"></div>
+        </div>
+        
+        <div class="btn-container">
+            <button id="spin-btn" onclick="simulate()">Spiel simulieren</button>
+            <button id="reset-btn" onclick="resetResult()">Reset</button>
+        </div>
+    </div>
+
+    <div class="dashboard">
+        <div class="dash-item"><div class="dash-name">Heim</div><div class="dash-pct" id="dash-val1">68%</div></div>
+        <div class="dash-item"><div class="dash-name">Remis</div><div class="dash-pct" id="dash-val2">20%</div></div>
+        <div class="dash-item"><div class="dash-name">Gast</div><div class="dash-pct" id="dash-val3">12%</div></div>
+    </div>
+
+    <div class="scoreboard-bundesliga">
+        <div class="team-block" id="block-home"><div class="team-name" id="display-name-home">FCB</div></div>
+        <div class="center-block">
+            <div class="score-row" id="result-score">? - ?</div>
+            <div class="time-row" id="result-time">90:00</div>
+        </div>
+        <div class="team-block" id="block-away"><div class="team-name" id="display-name-away">SGE</div></div>
+    </div>
+    
+    <div id="result-ticker" style="margin-top: 15px; font-weight: bold; font-size: 16px; color: #aaa;">Bereit</div>
 </div>
-<div class=row>
-<div class=field><label>Remis %</label><input id=dp type=number value=20></div>
-</div>
-<div class=row>
-<div class=field><label>Gast</label><input id=a value="SGE"></div>
-<div class=field><label>%</label><input id=ap type=number value=20></div>
-<div class=field><label>Farbe</label><input id=ac type=color value="#222222"></div>
-</div>
-<p id=err style="color:#ff6666"></p>
-<button id=sim onclick=simulate()>Spiel simulieren</button>
-<button id=reset onclick=resetResult()>Reset Ergebnis</button>
-</div>
-<div class="board">
-<div class=team id=homeBox>FCB</div>
-<div class=mid><div class=score id=sc>? - ?</div><div class=time>90:00</div></div>
-<div class=team id=awayBox>SGE</div>
-</div>
-<div id=ticker>Bereit</div>
-</div>
+
 <script>
-const H=["1:0","2:0","2:1","3:1","3:0","4:2"],D=["0:0","1:1","2:2"],A=["0:1","0:2","1:2","1:3","0:3"];
-function update(){
-homeBox.textContent=h.value||"Heim";awayBox.textContent=a.value||"Gast";
-homeBox.style.background=hc.value;awayBox.style.background=ac.value;
-}
-["h","a","hc","ac"].forEach(id=>document.getElementById(id).addEventListener("input",update));
-update();
-function simulate(){
-let x=+hp.value,y=+dp.value,z=+ap.value;
-if(x+y+z!==100){err.textContent="Die Prozentwerte müssen genau 100 ergeben.";return;}
-err.textContent="";update();ticker.textContent="Simulation läuft...";
-let n=0;let iv=setInterval(()=>{sc.textContent=Math.floor(Math.random()*5)+" - "+Math.floor(Math.random()*5);
-if(++n>18){clearInterval(iv);let r=Math.random()*100,res;
-if(r<x)res=H[Math.floor(Math.random()*H.length)];
-else if(r<x+y)res=D[Math.floor(Math.random()*D.length)];
-else res=A[Math.floor(Math.random()*A.length)];
-sc.textContent=res.replace(":"," - ");ticker.textContent="Simulation beendet.";}},90)}
-function resetResult(){sc.textContent="? - ?";ticker.textContent="Bereit";}
-</script></body></html>
+    const sc = document.getElementById('result-score');
+    const ticker = document.getElementById('result-ticker');
+    const err = document.getElementById('error');
+    const spinBtn = document.getElementById('spin-btn');
+    
+    const hp = document.getElementById('pct1');
+    const dp = document.getElementById('pct2');
+    const ap = document.getElementById('pct3');
+
+    const H = ["1:0", "2:0", "2:1", "3:0", "3:1", "3:2", "4:0"];
+    const D = ["0:0", "1:1", "2:2"];
+    const A = ["0:1", "0:2", "1:2", "0:3", "1:3", "2:3", "0:4"];
+
+    function update() {
+        const p1 = parseInt(hp.value) || 0;
+        const p2 = parseInt(dp.value) || 0;
+        const p3 = parseInt(ap.value) || 0;
+
+        if ((p1 + p2 + p3) !== 100) {
+            err.style.display = 'block';
+            spinBtn.disabled = true;
+            return;
+        } else {
+            err.style.display = 'none';
+            spinBtn.disabled = false;
+        }
+
+        const n1 = document.getElementById('name1').value || "Heim";
+        const n3 = document.getElementById('name3').value || "Gast";
+        const c1 = document.getElementById('col1').value;
+        const c3 = document.getElementById('col3').value;
+
+        document.getElementById('display-name-home').innerText = n1;
+        document.getElementById('display-name-away').innerText = n3;
+        document.getElementById('block-home').style.backgroundColor = c1;
+        document.getElementById('block-away').style.backgroundColor = c3;
+
+        document.getElementById('dash-val1').innerText = p1 + "%";
