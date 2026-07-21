@@ -91,6 +91,7 @@
             letter-spacing: 1px;
         }
         #spin-btn:hover { background: #276749 !important; }
+        #spin-btn:disabled { background: #4a5568 !important; cursor: not-allowed; opacity: 0.6; }
 
         #reset-btn {
             flex: 1 !important;
@@ -193,24 +194,24 @@
     <div class="box">
         <div id="error">⚠️ Die Prozentwerte müssen zusammen genau 100% ergeben!</div>
         <div class="input-row">
-            <div class="field-group"><label>Heim-Name</label><input type="text" id="name1" value="FCB" oninput="liveUpdate()"></div>
-            <div class="field-group"><label>Chance</label><span><input type="number" id="pct1" value="68" oninput="liveUpdate()"> %</span></div>
-            <div class="field-group"><label>Farbe</label><input type="color" id="col1" value="#dd0000" onchange="liveUpdate()"></div>
+            <div class="field-group"><label>Heim-Name</label><input type="text" id="name1" value="FCB"></div>
+            <div class="field-group"><label>Chance</label><span><input type="number" id="pct1" value="68"> %</span></div>
+            <div class="field-group"><label>Farbe</label><input type="color" id="col1" value="#dd0000"></div>
         </div>
         <div class="input-row">
             <div class="field-group"><label>Remis</label><input type="text" value="Unentschieden" disabled></div>
-            <div class="field-group"><label>Chance</label><span><input type="number" id="pct2" value="20" oninput="liveUpdate()"> %</span></div>
-            <div class="field-group"><label>Farbe</label><input type="color" id="col2" value="#718096" onchange="liveUpdate()"></div>
+            <div class="field-group"><label>Chance</label><span><input type="number" id="pct2" value="20"> %</span></div>
+            <div class="field-group"><label>Farbe</label><input type="color" id="col2" value="#718096"></div>
         </div>
         <div class="input-row">
-            <div class="field-group"><label>Gast-Name</label><input type="text" id="name3" value="SGE" oninput="liveUpdate()"></div>
-            <div class="field-group"><label>Chance</label><span><input type="number" id="pct3" value="12" oninput="liveUpdate()"> %</span></div>
-            <div class="field-group"><label>Farbe</label><input type="color" id="col3" value="#1a1a1a" onchange="liveUpdate()"></div>
+            <div class="field-group"><label>Gast-Name</label><input type="text" id="name3" value="SGE"></div>
+            <div class="field-group"><label>Chance</label><span><input type="number" id="pct3" value="12"> %</span></div>
+            <div class="field-group"><label>Farbe</label><input type="color" id="col3" value="#1a1a1a"></div>
         </div>
         
         <div class="btn-container">
-            <button id="spin-btn" onclick="simulieren()">Spiel simulieren</button>
-            <button id="reset-btn" onclick="resetErgebnisNur()">Reset</button>
+            <button id="spin-btn">Spiel simulieren</button>
+            <button id="reset-btn">Reset</button>
         </div>
     </div>
 
@@ -233,17 +234,22 @@
 </div>
 
 <script>
+    // Hochprofessionelle, fehlerisolierte Steuerzentrale
     const torePoolHeim = ["1:0", "2:0", "2:1", "3:0", "3:1", "3:2", "4:0"];
     const torePoolRemis = ["0:0", "1:1", "2:2"];
     const torePoolGast = ["0:1", "0:2", "1:2", "0:3", "1:3", "2:3", "0:4"];
     let tickerInterval = null;
+    let isRunning = false;
 
-    function liveUpdate() {
+    function liveUpdateDashboard() {
+        const spinBtn = document.getElementById('spin-btn');
+        const errorDiv = document.getElementById('error');
+        
         const p1 = parseInt(document.getElementById('pct1').value) || 0;
         const p2 = parseInt(document.getElementById('pct2').value) || 0;
         const p3 = parseInt(document.getElementById('pct3').value) || 0;
-        const errorDiv = document.getElementById('error');
-        const spinBtn = document.getElementById('spin-btn');
 
         if ((p1 + p2 + p3) !== 100) {
             errorDiv.style.display = 'block';
+            spinBtn.disabled = true;
+            return;
