@@ -176,12 +176,19 @@
         .time-row {
             flex: 1;
             line-height: 65px;
-            font-size: 36px;
+            font-size: 34px;
             font-weight: bold;
             color: #000000;
             background: #cccccc; 
             font-family: Arial, sans-serif;
             text-align: center;
+        }
+        .status-bar {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #a0aec0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
     </style>
 </head>
@@ -193,19 +200,19 @@
     <div class="box">
         <div id="error">Die Prozentwerte müssen genau 100 ergeben.</div>
         <div class="input-row">
-            <div class="field-group"><label>Heim-Name</label><input type="text" id="name1" value="FCB" oninput="updateLiveView()"></div>
-            <div class="field-group"><label>Chance</label><span><input type="number" id="pct1" value="68" oninput="updateLiveView()"> %</span></div>
-            <div class="field-group"><label>Farbe</label><input type="color" id="col1" value="#dd0000" oninput="updateLiveView()"></div>
+            <div class="field-group"><label>Heim-Name</label><input type="text" id="name1" value="FCB"></div>
+            <div class="field-group"><label>Chance</label><span><input type="number" id="pct1" value="64"> %</span></div>
+            <div class="field-group"><label>Farbe</label><input type="color" id="col1" value="#dd0000"></div>
         </div>
         <div class="input-row">
             <div class="field-group"><label>Remis</label><input type="text" value="Unentschieden" disabled></div>
-            <div class="field-group"><label>Chance</label><span><input type="number" id="pct2" value="20" oninput="updateLiveView()"> %</span></div>
-            <div class="field-group"><label>Farbe</label><input type="color" id="col2" value="#718096" oninput="updateLiveView()"></div>
+            <div class="field-group"><label>Chance</label><span><input type="number" id="pct2" value="24"> %</span></div>
+            <div class="field-group"><label>Farbe</label><input type="color" id="col2" value="#718096"></div>
         </div>
         <div class="input-row">
-            <div class="field-group"><label>Gast-Name</label><input type="text" id="name3" value="SGE" oninput="updateLiveView()"></div>
-            <div class="field-group"><label>Chance</label><span><input type="number" id="pct3" value="12" oninput="updateLiveView()"> %</span></div>
-            <div class="field-group"><label>Farbe</label><input type="color" id="col3" value="#1a1a1a" oninput="updateLiveView()"></div>
+            <div class="field-group"><label>Gast-Name</label><input type="text" id="name3" value="SGE"></div>
+            <div class="field-group"><label>Chance</label><span><input type="number" id="pct3" value="12"> %</span></div>
+            <div class="field-group"><label>Farbe</label><input type="color" id="col3" value="#1a1a1a"></div>
         </div>
         
         <div class="btn-container">
@@ -215,8 +222,8 @@
     </div>
 
     <div class="dashboard">
-        <div class="dash-item"><div class="dash-name">Heim</div><div class="dash-pct" id="dash-val1">68%</div></div>
-        <div class="dash-item"><div class="dash-name">Remis</div><div class="dash-pct" id="dash-val2">20%</div></div>
+        <div class="dash-item"><div class="dash-name">Heim</div><div class="dash-pct" id="dash-val1">64%</div></div>
+        <div class="dash-item"><div class="dash-name">Remis</div><div class="dash-pct" id="dash-val2">24%</div></div>
         <div class="dash-item"><div class="dash-name">Gast</div><div class="dash-pct" id="dash-val3">12%</div></div>
     </div>
 
@@ -224,14 +231,15 @@
         <div class="team-block" id="block-home"><div class="team-name" id="display-name-home">FCB</div></div>
         <div class="center-block">
             <div class="score-row" id="result-score">? - ?</div>
-            <div class="time-row" id="display-time">90'</div>
+            <div class="time-row" id="display-time">90:00</div>
         </div>
         <div class="team-block" id="block-away"><div class="team-name" id="display-name-away">SGE</div></div>
     </div>
+    
+    <div class="status-bar" id="status-text">Bereit</div>
 </div>
 
 <script>
-    // Live-Vorschau der Namen, Prozentanzeigen und Farben beim Tippen/Ändern
     function updateLiveView() {
         const nameHome = document.getElementById('name1').value;
         const nameAway = document.getElementById('name3').value;
@@ -243,7 +251,6 @@
         const colHome = document.getElementById('col1').value;
         const colAway = document.getElementById('col3').value;
 
-        // Anzeigetexte aktualisieren
         document.getElementById('display-name-home').innerText = nameHome;
         document.getElementById('display-name-away').innerText = nameAway;
         
@@ -251,13 +258,18 @@
         document.getElementById('dash-val2').innerText = pct2 + '%';
         document.getElementById('dash-val3').innerText = pct3 + '%';
 
-        // Farben der Anzeigeblöcke aktualisieren
         document.getElementById('block-home').style.backgroundColor = colHome;
         document.getElementById('block-away').style.backgroundColor = colAway;
 
-        // Fehlermeldung live ausblenden, falls Eingabe währenddessen korrigiert wird
         if (pct1 + pct2 + pct3 === 100) {
             document.getElementById('error').style.display = 'none';
         }
     }
 
+    function getRandomGoals() {
+        const rand = Math.random();
+        if (rand < 0.25) return 0;
+        if (rand < 0.55) return 1;
+        if (rand < 0.80) return 2;
+        if (rand < 0.93) return 3;
+        return Math.floor(Math.random() * 3) + 4;
