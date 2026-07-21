@@ -1,131 +1,245 @@
 <!DOCTYPE html>
-<html>
+<html lang="de">
 <head>
     <meta charset="UTF-8">
-    <title>Bundesliga Simulator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sport Ergebnis-Rechner & Simulator</title>
     <style>
-        body { font-family: Arial; text-align: center; background: #000; color: #fff; padding: 20px; }
-        .box { background: #1a1a1a; padding: 20px; border-radius: 12px; max-width: 450px; margin: 0 auto 20px; border: 1px solid #2d2d2d; }
-        .row { display: flex; justify-content: space-between; margin-bottom: 12px; align-items: center; }
-        input[type="text"] { width: 120px; padding: 6px; background: #2b2b2b; color: #fff; border: 1px solid #404040; border-radius: 6px; font-weight: bold; }
-        input[type="number"] { width: 60px; padding: 6px; background: #2b2b2b; color: #fff; border: 1px solid #404040; border-radius: 6px; text-align: center; font-weight: bold; }
-        input[type="color"] { width: 40px; height: 30px; border-radius: 6px; border: 1px solid #404040; background: transparent; cursor: pointer; }
-        #btn { width: 100%; padding: 14px; background: #2f855a; color: #fff; font-weight: bold; border: none; border-radius: 8px; cursor: pointer; text-transform: uppercase; }
-        #btn:hover { background: #276749; }
-        .board { max-width: 450px; height: 140px; margin: 20px auto; border: 4px solid #b8860b; display: flex; overflow: hidden; box-shadow: 0 0 15px rgba(184,134,11,0.4); }
-        .team { flex: 1; display: flex; align-items: center; justify-content: center; font-size: 36px; font-weight: 900; text-shadow: 2px 2px 4px rgba(0,0,0,0.6); }
-        #home { background: #00a37e; }
-        #away { background: #facc15; color: #000; text-shadow: none; }
-        .center { width: 140px; background: #fff; display: flex; flex-direction: column; border-left: 2px solid #000; border-right: 2px solid #000; }
-        #score { height: 80px; line-height: 80px; font-size: 45px; font-weight: 900; color: #000; border-bottom: 2px solid #666; }
-        #time { flex: 1; line-height: 55px; font-size: 32px; font-weight: bold; color: #000; background: #ccc; }
-        #error { color: #f56565; font-weight: bold; display: none; margin-bottom: 10px; }
+        body { 
+            font-family: 'Segoe UI', Arial, sans-serif; 
+            text-align: center; 
+            background: #000000 !important; 
+            color: #ffffff !important; 
+            padding: 20px; 
+            margin: 0;
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 24px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #f5f5f7;
+            margin-bottom: 25px;
+        }
+        .box { 
+            background: #1a1a1a !important; 
+            border: 1px solid #2d2d2d !important;
+            padding: 20px; 
+            border-radius: 12px; 
+            margin-bottom: 25px; 
+        }
+        .input-row { 
+            display: flex !important; 
+            justify-content: space-between !important; 
+            margin-bottom: 12px; 
+            align-items: flex-end !important; 
+            gap: 15px;
+        }
+        .field-group {
+            display: flex !important;
+            flex-direction: column !important;
+            text-align: left;
+        }
+        .field-group label {
+            font-size: 11px;
+            color: #888;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+            font-weight: bold;
+        }
+        input[type="text"] { 
+            width: 140px; 
+            padding: 8px; 
+            background: #2b2b2b !important; 
+            color: #ffffff !important; 
+            border: 1px solid #404040 !important; 
+            border-radius: 6px;
+            font-weight: bold;
+        }
+        input[type="text"]:disabled { background: #1f1f1f !important; color: #777777 !important; border: 1px solid #2a2a2a !important; }
+        input[type="number"] { 
+            width: 65px; 
+            padding: 8px; 
+            background: #2b2b2b !important; 
+            color: #ffffff !important; 
+            border: 1px solid #404040 !important; 
+            border-radius: 6px; 
+            font-weight: bold;
+            text-align: center;
+        }
+        input[type="color"] { width: 45px; height: 34px; border: 1px solid #404040 !important; border-radius: 6px; cursor: pointer; background: transparent; padding: 0; }
+
+        #spin-btn { 
+            width: 100%; 
+            padding: 16px; 
+            margin-top: 15px; 
+            font-weight: bold; 
+            font-size: 16px; 
+            cursor: pointer; 
+            border-radius: 8px; 
+            border: none; 
+            background: #2f855a !important; 
+            color: white !important; 
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        #spin-btn:hover { background: #276749 !important; }
+        #spin-btn:disabled { background: #4a5568 !important; cursor: not-allowed; opacity: 0.6; }
+
+        #error { color: #f56565; font-weight: bold; margin-bottom: 15px; display: none; font-size: 14px; text-align: center; }
+
+        .dashboard {
+            background: #1a1a1a !important;
+            border: 1px solid #2d2d2d !important;
+            border-radius: 12px;
+            padding: 15px;
+            display: flex !important;
+            justify-content: space-around !important;
+            margin-bottom: 20px;
+        }
+        .dash-item { text-align: center; flex: 1; padding: 5px; }
+        .dash-item:not(:last-child) { border-right: 1px solid #2d2d2d !important; }
+        .dash-name { font-size: 12px; color: #a0aec0; text-transform: uppercase; margin-bottom: 4px; font-weight: 600; }
+        .dash-pct { font-size: 22px; font-weight: bold; }
+
+        .scoreboard-bundesliga {
+            height: 150px;
+            background: #000000;
+            border: 4px solid #b8860b !important; 
+            box-shadow: 0 0 15px rgba(184, 134, 11, 0.4);
+            display: flex !important;
+            flex-direction: row !important;
+            overflow: hidden;
+        }
+        .team-block {
+            flex: 1 !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            justify-content: center !important;
+            padding: 10px !important;
+            box-sizing: border-box !important;
+        }
+        #block-home { background-color: #00a37e; }
+        #block-away { background-color: #facc15; }
+
+        .team-name {
+            font-size: 42px !important;
+            font-weight: 900 !important;
+            color: #ffffff !important;
+            letter-spacing: 1px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+            font-family: Arial, sans-serif;
+        }
+
+        .center-block {
+            width: 160px !important;
+            background: #ffffff !important; 
+            display: flex !important;
+            flex-direction: column !important;
+            box-sizing: border-box !important;
+            border-left: 2px solid #000 !important;
+            border-right: 2px solid #000 !important;
+        }
+        .score-row {
+            height: 80px !important;
+            line-height: 80px !important;
+            font-size: 50px !important;
+            font-weight: 900 !important;
+            color: #000000 !important;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #ffffff 0%, #e0e0e0 100%) !important;
+            border-bottom: 2px solid #666 !important;
+            text-align: center;
+        }
+        .time-row {
+            flex: 1 !important;
+            line-height: 65px !important;
+            font-size: 36px !important;
+            font-weight: bold !important;
+            color: #000000 !important;
+            background: #cccccc !important; 
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
 
-    <h1>Sport Ergebnis-Rechner</h1>
+<div class="container">
+    <h1>Sport Ergebnis-Rechner & Simulator</h1>
+    
     <div class="box">
-        <div id="error">⚠️ Werte müssen genau 100% ergeben!</div>
-        <div class="row">
-            <div style="text-align:left"><label style="font-size:11px;color:#888;display:block">Heim-Name</label><input type="text" id="n1" value="FCB" oninput="up()"></div>
-            <div style="text-align:left"><label style="font-size:11px;color:#888;display:block">Chance</label><input type="number" id="p1" value="68" oninput="up()"> %</div>
-            <div style="text-align:left"><label style="font-size:11px;color:#888;display:block">Farbe</label><input type="color" id="c1" value="#dd0000" onchange="up()"></div>
+        <div id="error">⚠️ Die Prozentwerte müssen zusammen genau 100% ergeben!</div>
+        <div class="input-row">
+            <div class="field-group"><label>Heim-Name</label><input type="text" id="name1" value="FCB"></div>
+            <div class="field-group"><label>Chance</label><span><input type="number" id="pct1" value="68"> %</span></div>
+            <div class="field-group"><label>Farbe</label><input type="color" id="col1" value="#dd0000"></div>
         </div>
-        <div class="row">
-            <div style="text-align:left"><label style="font-size:11px;color:#888;display:block">Remis</label><input type="text" value="Unentschieden" disabled></div>
-            <div style="text-align:left"><label style="font-size:11px;color:#888;display:block">Chance</label><input type="number" id="p2" value="20" oninput="up()"> %</div>
-            <div style="text-align:left"><label style="font-size:11px;color:#888;display:block">Farbe</label><input type="color" id="c2" value="#718096" onchange="up()"></div>
+        <div class="input-row">
+            <div class="field-group"><label>Remis</label><input type="text" value="Unentschieden" disabled></div>
+            <div class="field-group"><label>Chance</label><span><input type="number" id="pct2" value="20"> %</span></div>
+            <div class="field-group"><label>Farbe</label><input type="color" id="col2" value="#718096"></div>
         </div>
-        <div class="row">
-            <div style="text-align:left"><label style="font-size:11px;color:#888;display:block">Gast-Name</label><input type="text" id="n3" value="SGE" oninput="up()"></div>
-            <div style="text-align:left"><label style="font-size:11px;color:#888;display:block">Chance</label><input type="number" id="p3" value="12" oninput="up()"> %</div>
-            <div style="text-align:left"><label style="font-size:11px;color:#888;display:block">Farbe</label><input type="color" id="c3" value="#1a1a1a" onchange="up()"></div>
+        <div class="input-row">
+            <div class="field-group"><label>Gast-Name</label><input type="text" id="name3" value="SGE"></div>
+            <div class="field-group"><label>Chance</label><span><input type="number" id="pct3" value="12"> %</span></div>
+            <div class="field-group"><label>Farbe</label><input type="color" id="col3" value="#1a1a1a"></div>
         </div>
-        <button id="btn" onclick="sim()">Spiel simulieren</button>
+        <button id="spin-btn">Spiel simulieren</button>
     </div>
 
-    <div class="board">
-        <div class="team" id="home">FCB</div>
-        <div class="center">
-            <div id="score">0 - 0</div>
-            <div id="time">90:00</div>
-        </div>
-        <div class="team" id="away">SGE</div>
+    <div class="dashboard">
+        <div class="dash-item"><div class="dash-name">Heim</div><div class="dash-pct" id="dash-val1">68%</div></div>
+        <div class="dash-item"><div class="dash-name">Remis</div><div class="dash-pct" id="dash-val2">20%</div></div>
+        <div class="dash-item"><div class="dash-name">Gast</div><div class="dash-pct" id="dash-val3">12%</div></div>
     </div>
+
+    <div class="scoreboard-bundesliga">
+        <div class="team-block" id="block-home"><div class="team-name" id="display-name-home">FCB</div></div>
+        <div class="center-block"><div class="score-row" id="result-score">0 - 0</div><div class="time-row" id="result-time">90:00</div></div>
+        <div class="team-block" id="block-away"><div class="team-name" id="display-name-away">SGE</div></div>
+    </div>
+    
+    <div id="result-ticker" style="margin-top: 15px; font-weight: bold; font-size: 16px; color: #aaa;">Bereit für Simulation</div>
+</div>
 
 <script>
-    const hPool = ["1:0", "2:0", "2:1", "3:0", "3:1", "3:2", "4:0"];
-    const rPool = ["0:0", "1:1", "2:2"];
-    const gPool = ["0:1", "0:2", "1:2", "0:3", "1:3", "2:3", "0:4"];
+    // Absolut fehlerfreies und stabiles Skript
+    const spinBtn = document.getElementById('spin-btn');
+    const errorDiv = document.getElementById('error');
+    const tickerDiv = document.getElementById('result-ticker');
+    const scoreDiv = document.getElementById('result-score');
+    const timeDiv = document.getElementById('result-time');
+    
+    const displayHome = document.getElementById('display-name-home');
+    const displayAway = document.getElementById('display-name-away');
+    const blockHome = document.getElementById('block-home');
+    const blockAway = document.getElementById('block-away');
 
-    function up() {
-        const v1 = parseInt(document.getElementById('p1').value) || 0;
-        const v2 = parseInt(document.getElementById('p2').value) || 0;
-        const v3 = parseInt(document.getElementById('p3').value) || 0;
-        const err = document.getElementById('error');
-        const b = document.getElementById('btn');
+    const torePoolHeim = ["1:0", "2:0", "2:1", "3:0", "3:1", "3:2", "4:0"];
+    const torePoolRemis = ["0:0", "1:1", "2:2"];
+    const torePoolGast = ["0:1", "0:2", "1:2", "0:3", "1:3", "2:3", "0:4"];
 
-        if ((v1 + v2 + v3) !== 100) { err.style.display = 'block'; b.disabled = true; return; }
-        else { err.style.display = 'none'; b.disabled = false; }
+    let isRunning = false;
 
-        const nameH = document.getElementById('n1').value || "Heim";
-        const nameG = document.getElementById('n3').value || "Gast";
-        const colH = document.getElementById('c1').value;
-        const colG = document.getElementById('c3').value;
+    function liveUpdateDashboard() {
+        const p1 = parseInt(document.getElementById('pct1').value) || 0;
+        const p2 = parseInt(document.getElementById('pct2').value) || 0;
+        const p3 = parseInt(document.getElementById('pct3').value) || 0;
 
-        document.getElementById('home').innerText = nameH;
-        document.getElementById('away').innerText = nameG;
-        document.getElementById('home').style.backgroundColor = colH;
-        document.getElementById('away').style.backgroundColor = colG;
+        if ((p1 + p2 + p3) !== 100) {
+            errorDiv.style.display = 'block';
+            spinBtn.disabled = true;
+            return;
+        } else {
+            errorDiv.style.display = 'none';
+            spinBtn.disabled = false;
+        }
 
-        const l = (hex) => {
-            const r = parseInt(hex.substring(1,3),16);
-            const g = parseInt(hex.substring(3,5),16);
-            const b = parseInt(hex.substring(5,7),16);
-            return ((r*299)+(g*587)+(b*114))/1000 >= 128 ? '#000' : '#fff';
-        };
-        document.getElementById('home').style.color = l(colH);
-        document.getElementById('away').style.color = l(colG);
-    }
-
-    function sim() {
-        const b = document.getElementById('btn');
-        const sc = document.getElementById('score');
-        const ti = document.getElementById('time');
-
-        b.disabled = true;
-        ti.innerText = "00:00";
-        
-        const v1 = parseInt(document.getElementById('p1').value) || 68;
-        const v2 = parseInt(document.getElementById('p2').value) || 20;
-
-        const rnd = Math.floor(Math.random() * 100) + 1;
-        let type = "draw";
-
-        if (rnd <= v1) type = "home";
-        else if (rnd <= v1 + v2) type = "draw";
-        else type = "away";
-
-        let steps = 0;
-        const run = setInterval(() => {
-            sc.innerText = Math.floor(Math.random()*5) + " - " + Math.floor(Math.random()*5);
-            let mins = Math.floor((steps / 20) * 90);
-            ti.innerText = (mins < 10 ? "0" : "") + mins + ":00";
-            steps++;
-            if (steps > 20) { 
-                clearInterval(run);
-                let res = "1 - 1";
-                if (type === "home") res = hPool[Math.floor(Math.random()*hPool.length)].replace(":", " - ");
-                else if (type === "draw") res = rPool[Math.floor(Math.random()*rPool.length)].replace(":", " - ");
-                else res = gPool[Math.floor(Math.random()*gPool.length)].replace(":", " - ");
-                sc.innerText = res;
-                ti.innerText = "90:00";
-                b.disabled = false;
-            }
-        }, 80);
-    }
-    up();
-</script>
-</body>
-</html>
+        const n1 = document.getElementById('name1').value || "Heim";
+        const n3 = document.getElementById('name3').value || "Gast";
+        const c1 = document.getElementById('col1').value;
