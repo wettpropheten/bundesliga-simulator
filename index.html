@@ -24,7 +24,7 @@
             justify-content: center;
         }
         .content-area {
-            flex: 1 !important;
+            flex: 2 !important;
             min-width: 320px;
             text-align: center;
         }
@@ -200,7 +200,7 @@
         }
 
         .sidebar-slots {
-            width: 200px;
+            flex: 0 0 200px !important;
             background: #141414;
             border: 1px solid #2d2d2d;
             border-radius: 12px;
@@ -245,7 +245,7 @@
             <div id="error">⚠️ Die Prozentwerte müssen zusammen genau 100% ergeben!</div>
             <div class="input-row">
                 <div class="field-group"><label>Heim-Name</label><input type="text" id="name1" value="SVW"></div>
-                <div class="field-group"><label>Logo-Link (URL)</label><input type="text" id="logo-url-home" class="url-input" value="https://wikimedia.org"></div>
+                <div class="field-group"><label>Logo-Link (URL)</label><input type="text" id="logo-url-home" class="url-input" value=""></div>
                 <div class="field-group"><label>Chance</label><span><input type="number" id="pct1" value="64"> %</span></div>
                 <div class="field-group"><label>Farbe</label><input type="color" id="col1" value="#00a37e"></div>
             </div>
@@ -257,3 +257,4 @@
             </div>
             <div class="input-row">
                 <div class="field-group"><label>Gast-Name</label><input type="text" id="name3" value="BVB"></div>
+                <div class="field-group"><label>Logo-Link (URL)</label><input type="text" id="logo-url-away" class="url-input" value=""></div>
