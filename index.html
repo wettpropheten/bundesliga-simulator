@@ -1,4 +1,3 @@
-
 <!DOCTYPE html><html lang="de">
 <head>
     <meta charset="UTF-8">
@@ -194,19 +193,19 @@
     <div class="box">
         <div id="error">Die Prozentwerte müssen genau 100 ergeben.</div>
         <div class="input-row">
-            <div class="field-group"><label>Heim-Name</label><input type="text" id="name1" value="FCB"></div>
-            <div class="field-group"><label>Chance</label><span><input type="number" id="pct1" value="68"> %</span></div>
-            <div class="field-group"><label>Farbe</label><input type="color" id="col1" value="#dd0000"></div>
+            <div class="field-group"><label>Heim-Name</label><input type="text" id="name1" value="FCB" oninput="updateLiveView()"></div>
+            <div class="field-group"><label>Chance</label><span><input type="number" id="pct1" value="68" oninput="updateLiveView()"> %</span></div>
+            <div class="field-group"><label>Farbe</label><input type="color" id="col1" value="#dd0000" oninput="updateLiveView()"></div>
         </div>
         <div class="input-row">
             <div class="field-group"><label>Remis</label><input type="text" value="Unentschieden" disabled></div>
-            <div class="field-group"><label>Chance</label><span><input type="number" id="pct2" value="20"> %</span></div>
-            <div class="field-group"><label>Farbe</label><input type="color" id="col2" value="#718096"></div>
+            <div class="field-group"><label>Chance</label><span><input type="number" id="pct2" value="20" oninput="updateLiveView()"> %</span></div>
+            <div class="field-group"><label>Farbe</label><input type="color" id="col2" value="#718096" oninput="updateLiveView()"></div>
         </div>
         <div class="input-row">
-            <div class="field-group"><label>Gast-Name</label><input type="text" id="name3" value="SGE"></div>
-            <div class="field-group"><label>Chance</label><span><input type="number" id="pct3" value="12"> %</span></div>
-            <div class="field-group"><label>Farbe</label><input type="color" id="col3" value="#1a1a1a"></div>
+            <div class="field-group"><label>Gast-Name</label><input type="text" id="name3" value="SGE" oninput="updateLiveView()"></div>
+            <div class="field-group"><label>Chance</label><span><input type="number" id="pct3" value="12" oninput="updateLiveView()"> %</span></div>
+            <div class="field-group"><label>Farbe</label><input type="color" id="col3" value="#1a1a1a" oninput="updateLiveView()"></div>
         </div>
         
         <div class="btn-container">
@@ -225,31 +224,40 @@
         <div class="team-block" id="block-home"><div class="team-name" id="display-name-home">FCB</div></div>
         <div class="center-block">
             <div class="score-row" id="result-score">? - ?</div>
-            <div class="time-row" id="result-time">90:00</div>
+            <div class="time-row" id="display-time">90'</div>
         </div>
         <div class="team-block" id="block-away"><div class="team-name" id="display-name-away">SGE</div></div>
     </div>
-    
-    <div id="result-ticker" style="margin-top: 15px; font-weight: bold; font-size: 16px; color: #aaa;">Bereit</div>
 </div>
 
 <script>
-    const sc = document.getElementById('result-score');
-    const ticker = document.getElementById('result-ticker');
-    const err = document.getElementById('error');
-    const spinBtn = document.getElementById('spin-btn');
-    
-    const hp = document.getElementById('pct1');
-    const dp = document.getElementById('pct2');
-    const ap = document.getElementById('pct3');
+    // Live-Vorschau der Namen, Prozentanzeigen und Farben beim Tippen/Ändern
+    function updateLiveView() {
+        const nameHome = document.getElementById('name1').value;
+        const nameAway = document.getElementById('name3').value;
+        
+        const pct1 = parseInt(document.getElementById('pct1').value) || 0;
+        const pct2 = parseInt(document.getElementById('pct2').value) || 0;
+        const pct3 = parseInt(document.getElementById('pct3').value) || 0;
 
-    // DEINE VOLLSTÄNDIGE MATHEMATISCHE ERGEBNIS-MATRIX (1 BIS 100)
-    const tabelleStandard = {
-        1: ["0:3", "0:4", "1:2", "2:3"], 2: ["0:3", "1:3", "1:0"], 3: ["0:3", "1:3", "2:1"], 4: ["0:3", "1:2", "1:0"],
-        5: ["0:2", "1:3", "1:0"], 6: ["0:2", "1:2", "2:1"], 7: ["0:2", "1:2", "1:0"], 8: ["0:2", "1:2", "1:1", "2:2"],
-        9: ["0:2", "0:1", "2:1"], 10: ["0:2", "1:2", "1:0"], 11: ["1:2", "0:2", "1:1", "2:2"], 12: ["1:2", "0:1", "2:1"],
-        13: ["1:2", "0:2", "1:0"], 14: ["1:2", "0:1", "1:1", "2:2"], 15: ["1:2", "0:1", "1:1", "2:2"], 16: ["0:1", "1:2", "1:1", "2:2"],
-        17: ["0:1", "1:2", "1:0"], 18: ["0:1", "1:2", "1:1", "2:2"], 19: ["0:1", "1:1", "2:1", "2:2"], 20: ["0:1", "1:1", "1:2", "2:2"],
-        21: ["0:1", "1:1", "1:2", "2:2"], 22: ["1:1", "0:1", "1:2", "2:2"], 23: ["1:1", "0:1", "2:1", "2:2"], 24: ["1:1", "0:1", "1:2", "2:2"],
-        25: ["1:1", "1:2", "2:1", "2:2"], 26: ["1:1", "0:1", "1:2", "2:2"], 27: ["1:1", "2:1", "0:1", "2:2"], 28: ["1:1", "2:1", "0:1", "2:2"],
-        29: ["1:1", "1:0", "0:1", "2:2"], 30: ["1:1", "1:0", "1:2", "2:2"], 31: ["1:1", "1:0", "1:2", "2:2"], 32: ["1:1", "1:0", "2:1", "2:2"],
+        const colHome = document.getElementById('col1').value;
+        const colAway = document.getElementById('col3').value;
+
+        // Anzeigetexte aktualisieren
+        document.getElementById('display-name-home').innerText = nameHome;
+        document.getElementById('display-name-away').innerText = nameAway;
+        
+        document.getElementById('dash-val1').innerText = pct1 + '%';
+        document.getElementById('dash-val2').innerText = pct2 + '%';
+        document.getElementById('dash-val3').innerText = pct3 + '%';
+
+        // Farben der Anzeigeblöcke aktualisieren
+        document.getElementById('block-home').style.backgroundColor = colHome;
+        document.getElementById('block-away').style.backgroundColor = colAway;
+
+        // Fehlermeldung live ausblenden, falls Eingabe währenddessen korrigiert wird
+        if (pct1 + pct2 + pct3 === 100) {
+            document.getElementById('error').style.display = 'none';
+        }
+    }
+
