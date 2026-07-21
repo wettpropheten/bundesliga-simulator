@@ -8,8 +8,8 @@
         body { 
             font-family: 'Segoe UI', Arial, sans-serif; 
             text-align: center; 
-            background: #000000 !important; 
-            color: #ffffff !important; 
+            background: #000000; 
+            color: #ffffff; 
             padding: 20px; 
             margin: 0;
         }
@@ -25,22 +25,22 @@
             margin-bottom: 25px;
         }
         .box { 
-            background: #1a1a1a !important; 
-            border: 1px solid #2d2d2d !important;
+            background: #1a1a1a; 
+            border: 1px solid #2d2d2d;
             padding: 20px; 
             border-radius: 12px; 
             margin-bottom: 25px; 
         }
         .input-row { 
-            display: flex !important; 
-            justify-content: space-between !important; 
+            display: flex; 
+            justify-content: space-between; 
             margin-bottom: 12px; 
-            align-items: flex-end !important; 
+            align-items: flex-end; 
             gap: 15px;
         }
         .field-group {
-            display: flex !important;
-            flex-direction: column !important;
+            display: flex;
+            flex-direction: column;
             text-align: left;
         }
         .field-group label {
@@ -53,115 +53,134 @@
         input[type="text"] { 
             width: 140px; 
             padding: 8px; 
-            background: #2b2b2b !important; 
-            color: #ffffff !important; 
-            border: 1px solid #404040 !important; 
+            background: #2b2b2b; 
+            color: #ffffff; 
+            border: 1px solid #404040; 
             border-radius: 6px;
             font-weight: bold;
         }
-        input[type="text"]:disabled { background: #1f1f1f !important; color: #777777 !important; border: 1px solid #2a2a2a !important; }
+        input[type="text"]:disabled { background: #1f1f1f; color: #777777; border: 1px solid #2a2a2a; }
         input[type="number"] { 
             width: 65px; 
             padding: 8px; 
-            background: #2b2b2b !important; 
-            color: #ffffff !important; 
-            border: 1px solid #404040 !important; 
+            background: #2b2b2b; 
+            color: #ffffff; 
+            border: 1px solid #404040; 
             border-radius: 6px; 
             font-weight: bold;
             text-align: center;
         }
-        input[type="color"] { width: 45px; height: 34px; border: 1px solid #404040 !important; border-radius: 6px; cursor: pointer; background: transparent; padding: 0; }
+        input[type="color"] { width: 45px; height: 34px; border: 1px solid #404040; border-radius: 6px; cursor: pointer; background: transparent; padding: 0; }
 
+        .btn-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
         #spin-btn { 
-            width: 100%; 
+            flex: 3;
             padding: 16px; 
-            margin-top: 15px; 
             font-weight: bold; 
             font-size: 16px; 
             cursor: pointer; 
             border-radius: 8px; 
             border: none; 
-            background: #2f855a !important; 
-            color: white !important; 
+            background: #2f855a; 
+            color: white; 
             text-transform: uppercase;
             letter-spacing: 1px;
         }
-        #spin-btn:hover { background: #276749 !important; }
-        #spin-btn:disabled { background: #4a5568 !important; cursor: not-allowed; opacity: 0.6; }
+        #spin-btn:hover { background: #276749; }
+        #spin-btn:disabled { background: #4a5568; cursor: not-allowed; opacity: 0.6; }
+
+        #reset-btn {
+            flex: 1;
+            padding: 16px;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 8px;
+            border: 1px solid #404040;
+            background: #2b2b2b;
+            color: #ef4444;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        #reset-btn:hover { background: #3f3f46; border-color: #ef4444; }
 
         #error { color: #f56565; font-weight: bold; margin-bottom: 15px; display: none; font-size: 14px; text-align: center; }
 
         .dashboard {
-            background: #1a1a1a !important;
-            border: 1px solid #2d2d2d !important;
+            background: #1a1a1a;
+            border: 1px solid #2d2d2d;
             border-radius: 12px;
             padding: 15px;
-            display: flex !important;
-            justify-content: space-around !important;
+            display: flex;
+            justify-content: space-around;
             margin-bottom: 20px;
         }
         .dash-item { text-align: center; flex: 1; padding: 5px; }
-        .dash-item:not(:last-child) { border-right: 1px solid #2d2d2d !important; }
+        .dash-item:not(:last-child) { border-right: 1px solid #2d2d2d; }
         .dash-name { font-size: 12px; color: #a0aec0; text-transform: uppercase; margin-bottom: 4px; font-weight: 600; }
         .dash-pct { font-size: 22px; font-weight: bold; }
 
         .scoreboard-bundesliga {
             height: 150px;
             background: #000000;
-            border: 4px solid #b8860b !important; 
+            border: 4px solid #b8860b; 
             box-shadow: 0 0 15px rgba(184, 134, 11, 0.4);
-            display: flex !important;
-            flex-direction: row !important;
+            display: flex;
+            flex-direction: row;
             overflow: hidden;
         }
         .team-block {
-            flex: 1 !important;
-            display: flex !important;
-            flex-direction: column !important;
-            align-items: center !important;
-            justify-content: center !important;
-            padding: 10px !important;
-            box-sizing: border-box !important;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            box-sizing: border-box;
         }
         #block-home { background-color: #00a37e; }
         #block-away { background-color: #facc15; }
 
         .team-name {
-            font-size: 42px !important;
-            font-weight: 900 !important;
-            color: #ffffff !important;
+            font-size: 42px;
+            font-weight: 900;
+            color: #ffffff;
             letter-spacing: 1px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
             font-family: Arial, sans-serif;
         }
 
         .center-block {
-            width: 160px !important;
-            background: #ffffff !important; 
-            display: flex !important;
-            flex-direction: column !important;
-            box-sizing: border-box !important;
-            border-left: 2px solid #000 !important;
-            border-right: 2px solid #000 !important;
+            width: 160px;
+            background: #ffffff; 
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+            border-left: 2px solid #000;
+            border-right: 2px solid #000;
         }
         .score-row {
-            height: 80px !important;
-            line-height: 80px !important;
-            font-size: 50px !important;
-            font-weight: 900 !important;
-            color: #000000 !important;
+            height: 80px;
+            line-height: 80px;
+            font-size: 50px;
+            font-weight: 900;
+            color: #000000;
             font-family: Arial, sans-serif;
-            background: linear-gradient(to bottom, #ffffff 0%, #e0e0e0 100%) !important;
-            border-bottom: 2px solid #666 !important;
+            background: linear-gradient(to bottom, #ffffff 0%, #e0e0e0 100%);
+            border-bottom: 2px solid #666;
             text-align: center;
         }
         .time-row {
-            flex: 1 !important;
-            line-height: 65px !important;
-            font-size: 36px !important;
-            font-weight: bold !important;
-            color: #000000 !important;
-            background: #cccccc !important; 
+            flex: 1;
+            line-height: 65px;
+            font-size: 36px;
+            font-weight: bold;
+            color: #000000;
+            background: #cccccc; 
             font-family: Arial, sans-serif;
             text-align: center;
         }
@@ -189,7 +208,11 @@
             <div class="field-group"><label>Chance</label><span><input type="number" id="pct3" value="12"> %</span></div>
             <div class="field-group"><label>Farbe</label><input type="color" id="col3" value="#1a1a1a"></div>
         </div>
-        <button id="spin-btn">Spiel simulieren</button>
+        
+        <div class="btn-container">
+            <button id="spin-btn">Spiel simulieren</button>
+            <button id="reset-btn">Reset</button>
+        </div>
     </div>
 
     <div class="dashboard">
@@ -200,7 +223,10 @@
 
     <div class="scoreboard-bundesliga">
         <div class="team-block" id="block-home"><div class="team-name" id="display-name-home">FCB</div></div>
-        <div class="center-block"><div class="score-row" id="result-score">0 - 0</div><div class="time-row" id="result-time">90:00</div></div>
+        <div class="center-block">
+            <div class="score-row" id="result-score">? - ?</div>
+            <div class="time-row" id="result-time">90:00</div>
+        </div>
         <div class="team-block" id="block-away"><div class="team-name" id="display-name-away">SGE</div></div>
     </div>
     
@@ -208,8 +234,8 @@
 </div>
 
 <script>
-    // Absolut fehlerfreies und stabiles Skript
     const spinBtn = document.getElementById('spin-btn');
+    const resetBtn = document.getElementById('reset-btn');
     const errorDiv = document.getElementById('error');
     const tickerDiv = document.getElementById('result-ticker');
     const scoreDiv = document.getElementById('result-score');
@@ -227,9 +253,19 @@
     let isRunning = false;
 
     function liveUpdateDashboard() {
-        const p1 = parseInt(document.getElementById('pct1').value) || 0;
-        const p2 = parseInt(document.getElementById('pct2').value) || 0;
-        const p3 = parseInt(document.getElementById('pct3').value) || 0;
+        const val1 = document.getElementById('pct1').value;
+        const val2 = document.getElementById('pct2').value;
+        const val3 = document.getElementById('pct3').value;
+
+        if(val1 === "" && val2 === "" && val3 === "") {
+            errorDiv.style.display = 'none';
+            spinBtn.disabled = true;
+            return;
+        }
+
+        const p1 = parseInt(val1) || 0;
+        const p2 = parseInt(val2) || 0;
+        const p3 = parseInt(val3) || 0;
 
         if ((p1 + p2 + p3) !== 100) {
             errorDiv.style.display = 'block';
@@ -237,9 +273,3 @@
             return;
         } else {
             errorDiv.style.display = 'none';
-            spinBtn.disabled = false;
-        }
-
-        const n1 = document.getElementById('name1').value || "Heim";
-        const n3 = document.getElementById('name3').value || "Gast";
-        const c1 = document.getElementById('col1').value;
