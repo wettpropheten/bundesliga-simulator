@@ -24,7 +24,7 @@
             justify-content: center;
         }
         .content-area {
-            flex: 2 !important;
+            flex: 1 !important;
             min-width: 320px;
             text-align: center;
         }
@@ -40,7 +40,7 @@
             border: 1px solid #2d2d2d !important;
             padding: 20px; 
             border-radius: 12px; 
-            max-width: 650px; 
+            max-width: 500px; 
             margin: 0 auto 25px auto; 
         }
         .input-row { 
@@ -48,8 +48,7 @@
             justify-content: space-between !important; 
             margin-bottom: 12px; 
             align-items: flex-end !important; 
-            gap: 10px;
-            flex-wrap: wrap;
+            gap: 15px;
         }
         .field-group {
             display: flex !important;
@@ -64,7 +63,7 @@
             font-weight: bold;
         }
         input[type="text"] { 
-            width: 100px; 
+            width: 140px; 
             padding: 8px; 
             background: #2b2b2b !important; 
             color: #ffffff !important; 
@@ -72,14 +71,9 @@
             border-radius: 6px;
             font-weight: bold;
         }
-        input[type="text"].url-input {
-            width: 200px; 
-            font-weight: normal;
-            font-size: 12px;
-        }
         input[type="text"]:disabled { background: #1f1f1f !important; color: #777777 !important; border: 1px solid #2a2a2a !important; }
         input[type="number"] { 
-            width: 55px; 
+            width: 65px; 
             padding: 8px; 
             background: #2b2b2b !important; 
             color: #ffffff !important; 
@@ -126,7 +120,7 @@
 
         .scoreboard-bundesliga {
             max-width: 460px;
-            height: 200px;
+            height: 150px;
             margin: 25px auto;
             background: #000000;
             border: 4px solid #b8860b !important; 
@@ -141,15 +135,15 @@
             display: flex !important;
             flex-direction: column !important;
             align-items: center !important;
-            justify-content: flex-start !important;
-            padding: 15px 5px !important;
+            justify-content: center !important;
+            padding: 10px !important;
             box-sizing: border-box !important;
         }
         #block-home { background-color: #00a37e; }
         #block-away { background-color: #facc15; }
 
         .team-name {
-            font-size: 38px !important;
+            font-size: 42px !important;
             font-weight: 900 !important;
             color: #ffffff;
             letter-spacing: 1px;
@@ -157,16 +151,6 @@
             font-family: Arial, sans-serif;
         }
         #block-away .team-name { color: #000000 !important; text-shadow: none !important; }
-
-        .logo-wrapper {
-            width: 90px;
-            height: 90px;
-            margin-top: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .logo-wrapper img { max-width: 100%; max-height: 100%; object-fit: contain; }
 
         .center-block {
             width: 160px !important;
@@ -178,9 +162,9 @@
             border-right: 2px solid #000 !important;
         }
         .score-row {
-            height: 100px !important;
-            line-height: 100px !important;
-            font-size: 55px !important;
+            height: 80px !important;
+            line-height: 80px !important;
+            font-size: 50px !important;
             font-weight: 900 !important;
             color: #000000 !important;
             font-family: Arial, sans-serif;
@@ -190,8 +174,8 @@
         }
         .time-row {
             flex: 1 !important;
-            line-height: 95px !important;
-            font-size: 48px !important;
+            line-height: 65px !important;
+            font-size: 36px !important;
             font-weight: bold !important;
             color: #000000 !important;
             background: #cccccc !important; 
@@ -200,7 +184,7 @@
         }
 
         .sidebar-slots {
-            flex: 0 0 200px !important;
+            width: 200px;
             background: #141414;
             border: 1px solid #2d2d2d;
             border-radius: 12px;
@@ -245,16 +229,24 @@
             <div id="error">⚠️ Die Prozentwerte müssen zusammen genau 100% ergeben!</div>
             <div class="input-row">
                 <div class="field-group"><label>Heim-Name</label><input type="text" id="name1" value="SVW"></div>
-                <div class="field-group"><label>Logo-Link (URL)</label><input type="text" id="logo-url-home" class="url-input" value=""></div>
                 <div class="field-group"><label>Chance</label><span><input type="number" id="pct1" value="64"> %</span></div>
                 <div class="field-group"><label>Farbe</label><input type="color" id="col1" value="#00a37e"></div>
             </div>
             <div class="input-row">
                 <div class="field-group"><label>Remis</label><input type="text" id="name2" value="Unentschieden" disabled></div>
-                <div class="field-group" style="visibility: hidden;"><input type="text" class="url-input"></div>
                 <div class="field-group"><label>Chance</label><span><input type="number" id="pct2" value="16"> %</span></div>
                 <div class="field-group"><label>Farbe</label><input type="color" id="col2" value="#718096"></div>
             </div>
             <div class="input-row">
                 <div class="field-group"><label>Gast-Name</label><input type="text" id="name3" value="BVB"></div>
-                <div class="field-group"><label>Logo-Link (URL)</label><input type="text" id="logo-url-away" class="url-input" value=""></div>
+                <div class="field-group"><label>Chance</label><span><input type="number" id="pct3" value="20"> %</span></div>
+                <div class="field-group"><label>Farbe</label><input type="color" id="col3" value="#facc15"></div>
+            </div>
+            <button id="spin-btn">Spiel simulieren</button>
+        </div>
+        <div class="dashboard">
+            <div class="dash-item"><div class="dash-name" id="dash-lbl1">Heim</div><div class="dash-pct" id="dash-val1">64%</div></div>
+            <div class="dash-item"><div class="dash-name" id="dash-lbl2">Remis</div><div class="dash-pct" id="dash-val2">16%</div></div>
+            <div class="dash-item"><div class="dash-name" id="dash-lbl3">Gast</div><div class="dash-pct" id="dash-val3">20%</div></div>
+        </div>
+        <div class="scoreboard-bundesliga">
