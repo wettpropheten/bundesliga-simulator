@@ -27,157 +27,106 @@ body{
 
 
 .box{
-
     background:#1a0a0a;
     padding:20px;
-    width:400px;
+    width:380px;
     border-radius:10px;
     box-shadow:0 5px 15px black;
-
 }
-
-
-
-.row{
-
-    display:flex;
-    justify-content:space-between;
-    margin-bottom:15px;
-
-}
-
 
 
 label{
-
     display:block;
     color:#aaa;
     font-size:12px;
-
+    margin-bottom:5px;
 }
 
 
-
-input,
-select{
-
-    background:#2b1b1b;
+select,input{
+    background:#222;
     color:white;
     border:1px solid #555;
-    padding:7px;
-    width:90px;
-
+    padding:8px;
+    width:160px;
 }
 
 
-
-input[type="color"]{
-
-    width:45px;
-    height:35px;
-    padding:0;
-
+.row{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:15px;
 }
-
 
 
 button{
-
     width:100%;
     padding:12px;
     margin-top:12px;
     font-weight:bold;
     cursor:pointer;
-
 }
-
-
-
-.update{
-
-    background:none;
-    color:#ff4444;
-    border:1px solid #ff4444;
-
-}
-
-
-
-.reset{
-
-    background:#700000;
-    color:white;
-    border:none;
-
-}
-
 
 
 .start{
-
     width:200px;
     background:#168044;
     color:white;
     border:none;
     font-size:22px;
-
 }
-
 
 
 .start:disabled{
-
     background:#555;
-
 }
 
+
+.update{
+    background:#333;
+    color:white;
+    border:1px solid #777;
+}
+
+
+.reset{
+    background:#700000;
+    color:white;
+    border:none;
+}
 
 
 
 .scoreboard{
-
     width:600px;
     background:#222;
     border:3px solid #444;
-
 }
-
-
 
 
 .teams{
-
     display:flex;
     height:130px;
-
 }
 
 
-
 .team{
-
     width:200px;
     display:flex;
     justify-content:center;
     align-items:center;
-    font-size:42px;
+    font-size:45px;
     font-weight:bold;
-
 }
-
 
 
 
 .middle{
-
     flex:1;
-
 }
 
 
-
 .score{
-
     height:70px;
     background:white;
     color:black;
@@ -186,13 +135,10 @@ button{
     align-items:center;
     font-size:42px;
     font-weight:bold;
-
 }
 
 
-
 .time{
-
     height:60px;
     background:#ccc;
     color:black;
@@ -200,89 +146,63 @@ button{
     justify-content:center;
     align-items:center;
     font-size:28px;
-
 }
-
 
 
 
 .percent{
-
     display:flex;
     background:#111;
     padding:15px;
-
 }
-
 
 
 .percent div{
-
     flex:1;
     text-align:center;
-
 }
-
 
 
 
 .status{
-
     background:#111;
     text-align:center;
     padding:12px;
     font-size:22px;
     font-weight:bold;
-
 }
-
 
 
 
 .ticker{
-
     display:flex;
     background:#050505;
     min-height:150px;
     padding:15px;
-
 }
-
 
 
 
 .homeTicker{
-
     width:50%;
     text-align:left;
-
 }
-
-
 
 
 .awayTicker{
-
     width:50%;
     text-align:right;
-
 }
-
-
 
 
 .goal{
-
     color:#00ff66;
-    font-size:18px;
     font-weight:bold;
-
+    font-size:18px;
 }
 
 
-
 </style>
-
 
 </head>
 
@@ -290,103 +210,51 @@ button{
 <body>
 
 
-
 <div class="main">
 
 
-
 <div>
-
 
 
 <div class="box">
 
 
-
 <h3>Heim</h3>
 
 
-
 <div class="row">
 
-
 <div>
 
-<label>Name</label>
+<label>Mannschaft</label>
 
-<input id="homeName" value="">
+<select id="homeTeam">
 
-</div>
-
-
-
-<div>
-
-<label>Sieg %</label>
-
-<input id="homePct" type="number" value="50">
-
-</div>
-
-
-</div>
-
-
-
-
-<div class="row">
-
-
-<div>
-
-<label>Farbe</label>
-
-<input id="homeColor" type="color" value="#777777">
-
-</div>
-
-
-
-<div>
-
-<label>Schrift</label>
-
-<select id="homeTextColor">
-
-<option value="white">
-Weiß
-</option>
-
-<option value="black">
-Schwarz
-</option>
+<option value="FCB">FCB</option>
+<option value="BVB">BVB</option>
+<option value="RBL">RBL</option>
+<option value="VFB">VFB</option>
+<option value="TSG">TSG</option>
+<option value="B04">B04</option>
+<option value="SCF">SCF</option>
+<option value="SGE">SGE</option>
+<option value="FCA">FCA</option>
+<option value="M05">M05</option>
+<option value="FCU">FCU</option>
+<option value="BMG">BMG</option>
+<option value="HSV">HSV</option>
+<option value="KOE">KOE</option>
+<option value="SVW">SVW</option>
+<option value="S04">S04</option>
+<option value="ELV">ELV</option>
+<option value="SCP">SCP</option>
 
 </select>
 
-
 </div>
 
 
 </div>
-
-
-
-
-
-<div class="row">
-
-
-<div>
-
-<label>Remis %</label>
-
-<input id="drawPct" type="number" value="25">
-
-</div>
-
-
-</div>
-
 
 
 
@@ -395,62 +263,34 @@ Schwarz
 <h3>Gast</h3>
 
 
-
 <div class="row">
 
 
 <div>
 
-<label>Name</label>
-
-<input id="awayName" value="">
-
-</div>
+<label>Mannschaft</label>
 
 
+<select id="awayTeam">
 
-<div>
-
-<label>Sieg %</label>
-
-<input id="awayPct" type="number" value="25">
-
-</div>
-
-
-</div>
-
-
-
-
-
-<div class="row">
-
-
-<div>
-
-<label>Farbe</label>
-
-<input id="awayColor" type="color" value="#777777">
-
-</div>
-
-
-
-<div>
-
-<label>Schrift</label>
-
-
-<select id="awayTextColor">
-
-<option value="white">
-Weiß
-</option>
-
-<option value="black">
-Schwarz
-</option>
+<option value="BVB">BVB</option>
+<option value="FCB">FCB</option>
+<option value="RBL">RBL</option>
+<option value="VFB">VFB</option>
+<option value="TSG">TSG</option>
+<option value="B04">B04</option>
+<option value="SCF">SCF</option>
+<option value="SGE">SGE</option>
+<option value="FCA">FCA</option>
+<option value="M05">M05</option>
+<option value="FCU">FCU</option>
+<option value="BMG">BMG</option>
+<option value="HSV">HSV</option>
+<option value="KOE">KOE</option>
+<option value="SVW">SVW</option>
+<option value="S04">S04</option>
+<option value="ELV">ELV</option>
+<option value="SCP">SCP</option>
 
 </select>
 
@@ -460,6 +300,43 @@ Schwarz
 
 </div>
 
+
+
+
+
+<h3>Wahrscheinlichkeit</h3>
+
+
+<div class="row">
+
+<div>
+
+<label>Heimsieg %</label>
+
+<input id="homePct" value="50">
+
+</div>
+
+
+<div>
+
+<label>Remis %</label>
+
+<input id="drawPct" value="25">
+
+</div>
+
+
+<div>
+
+<label>Gast %</label>
+
+<input id="awayPct" value="25">
+
+</div>
+
+
+</div>
 
 
 
@@ -471,7 +348,6 @@ Aktualisieren
 
 
 
-
 <button class="reset" onclick="resetGame()">
 
 RESET
@@ -479,11 +355,7 @@ RESET
 </button>
 
 
-
-
 </div>
-
-
 
 
 
@@ -494,7 +366,6 @@ START
 </button>
 
 
-
 </div>
 <div class="scoreboard">
 
@@ -502,29 +373,24 @@ START
 <div class="teams">
 
 
-<div id="homeView" class="team">
-</div>
+<div id="homeView" class="team"></div>
 
 
 <div class="middle">
 
 
 <div id="score" class="score">
-
 </div>
 
 
 <div id="time" class="time">
-
 </div>
 
 
 </div>
 
 
-<div id="awayView" class="team">
-
-</div>
+<div id="awayView" class="team"></div>
 
 
 </div>
@@ -535,31 +401,20 @@ START
 
 
 <div>
-
-<span>Heim</span><br>
-
+Heim<br>
 <span id="hp"></span>
-
 </div>
 
 
-
 <div>
-
-<span>Remis</span><br>
-
+Remis<br>
 <span id="dp"></span>
-
 </div>
 
 
-
 <div>
-
-<span>Gast</span><br>
-
+Gast<br>
 <span id="ap"></span>
-
 </div>
 
 
@@ -568,7 +423,6 @@ START
 
 
 <div id="status" class="status">
-
 </div>
 
 
@@ -585,9 +439,7 @@ START
 </div>
 
 
-
 </div>
-
 
 
 </div>
@@ -603,15 +455,176 @@ let running=false;
 
 
 
+const teams={
+
+
+FCB:{
+name:"FC Bayern München",
+color:"#DC052D",
+text:"#FFFFFF",
+strength:92
+},
+
+
+BVB:{
+name:"Borussia Dortmund",
+color:"#FDE100",
+text:"#000000",
+strength:86
+},
+
+
+RBL:{
+name:"RB Leipzig",
+color:"#FFFFFF",
+text:"#000000",
+strength:84
+},
+
+
+VFB:{
+name:"VfB Stuttgart",
+color:"#FFFFFF",
+text:"#000000",
+strength:82
+},
+
+
+TSG:{
+name:"TSG Hoffenheim",
+color:"#0066CC",
+text:"#000000",
+strength:76
+},
+
+
+B04:{
+name:"Bayer 04 Leverkusen",
+color:"#E32221",
+text:"#FFFFFF",
+strength:90
+},
+
+
+SCF:{
+name:"SC Freiburg",
+color:"#E30613",
+text:"#FFFFFF",
+strength:78
+},
+
+
+SGE:{
+name:"Eintracht Frankfurt",
+color:"#000000",
+text:"#FFFFFF",
+strength:80
+},
+
+
+FCA:{
+name:"FC Augsburg",
+color:"#8B0000",
+text:"#FFFFFF",
+strength:72
+},
+
+
+M05:{
+name:"1. FSV Mainz 05",
+color:"#E30613",
+text:"#FFFFFF",
+strength:74
+},
+
+
+FCU:{
+name:"1. FC Union Berlin",
+color:"#E30613",
+text:"#FFFFFF",
+strength:74
+},
+
+
+BMG:{
+name:"Borussia Mönchengladbach",
+color:"#000000",
+text:"#FFFFFF",
+strength:75
+},
+
+
+HSV:{
+name:"Hamburger SV",
+color:"#005CA9",
+text:"#FFFFFF",
+strength:73
+},
+
+
+KOE:{
+name:"1. FC Köln",
+color:"#E30613",
+text:"#FFFFFF",
+strength:70
+},
+
+
+SVW:{
+name:"SV Werder Bremen",
+color:"#008000",
+text:"#FFFFFF",
+strength:75
+},
+
+
+S04:{
+name:"FC Schalke 04",
+color:"#005CA9",
+text:"#FFFFFF",
+strength:72
+},
+
+
+ELV:{
+name:"SV Elversberg",
+color:"#D4AF37",
+text:"#000000",
+strength:68
+},
+
+
+SCP:{
+name:"SC Paderborn 07",
+color:"#005CA9",
+text:"#FFFFFF",
+strength:68
+}
+
+
+};
+
+
+
+
+
 
 
 function updateBoard(){
 
 
-let home=document.getElementById("homeName").value;
+let home=
+document.getElementById("homeTeam").value;
 
-let away=document.getElementById("awayName").value;
 
+let away=
+document.getElementById("awayTeam").value;
+
+
+
+let h=teams[home];
+
+let a=teams[away];
 
 
 
@@ -621,32 +634,21 @@ let awayView=document.getElementById("awayView");
 
 
 
-
 homeView.innerHTML=home;
 
 awayView.innerHTML=away;
 
 
 
+homeView.style.background=h.color;
 
-homeView.style.background=
-document.getElementById("homeColor").value;
-
-
-awayView.style.background=
-document.getElementById("awayColor").value;
+homeView.style.color=h.text;
 
 
 
+awayView.style.background=a.color;
 
-homeView.style.color=
-document.getElementById("homeTextColor").value;
-
-
-awayView.style.color=
-document.getElementById("awayTextColor").value;
-
-
+awayView.style.color=a.text;
 
 
 
@@ -654,10 +656,8 @@ document.getElementById("hp").innerHTML=
 document.getElementById("homePct").value+"%";
 
 
-
 document.getElementById("dp").innerHTML=
 document.getElementById("drawPct").value+"%";
-
 
 
 document.getElementById("ap").innerHTML=
@@ -673,18 +673,10 @@ document.getElementById("awayPct").value+"%";
 
 
 
-
 function resetGame(){
 
 
-
 running=false;
-
-
-
-document.getElementById("homeName").value="";
-
-document.getElementById("awayName").value="";
 
 
 
@@ -693,17 +685,9 @@ document.getElementById("homeView").innerHTML="";
 document.getElementById("awayView").innerHTML="";
 
 
+document.getElementById("homeView").style.background="#555";
 
-document.getElementById("homeView").style.background="#777777";
-
-document.getElementById("awayView").style.background="#777777";
-
-
-
-document.getElementById("homeView").style.color="white";
-
-document.getElementById("awayView").style.color="white";
-
+document.getElementById("awayView").style.background="#555";
 
 
 document.getElementById("score").innerHTML="";
@@ -713,11 +697,9 @@ document.getElementById("time").innerHTML="";
 document.getElementById("status").innerHTML="";
 
 
-
 document.getElementById("homeTicker").innerHTML="";
 
 document.getElementById("awayTicker").innerHTML="";
-
 
 
 document.getElementById("hp").innerHTML="";
@@ -727,13 +709,10 @@ document.getElementById("dp").innerHTML="";
 document.getElementById("ap").innerHTML="";
 
 
-
 document.getElementById("start").disabled=false;
 
 
 }
-
-
 
 
 
@@ -751,14 +730,11 @@ let p=1;
 let k=0;
 
 
-
 do{
 
 k++;
 
 p*=Math.random();
-
-
 
 }
 while(p>L);
@@ -767,10 +743,7 @@ while(p>L);
 
 return k-1;
 
-
 }
-
-
 
 
 
@@ -781,83 +754,27 @@ return k-1;
 function createResult(){
 
 
-
-let homePercent=
-Number(document.getElementById("homePct").value);
-
+let home=
+teams[document.getElementById("homeTeam").value];
 
 
-let awayPercent=
-Number(document.getElementById("awayPct").value);
-
-
-
-let drawPercent=
-Number(document.getElementById("drawPct").value);
-
-
+let away=
+teams[document.getElementById("awayTeam").value];
 
 
 
 let homeXg=
-(50+(homePercent/2)+7)/45;
-
+(home.strength+7)/45;
 
 
 let awayXg=
-(50+(awayPercent/2))/60;
+away.strength/55;
 
 
 
+let hs=poisson(homeXg);
 
-
-let home=poisson(homeXg);
-
-let away=poisson(awayXg);
-
-
-
-
-
-if(Math.random()*100 < drawPercent){
-
-
-let draws=[
-
-[0,0],
-
-[1,1],
-
-[2,2]
-
-];
-
-
-let d=draws[Math.floor(Math.random()*draws.length)];
-
-
-home=d[0];
-
-away=d[1];
-
-
-}
-
-
-
-
-
-if(Math.random()<0.10){
-
-
-let t=home;
-
-home=away;
-
-away=t;
-
-
-}
+let as=poisson(awayXg);
 
 
 
@@ -865,9 +782,9 @@ away=t;
 
 return{
 
-home:home,
+home:Math.min(hs,6),
 
-away:away
+away:Math.min(as,6)
 
 };
 
@@ -880,15 +797,11 @@ away:away
 
 
 
-
-
 function startGame(){
 
 
 
-if(running)
-return;
-
+if(running)return;
 
 
 running=true;
@@ -908,12 +821,9 @@ let time=document.getElementById("time");
 let status=document.getElementById("status");
 
 
-
 let homeTicker=document.getElementById("homeTicker");
 
 let awayTicker=document.getElementById("awayTicker");
-
-
 
 
 
@@ -925,8 +835,6 @@ status.innerHTML="⚽ ANPFIFF";
 
 
 
-
-
 let result=createResult();
 
 
@@ -935,39 +843,25 @@ let goals=[];
 
 
 
-
 for(let i=0;i<result.home;i++){
 
-
 goals.push({
-
 team:"home",
-
 minute:Math.floor(Math.random()*90)+1
-
 });
 
-
 }
-
 
 
 
 for(let i=0;i<result.away;i++){
 
-
 goals.push({
-
 team:"away",
-
 minute:Math.floor(Math.random()*90)+1
-
 });
 
-
 }
-
-
 
 
 
@@ -975,14 +869,11 @@ goals.sort((a,b)=>a.minute-b.minute);
 
 
 
-
-
 let minute=0;
 
-let homeScore=0;
+let hs=0;
 
-let awayScore=0;
-
+let as=0;
 
 
 
@@ -990,58 +881,41 @@ let awayScore=0;
 let timer=setInterval(()=>{
 
 
-
 minute++;
-
 
 
 time.innerHTML=minute+"'";
 
 
 
-
-if(minute==45){
-
+if(minute==45)
 status.innerHTML="⏸ HALBZEIT";
 
-}
 
-
-
-if(minute==46){
-
+if(minute==46)
 status.innerHTML="▶ 2. HALBZEIT";
 
-}
 
 
 
+goals.forEach(g=>{
 
 
-
-goals.forEach(goal=>{
-
+if(g.minute==minute){
 
 
-if(goal.minute==minute){
+if(g.team=="home"){
 
 
-
-if(goal.team=="home"){
-
-
-homeScore++;
-
+hs++;
 
 
 homeTicker.innerHTML+=
-
 "<div class='goal'>"+
 minute+
 "' ⚽ "+
-document.getElementById("homeName").value+
+document.getElementById("homeTeam").value+
 "</div>";
-
 
 
 }
@@ -1049,27 +923,22 @@ document.getElementById("homeName").value+
 else{
 
 
-awayScore++;
-
+as++;
 
 
 awayTicker.innerHTML+=
-
 "<div class='goal'>"+
 minute+
 "' ⚽ "+
-document.getElementById("awayName").value+
+document.getElementById("awayTeam").value+
 "</div>";
-
 
 
 }
 
 
 
-score.innerHTML=
-homeScore+":"+awayScore;
-
+score.innerHTML=hs+":"+as;
 
 
 }
@@ -1081,33 +950,23 @@ homeScore+":"+awayScore;
 
 
 
-
-
-
-
 if(minute>=90){
-
 
 
 clearInterval(timer);
 
 
 
-score.innerHTML=
-result.home+":"+result.away;
-
+score.innerHTML=result.home+":"+result.away;
 
 time.innerHTML="90+3'";
 
-
 status.innerHTML="🏁 ENDE";
-
 
 
 running=false;
 
 button.disabled=false;
-
 
 
 }
@@ -1117,9 +976,7 @@ button.disabled=false;
 },160);
 
 
-
 }
-
 
 
 
@@ -1129,9 +986,7 @@ button.disabled=false;
 updateBoard();
 
 
-
 </script>
-
 
 
 </body>
