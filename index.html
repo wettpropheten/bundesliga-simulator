@@ -243,7 +243,7 @@
                 <button class="btn-update" onclick="updateMatchboard()">Aktualisieren</button>
             </div>
 
-            <button class="btn-start" id="start-btn" onclick="startTimer()">Ergebnis</button>
+            <button class="btn-start" id="start-btn" onclick="startSimulation()">Ergebnis</button>
         </div>
 
         <!-- RECHTE SPALTE (Matchboard) -->
@@ -270,10 +270,10 @@
 <script>
     let isRunning = false;
 
-    // Lädt die Werte SOFORT beim Starten der Seite korrekt
-    window.onload = function() {
+    // Diese absolut sichere Methode zwingt das Skript beim Laden zum Starten
+    document.addEventListener("DOMContentLoaded", function() {
         updateMatchboard();
-    };
+    });
 
     function updateMatchboard() {
         if (isRunning) return;
@@ -299,7 +299,3 @@
         document.getElementById('view-name3').style.backgroundColor = colorAway;
 
         document.getElementById('view-score').innerText = "?:?";
-        document.getElementById('view-time').innerText = "0'";
-    }
-
-    function startTimer() {
