@@ -6,14 +6,13 @@
     <title>Sport Simulator Layout</title>
     <style>
         body {
-            background-color: #8b1111; /* Roter Hintergrund aus dem Screenshot */
+            background-color: #8b1111;
             color: white;
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 30px;
         }
 
-        /* Das Haupt-Raster, das die Seite in zwei Hälften teilt */
         .main-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -23,7 +22,6 @@
             align-items: flex-start;
         }
 
-        /* Linke Spalte: Eingaben & Buttons */
         .left-column {
             display: flex;
             flex-direction: column;
@@ -31,7 +29,6 @@
             align-items: flex-start;
         }
 
-        /* Rechte Spalte: Anzeigetafel */
         .right-column {
             display: flex;
             flex-direction: column;
@@ -39,7 +36,6 @@
             gap: 35px;
         }
 
-        /* Eingabemaske */
         .input-box {
             background-color: #1a0a0a;
             border: 2px solid #2d1515;
@@ -116,7 +112,6 @@
             background-color: rgba(255,51,51,0.1);
         }
 
-        /* Der Ergebnis/Start-Button */
         .btn-start {
             background-color: #1e7e4e;
             color: white;
@@ -141,7 +136,6 @@
             cursor: not-allowed;
         }
 
-        /* Die Anzeigetafel */
         .scoreboard {
             width: 100%;
             max-width: 500px;
@@ -163,7 +157,6 @@
             background-color: #64b931; 
             color: white;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-            transition: background-color 0.2s;
         }
         .score-container {
             flex: 1;
@@ -221,7 +214,6 @@
 
     <div class="main-grid">
         
-        <!-- LINKE SPALTE (Eingabe) -->
         <div class="left-column">
             <div class="input-box">
                 <div class="input-row">
@@ -248,16 +240,15 @@
             <button class="btn-start" id="start-btn" onclick="startTimer()">Start</button>
         </div>
 
-        <!-- RECHTE SPALTE (Matchboard) -->
         <div class="right-column">
             <div class="scoreboard">
                 <div class="team-row">
-                    <div class="team-box" id="view-name1">BVB</div>
+                    <div class="team-box" id="view-name1" style="background-color: #64b931;">BVB</div>
                     <div class="score-container">
                         <div class="score-box" id="view-score">?:?</div>
                         <div class="time-box" id="view-time">0'</div>
                     </div>
-                    <div class="team-box" id="view-name3">BVB</div>
+                    <div class="team-box" id="view-name3" style="background-color: #64b931;">BVB</div>
                 </div>
                 <div class="pct-row">
                     <div class="pct-box"><span>Heim</span><div id="view-pct1">67%</div></div>
@@ -272,12 +263,6 @@
 <script>
     let isRunning = false;
 
-    // Synchronisiert die Werte beim ersten Laden der Seite automatisch
-    window.onload = function() {
-        updateMatchboard();
-    };
-
-    // Funktion: Überträgt die Werte aus der linken Box auf das Matchboard rechts
     function updateMatchboard() {
         if (isRunning) return;
 
@@ -291,13 +276,29 @@
         const colorHome = document.getElementById('inp-col1').value;
         const colorAway = document.getElementById('inp-col3').value;
 
-        // Texte auf dem Board anpassen
         document.getElementById('view-name1').innerText = nameHome;
         document.getElementById('view-name3').innerText = nameAway;
 
-        // Prozentzahlen unter dem Board anpassen
         document.getElementById('view-pct1').innerText = pctHome + "%";
         document.getElementById('view-pct2').innerText = pctDraw + "%";
         document.getElementById('view-pct3').innerText = pctAway + "%";
 
-    
+        document.getElementById('view-name1').style.backgroundColor = colorHome;
+        document.getElementById('view-name3').style.backgroundColor = colorAway;
+
+        document.getElementById('view-score').innerText = "?:?";
+        document.getElementById('view-time').innerText = "0'";
+    }
+
+    function startTimer() {
+        if (isRunning) return;
+        isRunning = true;
+
+        const btn = document.getElementById('start-btn');
+        const timeBox = document.getElementById('view-time');
+        const scoreBox = document.getElementById('view-score');
+
+        btn.disabled = true;
+        scoreBox.innerText = "0:0";
+
+        let currentMinute = 0;
