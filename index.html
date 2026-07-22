@@ -144,7 +144,6 @@
             justify-content: center;
             padding: 10px;
             box-sizing: border-box;
-            transition: background-color 0.3s;
         }
         #block-home { background-color: #dd0000; }
         #block-away { background-color: #1a1a1a; }
@@ -189,27 +188,27 @@
             text-align: center;
         }
 
-        /* Neue CSS-Stile für die Glücksrad-Anzeige */
-        .wheel-container {
+        /* Glücksrad-Stile */
+        .wheel-box {
             position: relative;
-            width: 320px;
-            height: 320px;
+            width: 300px;
+            height: 300px;
             margin: 20px auto;
-            border: 8px solid #b8860b;
+            border: 6px solid #b8860b;
             border-radius: 50%;
-            box-shadow: 0 0 15px rgba(184, 134, 11, 0.4);
             background: #111;
+            box-shadow: 0 0 15px rgba(184, 134, 11, 0.4);
         }
-        .wheel-pointer {
+        .wheel-arrow {
             position: absolute;
-            top: -18px;
+            top: -15px;
             left: 50%;
             transform: translateX(-50%);
             width: 0;
             height: 0;
-            border-left: 12px solid transparent;
-            border-right: 12px solid transparent;
-            border-top: 24px solid #ef4444;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 22px solid #ef4444;
             z-index: 10;
         }
         #wheel-canvas {
@@ -221,8 +220,8 @@
 
 <div class="container">
     <h1>Sport Ergebnis-Rechner & Simulator</h1>
-
-    <!-- Die obere Bundesliga Anzeigetafel -->
+    
+    <!-- Anzeigetafel -->
     <div class="scoreboard-bundesliga">
         <div class="team-block" id="block-home">
             <div class="team-name" id="lbl-home">FCB</div>
@@ -235,8 +234,8 @@
             <div class="team-name" id="lbl-away">SGE</div>
         </div>
     </div>
-    
-    <!-- Die Eingabemaske -->
+
+    <!-- Steuerung -->
     <div class="box">
         <div id="error">Die Prozentwerte müssen genau 100 ergeben.</div>
         <div class="input-row">
@@ -256,12 +255,12 @@
         </div>
         
         <div class="btn-container">
-            <button id="spin-btn" onclick="simulateGame()">Spiel simulieren</button>
+            <button id="spin-btn" onclick="startSimulation()">Spiel simulieren</button>
             <button id="reset-btn" onclick="resetForm()">Reset</button>
         </div>
     </div>
 
-    <!-- Das untere Dashboard für Prozentwerte und Quoten -->
+    <!-- Dashboard -->
     <div class="dashboard">
         <div class="dash-item">
             <div class="dash-name">Heim</div>
@@ -280,3 +279,6 @@
         </div>
     </div>
 
+    <!-- Das Glücksrad -->
+    <div class="wheel-box">
+        <div class="wheel-arrow"></div>
