@@ -6,14 +6,14 @@
     <title>Sport Simulator Schritt für Schritt</title>
     <style>
         body {
-            background-color: #8b1111; /* Roter Hintergrund */
+            background-color: #8b1111; /* Roter Hintergrund aus dem Screenshot */
             color: white;
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 30px;
         }
 
-        /* Haupt-Raster: Links Eingabe, Rechts Anzeige */
+        /* Das Haupt-Raster, das die Seite in zwei Hälften teilt */
         .main-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -23,14 +23,15 @@
             align-items: flex-start;
         }
 
-        /* Linke Spalte */
+        /* Linke Spalte: Eingaben & Buttons */
         .left-column {
             display: flex;
             flex-direction: column;
             gap: 40px; 
+            align-items: flex-start;
         }
 
-        /* Rechte Spalte */
+        /* Rechte Spalte: Anzeigetafel */
         .right-column {
             display: flex;
             flex-direction: column;
@@ -115,7 +116,7 @@
             background-color: rgba(255,51,51,0.1);
         }
 
-        /* Grüner ERGEBNIS Button */
+        /* Der grüne Ergebnis-Button (wie im Screenshot) */
         .btn-start {
             background-color: #1e7e4e;
             color: white;
@@ -130,7 +131,7 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.3);
             text-transform: uppercase;
             letter-spacing: 1px;
-            align-self: flex-start;
+            margin-top: 20px;
         }
         .btn-start:hover {
             background-color: #155a37;
@@ -141,7 +142,7 @@
             cursor: not-allowed;
         }
 
-        /* Anzeigetafel */
+        /* Die Anzeigetafel */
         .scoreboard {
             width: 100%;
             max-width: 500px;
@@ -160,6 +161,7 @@
             justify-content: center;
             font-size: 45px;
             font-weight: 900;
+            background-color: #64b931; 
             color: white;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
@@ -219,48 +221,48 @@
 
     <div class="main-grid">
         
-        <!-- LINKE SPALTE (Eingabe) -->
+        <!-- LINKE SPALTE (Eingabe & Ergebnis-Knopf) -->
         <div class="left-column">
             <div class="input-box">
                 <div class="input-row">
                     <div class="field-group"><label>Heim-Name</label><input type="text" id="inp-name1" value="FCB"></div>
-                    <div class="field-group"><label>Chance</label><input type="number" id="inp-pct1" value="50"></div>
-                    <div class="field-group"><label>Farbe</label><input type="color" id="inp-col1" value="#ff3300"></div>
+                    <div class="field-group"><label>Chance</label><input type="number" id="inp-pct1" value="67"></div>
+                    <div class="field-group"><label>Farbe</label><input type="color" id="inp-col1" value="#64b931"></div>
                 </div>
                 
                 <div class="input-row">
                     <div class="field-group"><label>Remis</label><input type="text" value="Unentschieden" disabled></div>
-                    <div class="field-group"><label>Chance</label><input type="number" id="inp-pct2" value="20"></div>
+                    <div class="field-group"><label>Chance</label><input type="number" id="inp-pct2" value="13"></div>
                     <div class="field-group"><label>Farbe</label><input type="color" id="inp-col2" value="#444444"></div>
                 </div>
                 
                 <div class="input-row">
-                    <div class="field-group"><label>Gast-Name</label><input type="text" id="inp-name3" value="fcu"></div>
-                    <div class="field-group"><label>Chance</label><input type="number" id="inp-pct3" value="30"></div>
-                    <div class="field-group"><label>Farbe</label><input type="color" id="inp-col3" value="#3333ff"></div>
+                    <div class="field-group"><label>Gast-Name</label><input type="text" id="inp-name3" value="SGE"></div>
+                    <div class="field-group"><label>Chance</label><input type="number" id="inp-pct3" value="20"></div>
+                    <div class="field-group"><label>Farbe</label><input type="color" id="inp-col3" value="#ff3333"></div>
                 </div>
 
                 <button class="btn-update" onclick="updateMatchboard()">Aktualisieren</button>
             </div>
 
-            <button class="btn-start" id="start-btn" onclick="startSimulation()">Ergebnis</button>
+            <button class="btn-start" id="start-btn" onclick="startTimer()">Ergebnis</button>
         </div>
 
         <!-- RECHTE SPALTE (Matchboard) -->
         <div class="right-column">
             <div class="scoreboard">
                 <div class="team-row">
-                    <div class="team-box" id="view-name1">---</div>
+                    <div class="team-box" id="view-name1">BVB</div>
                     <div class="score-container">
                         <div class="score-box" id="view-score">?:?</div>
                         <div class="time-box" id="view-time">0'</div>
                     </div>
-                    <div class="team-box" id="view-name3">---</div>
+                    <div class="team-box" id="view-name3">BVB</div>
                 </div>
                 <div class="pct-row">
-                    <div class="pct-box"><span>Heim</span><div id="view-pct1">0%</div></div>
-                    <div class="pct-box"><span>Remis</span><div id="view-pct2">0%</div></div>
-                    <div class="pct-box"><span>Gast</span><div id="view-pct3">0%</div></div>
+                    <div class="pct-box"><span>Heim</span><div id="view-pct1">67%</div></div>
+                    <div class="pct-box"><span>Remis</span><div id="view-pct2">13%</div></div>
+                    <div class="pct-box"><span>Gast</span><div id="view-pct3">20%</div></div>
                 </div>
             </div>
         </div>
@@ -270,10 +272,9 @@
 <script>
     let isRunning = false;
 
-    // Diese absolut sichere Methode zwingt das Skript beim Laden zum Starten
-    document.addEventListener("DOMContentLoaded", function() {
+    window.onload = function() {
         updateMatchboard();
-    });
+    };
 
     function updateMatchboard() {
         if (isRunning) return;
@@ -298,4 +299,3 @@
         document.getElementById('view-name1').style.backgroundColor = colorHome;
         document.getElementById('view-name3').style.backgroundColor = colorAway;
 
-        document.getElementById('view-score').innerText = "?:?";
