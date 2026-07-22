@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Bundesliga Real Simulator</title>
+<title>Bundesliga Sport Simulator</title>
 
 <style>
 
@@ -25,13 +26,15 @@ body{
 }
 
 
+
 .box{
-    background:#180909;
+    background:#1a0a0a;
     padding:20px;
-    border-radius:12px;
     width:380px;
-    box-shadow:0 5px 20px black;
+    border-radius:10px;
+    box-shadow:0 5px 15px black;
 }
+
 
 
 .row{
@@ -41,6 +44,7 @@ body{
 }
 
 
+
 label{
     display:block;
     color:#aaa;
@@ -48,13 +52,23 @@ label{
 }
 
 
+
 input{
-    width:90px;
-    padding:8px;
     background:#2b1b1b;
-    border:1px solid #555;
     color:white;
+    border:1px solid #555;
+    padding:8px;
+    width:80px;
 }
+
+
+
+input[type=color]{
+    width:45px;
+    height:35px;
+    padding:0;
+}
+
 
 
 button{
@@ -66,6 +80,7 @@ button{
 }
 
 
+
 .update{
     background:none;
     color:#ff4444;
@@ -73,12 +88,15 @@ button{
 }
 
 
+
 .start{
+    width:200px;
     background:#168044;
     color:white;
+    border:0;
     font-size:22px;
-    width:200px;
 }
+
 
 
 .start:disabled{
@@ -88,103 +106,131 @@ button{
 
 
 .scoreboard{
-
-    width:560px;
+    width:600px;
     background:#222;
-    border:3px solid #555;
-
+    border:3px solid #444;
 }
 
 
 
 .teams{
-
-    height:140px;
     display:flex;
-
+    height:130px;
 }
 
 
-.team{
 
-    width:190px;
+.team{
+    width:200px;
     display:flex;
     justify-content:center;
     align-items:center;
     font-size:45px;
     font-weight:bold;
-
 }
+
 
 
 .middle{
-
     flex:1;
-
 }
+
 
 
 .score{
-
-    height:75px;
+    height:70px;
     background:white;
     color:black;
     display:flex;
-    justify-content:center;
     align-items:center;
+    justify-content:center;
     font-size:42px;
     font-weight:bold;
     transition:.3s;
-
 }
 
 
-.time{
 
-    height:65px;
+.time{
+    height:60px;
     background:#ccc;
     color:black;
     display:flex;
-    justify-content:center;
     align-items:center;
+    justify-content:center;
     font-size:28px;
-
 }
 
 
 
 .percent{
-
     display:flex;
     background:#111;
     padding:15px;
-
 }
+
 
 
 .percent div{
-
     flex:1;
     text-align:center;
-
 }
+
 
 
 .small{
-
-    color:#888;
     font-size:12px;
+    color:#888;
+}
+
+
+
+/* TICKER */
+
+.ticker{
+
+    display:flex;
+    background:#090909;
+    min-height:150px;
+    padding:10px;
 
 }
 
 
 
-.events{
+.homeTicker,
+.awayTicker{
 
-    background:#090909;
-    min-height:120px;
-    padding:15px;
-    font-size:18px;
+    width:50%;
+    font-size:17px;
+
+}
+
+
+
+.homeTicker{
+
+    text-align:left;
+
+}
+
+
+
+.awayTicker{
+
+    text-align:right;
+
+}
+
+
+
+.centerEvent{
+
+    text-align:center;
+    font-size:22px;
+    font-weight:bold;
+    padding:10px;
+    background:#111;
 
 }
 
@@ -193,8 +239,7 @@ button{
 .goal{
 
     color:#00ff66;
-    font-weight:bold;
-    animation:goal .5s;
+    animation:goal .4s;
 
 }
 
@@ -203,7 +248,7 @@ button{
 @keyframes goal{
 
 from{
-transform:scale(1.5);
+transform:scale(1.4);
 }
 
 to{
@@ -234,16 +279,21 @@ transform:scale(1);
 <div class="row">
 
 <div>
-<label>Heimteam</label>
+<label>Heim</label>
 <input id="homeName" value="FCB">
 </div>
 
 
 <div>
-<label>Stärke</label>
-<input id="homeStrength" type="number" value="85">
+<label>Sieg %</label>
+<input id="homePct" type="number" value="67">
 </div>
 
+
+<div>
+<label>Farbe</label>
+<input id="homeColor" type="color" value="#64b931">
+</div>
 
 </div>
 
@@ -252,22 +302,49 @@ transform:scale(1);
 <div class="row">
 
 <div>
-<label>Gastteam</label>
+<label>Remis</label>
+<input disabled value="X">
+</div>
+
+
+<div>
+<label>Remis %</label>
+<input id="drawPct" type="number" value="13">
+</div>
+
+
+</div>
+
+
+
+
+<div class="row">
+
+
+<div>
+<label>Gast</label>
 <input id="awayName" value="SGE">
 </div>
 
 
 <div>
-<label>Stärke</label>
-<input id="awayStrength" type="number" value="70">
+<label>Sieg %</label>
+<input id="awayPct" type="number" value="20">
+</div>
+
+
+<div>
+<label>Farbe</label>
+<input id="awayColor" type="color" value="#ff3333">
 </div>
 
 
 </div>
+
 
 
 <button class="update" onclick="updateBoard()">
-Berechnen
+Aktualisieren
 </button>
 
 
@@ -284,8 +361,6 @@ START
 
 
 
-
-
 <div class="scoreboard">
 
 
@@ -297,7 +372,9 @@ FCB
 </div>
 
 
+
 <div class="middle">
+
 
 <div id="score" class="score">
 0:0
@@ -310,6 +387,7 @@ FCB
 
 
 </div>
+
 
 
 <div id="awayView" class="team" style="background:#ff3333">
@@ -325,23 +403,20 @@ SGE
 
 
 <div>
-<span class="small">Heim Sieg</span>
-<br>
-<span id="homeProb">0%</span>
+<span class="small">Heim</span><br>
+<span id="hp">67%</span>
 </div>
 
 
 <div>
-<span class="small">Remis</span>
-<br>
-<span id="drawProb">0%</span>
+<span class="small">Remis</span><br>
+<span id="dp">13%</span>
 </div>
 
 
 <div>
-<span class="small">Gast Sieg</span>
-<br>
-<span id="awayProb">0%</span>
+<span class="small">Gast</span><br>
+<span id="ap">20%</span>
 </div>
 
 
@@ -349,12 +424,27 @@ SGE
 
 
 
-<div class="events" id="events">
-Spiel startet...
+<div id="event" class="centerEvent">
+ANPFIFF
 </div>
 
 
+
+<div class="ticker">
+
+
+<div id="homeTicker" class="homeTicker"></div>
+
+
+<div id="awayTicker" class="awayTicker"></div>
+
+
 </div>
+
+
+
+</div>
+
 
 
 </div>
@@ -364,104 +454,76 @@ Spiel startet...
     let running = false;
 
 
-// Bundesliga-basierte Berechnung
-// Stärke 0-100 beeinflusst Siegchance
-function calculateProbability(){
-
-    let home = Number(document.getElementById("homeStrength").value);
-    let away = Number(document.getElementById("awayStrength").value);
-
-
-    let diff = home - away;
-
-
-    // Heimvorteil Bundesliga ca. 10 Punkte
-    let homePower = home + 10;
-    let awayPower = away;
-
-
-    let total = homePower + awayPower;
-
-
-    let homeChance = homePower / total;
-    let awayChance = awayPower / total;
-
-
-    let drawChance = 0.26 - Math.abs(diff)*0.002;
-
-
-    if(drawChance < 0.12)
-        drawChance = 0.12;
-
-
-
-    homeChance = homeChance * (1-drawChance);
-    awayChance = awayChance * (1-drawChance);
-
-
-
-    return {
-
-        home:Math.round(homeChance*100),
-        draw:Math.round(drawChance*100),
-        away:Math.round(awayChance*100)
-
-    };
-
-
-}
-
-
-
-
 
 function updateBoard(){
 
 
-    let home=document.getElementById("homeName").value;
-    let away=document.getElementById("awayName").value;
+    let hn = document.getElementById("homeName").value;
+    let an = document.getElementById("awayName").value;
+
+
+    let hc = document.getElementById("homeColor").value;
+    let ac = document.getElementById("awayColor").value;
 
 
 
-    document.getElementById("homeView").innerHTML=home;
-
-    document.getElementById("awayView").innerHTML=away;
-
+    document.getElementById("homeView").innerHTML = hn;
+    document.getElementById("awayView").innerHTML = an;
 
 
-    let p=calculateProbability();
+    document.getElementById("homeView").style.background = hc;
+    document.getElementById("awayView").style.background = ac;
 
 
 
-    document.getElementById("homeProb").innerHTML=p.home+"%";
-    document.getElementById("drawProb").innerHTML=p.draw+"%";
-    document.getElementById("awayProb").innerHTML=p.away+"%";
+    document.getElementById("hp").innerHTML =
+    document.getElementById("homePct").value+"%";
+
+
+    document.getElementById("dp").innerHTML =
+    document.getElementById("drawPct").value+"%";
+
+
+    document.getElementById("ap").innerHTML =
+    document.getElementById("awayPct").value+"%";
+
 
 }
 
 
 
 
-
-// erzeugt realistisches Ergebnis
+// realistische Ergebnisverteilung
 function createResult(){
 
 
-    let p=calculateProbability();
+    let hp =
+    Number(document.getElementById("homePct").value);
 
 
-    let r=Math.random()*100;
+    let dp =
+    Number(document.getElementById("drawPct").value);
+
+
+    let ap =
+    Number(document.getElementById("awayPct").value);
+
+
+
+    let r = Math.random()*100;
+
 
 
     let result;
 
 
-    if(r < p.home){
+
+    if(r < hp){
 
         result="home";
 
     }
-    else if(r < p.home+p.draw){
+    else if(r < hp+dp){
 
         result="draw";
 
@@ -474,59 +536,52 @@ function createResult(){
 
 
 
-    let homeStrength =
-    Number(document.getElementById("homeStrength").value);
-
-
-    let awayStrength =
-    Number(document.getElementById("awayStrength").value);
+    let homeGoals;
+    let awayGoals;
 
 
 
-    // Tore über durchschnittliche Bundesliga-Werte
+    // Bundesliga ähnliche Torverteilung
+    function goals(){
 
-    let homeGoals=Math.floor(Math.random()*4);
+        let x=Math.random();
 
-    let awayGoals=Math.floor(Math.random()*4);
+        if(x<0.15) return 0;
+        if(x<0.45) return 1;
+        if(x<0.75) return 2;
+        if(x<0.92) return 3;
 
-
-
-    if(result==="home"){
-
-
-        if(homeGoals<=awayGoals)
-            homeGoals=awayGoals+1;
-
+        return 4;
 
     }
 
 
 
-    if(result==="away"){
+    homeGoals=goals();
+    awayGoals=goals();
 
 
-        if(awayGoals<=homeGoals)
-            awayGoals=homeGoals+1;
 
+    // Ergebnis an Wahrscheinlichkeit anpassen
+    if(result==="home" && homeGoals<=awayGoals){
+
+        homeGoals=awayGoals+1;
 
     }
 
+
+    if(result==="away" && awayGoals<=homeGoals){
+
+        awayGoals=homeGoals+1;
+
+    }
 
 
     if(result==="draw"){
 
-
         awayGoals=homeGoals;
 
-
     }
-
-
-
-
-    // Begrenzung
-    if(homeGoals>5) homeGoals=5;
-    if(awayGoals>5) awayGoals=5;
 
 
 
@@ -557,25 +612,35 @@ function startGame(){
 
 
     let button=document.getElementById("start");
+
     button.disabled=true;
 
 
 
     let score=document.getElementById("score");
     let time=document.getElementById("time");
-    let events=document.getElementById("events");
+    let event=document.getElementById("event");
+
+
+    let homeTicker=document.getElementById("homeTicker");
+    let awayTicker=document.getElementById("awayTicker");
 
 
 
     score.innerHTML="0:0";
+
     time.innerHTML="0'";
 
 
-    events.innerHTML="";
+    event.innerHTML="⚽ ANPFIFF";
+
+
+    homeTicker.innerHTML="";
+    awayTicker.innerHTML="";
 
 
 
-    let final=createResult();
+    let result=createResult();
 
 
 
@@ -583,12 +648,12 @@ function startGame(){
 
 
 
-    for(let i=0;i<final.home;i++){
+    for(let i=0;i<result.home;i++){
 
         goals.push({
 
-            team:"home",
-            minute:Math.floor(Math.random()*85)+1
+            minute:Math.floor(Math.random()*88)+1,
+            team:"home"
 
         });
 
@@ -596,13 +661,12 @@ function startGame(){
 
 
 
-
-    for(let i=0;i<final.away;i++){
+    for(let i=0;i<result.away;i++){
 
         goals.push({
 
-            team:"away",
-            minute:Math.floor(Math.random()*85)+1
+            minute:Math.floor(Math.random()*88)+1,
+            team:"away"
 
         });
 
@@ -616,9 +680,8 @@ function startGame(){
 
     let minute=0;
 
-
-
     let homeScore=0;
+
     let awayScore=0;
 
 
@@ -633,6 +696,17 @@ function startGame(){
 
 
 
+        // Halbzeit
+
+        if(minute===45){
+
+            event.innerHTML="⏸ HALBZEIT";
+
+        }
+
+
+
+
         goals.forEach(goal=>{
 
 
@@ -642,11 +716,18 @@ function startGame(){
 
                 if(goal.team==="home"){
 
+
                     homeScore++;
 
-                    events.innerHTML +=
-                    "<div class='goal'>⚽ TOR "+document.getElementById("homeName").value+
-                    " ("+minute+"')</div>";
+
+                    homeTicker.innerHTML +=
+
+                    "<div class='goal'>"+
+                    minute+"' ⚽ "+
+                    document.getElementById("homeName").value+
+                    "</div>";
+
+
 
                 }
                 else{
@@ -655,28 +736,32 @@ function startGame(){
                     awayScore++;
 
 
-                    events.innerHTML +=
-                    "<div class='goal'>⚽ TOR "+document.getElementById("awayName").value+
-                    " ("+minute+"')</div>";
+                    awayTicker.innerHTML +=
+
+                    "<div class='goal'>"+
+                    minute+"' ⚽ "+
+                    document.getElementById("awayName").value+
+                    "</div>";
+
 
                 }
 
 
 
-                score.style.transform="scale(1.3)";
+
+                score.style.transform="scale(1.25)";
 
 
                 setTimeout(()=>{
 
                     score.style.transform="scale(1)";
 
-                },300);
+                },250);
 
 
 
-                score.innerHTML=
+                score.innerHTML =
                 homeScore+":"+awayScore;
-
 
 
             }
@@ -688,6 +773,9 @@ function startGame(){
 
 
 
+
+        // Spielende
+
         if(minute>=90){
 
 
@@ -695,15 +783,15 @@ function startGame(){
 
 
 
-            score.innerHTML=
-            final.home+":"+final.away;
+            score.innerHTML =
+            result.home+":"+result.away;
+
 
 
             time.innerHTML="90'";
 
 
-            events.innerHTML +=
-            "<br><b>🏁 Abpfiff</b>";
+            event.innerHTML="🏁 ENDE";
 
 
 
@@ -717,7 +805,7 @@ function startGame(){
 
 
 
-    },150);
+    },160);
 
 
 
@@ -725,12 +813,4 @@ function startGame(){
 
 
 
-
-
 updateBoard();
-
-</script>
-
-
-</body>
-</html>
