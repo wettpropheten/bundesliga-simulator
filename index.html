@@ -23,11 +23,11 @@
             align-items: flex-start;
         }
 
-        /* Linke Spalte: Eingaben */
+        /* Linke Spalte: Eingaben & der Ergebnis-Button */
         .left-column {
             display: flex;
             flex-direction: column;
-            gap: 40px; 
+            gap: 60px; /* Genügend Abstand nach unten zum Ergebnis-Button */
         }
 
         /* Rechte Spalte: Anzeigetafel */
@@ -115,6 +115,32 @@
             background-color: rgba(255,51,51,0.1);
         }
 
+        /* Der grüne ERGEBNIS Button */
+        .btn-start {
+            background-color: #1e7e4e;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 4px;
+            width: 180px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            align-self: flex-start; /* Linksbündig unter der Box platziert */
+        }
+        .btn-start:hover {
+            background-color: #155a37;
+        }
+        .btn-start:disabled {
+            background-color: #444;
+            color: #aaa;
+            cursor: not-allowed;
+        }
+
         /* Die Anzeigetafel */
         .scoreboard {
             width: 100%;
@@ -194,29 +220,32 @@
 
     <div class="main-grid">
         
-        <!-- LINKE SPALTE (Eingabe) -->
+        <!-- LINKE SPALTE (Eingabe & Button) -->
         <div class="left-column">
             <div class="input-box">
                 <div class="input-row">
                     <div class="field-group"><label>Heim-Name</label><input type="text" id="inp-name1" value="FCB"></div>
-                    <div class="field-group"><label>Chance</label><input type="number" id="inp-pct1" value="67"></div>
-                    <div class="field-group"><label>Farbe</label><input type="color" id="inp-col1" value="#64b931"></div>
+                    <div class="field-group"><label>Chance</label><input type="number" id="inp-pct1" value="50"></div>
+                    <div class="field-group"><label>Farbe</label><input type="color" id="inp-col1" value="#ff3300"></div>
                 </div>
                 
                 <div class="input-row">
                     <div class="field-group"><label>Remis</label><input type="text" value="Unentschieden" disabled></div>
-                    <div class="field-group"><label>Chance</label><input type="number" id="inp-pct2" value="13"></div>
+                    <div class="field-group"><label>Chance</label><input type="number" id="inp-pct2" value="20"></div>
                     <div class="field-group"><label>Farbe</label><input type="color" id="inp-col2" value="#444444"></div>
                 </div>
                 
                 <div class="input-row">
-                    <div class="field-group"><label>Gast-Name</label><input type="text" id="inp-name3" value="SGE"></div>
-                    <div class="field-group"><label>Chance</label><input type="number" id="inp-pct3" value="20"></div>
-                    <div class="field-group"><label>Farbe</label><input type="color" id="inp-col3" value="#ff3333"></div>
+                    <div class="field-group"><label>Gast-Name</label><input type="text" id="inp-name3" value="fcu"></div>
+                    <div class="field-group"><label>Chance</label><input type="number" id="inp-pct3" value="30"></div>
+                    <div class="field-group"><label>Farbe</label><input type="color" id="inp-col3" value="#3333ff"></div>
                 </div>
 
                 <button class="btn-update" onclick="updateMatchboard()">Aktualisieren</button>
             </div>
+
+            <!-- Hier ist dein ERGEBNIS Button wieder -->
+            <button class="btn-start" id="start-btn" onclick="startTimer()">Ergebnis</button>
         </div>
 
         <!-- RECHTE SPALTE (Matchboard) -->
@@ -231,9 +260,9 @@
                     <div class="team-box" id="view-name3">BVB</div>
                 </div>
                 <div class="pct-row">
-                    <div class="pct-box"><span>Heim</span><div id="view-pct1">67%</div></div>
-                    <div class="pct-box"><span>Remis</span><div id="view-pct2">13%</div></div>
-                    <div class="pct-box"><span>Gast</span><div id="view-pct3">20%</div></div>
+                    <div class="pct-box"><span>Heim</span><div id="view-pct1">50%</div></div>
+                    <div class="pct-box"><span>Remis</span><div id="view-pct2">20%</div></div>
+                    <div class="pct-box"><span>Gast</span><div id="view-pct3">30%</div></div>
                 </div>
             </div>
         </div>
@@ -241,14 +270,15 @@
     </div>
 
 <script>
-    // Sobald die Seite lädt, führen wir die Funktion einmal aus
+    let isRunning = false;
+
     window.onload = function() {
         updateMatchboard();
     };
 
-    // Diese Funktion holt die Werte von links und schreibt sie nach rechts
     function updateMatchboard() {
-        // 1. Werte aus den linken Feldern auslesen
+        if (isRunning) return;
+
         const nameHome = document.getElementById('inp-name1').value;
         const nameAway = document.getElementById('inp-name3').value;
 
@@ -259,20 +289,11 @@
         const colorHome = document.getElementById('inp-col1').value;
         const colorAway = document.getElementById('inp-col3').value;
 
-        // 2. Texte auf der rechten Tafel anpassen
         document.getElementById('view-name1').innerText = nameHome;
         document.getElementById('view-name3').innerText = nameAway;
 
-        // 3. Prozentzahlen unter der rechten Tafel anpassen
         document.getElementById('view-pct1').innerText = pctHome + "%";
         document.getElementById('view-pct2').innerText = pctDraw + "%";
         document.getElementById('view-pct3').innerText = pctAway + "%";
 
-        // 4. Farben der Boxen auf der rechten Tafel anpassen
         document.getElementById('view-name1').style.backgroundColor = colorHome;
-        document.getElementById('view-name3').style.backgroundColor = colorAway;
-    }
-</script>
-
-</body>
-</html>
