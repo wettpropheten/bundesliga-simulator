@@ -133,6 +133,8 @@
             display: flex;
             flex-direction: row;
             overflow: hidden;
+            border-radius: 12px;
+            margin-bottom: 25px;
         }
         .team-block {
             flex: 1;
@@ -142,6 +144,7 @@
             justify-content: center;
             padding: 10px;
             box-sizing: border-box;
+            transition: background-color 0.3s;
         }
         #block-home { background-color: #dd0000; }
         #block-away { background-color: #1a1a1a; }
@@ -185,6 +188,35 @@
             font-family: Arial, sans-serif;
             text-align: center;
         }
+
+        /* NEU: Das interaktive Glücksrad-Element */
+        .wheel-container {
+            position: relative;
+            width: 340px;
+            height: 340px;
+            margin: 25px auto 10px auto;
+            border: 8px solid #b8860b;
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(184, 134, 11, 0.5);
+            background: #111;
+        }
+        .wheel-pointer {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 14px solid transparent;
+            border-right: 14px solid transparent;
+            border-top: 28px solid #ff0000;
+            z-index: 10;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8));
+        }
+        #wheel {
+            border-radius: 50%;
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -192,30 +224,46 @@
 <div class="container">
     <h1>Sport Ergebnis-Rechner & Simulator</h1>
     
-    <div class="box">
-        <div id="error">Die Prozentwerte müssen genau 100 ergeben.</div>
-        <div class="input-row">
-            <div class="field-group"><label>Heim-Name</label><input type="text" id="name1" value="FCB"></div>
-            <div class="field-group"><label>Chance</label><span><input type="number" id="pct1" value="68"> %</span></div>
-            <div class="field-group"><label>Farbe</label><input type="color" id="col1" value="#dd0000"></div>
+    <!-- Anzeigetafel oben -->
+    <div class="scoreboard-bundesliga">
+        <div class="team-block" id="block-home">
+            <div class="team-name" id="lbl-home">FCB</div>
         </div>
-        <div class="input-row">
-            <div class="field-group"><label>Remis</label><input type="text" value="Unentschieden" disabled></div>
-            <div class="field-group"><label>Chance</label><span><input type="number" id="pct2" value="20"> %</span></div>
-            <div class="field-group"><label>Farbe</label><input type="color" id="col2" value="#718096"></div>
+        <div class="center-block">
+            <div class="score-row" id="lbl-score">?:?</div>
+            <div class="time-row">90'</div>
         </div>
-        <div class="input-row">
-            <div class="field-group"><label>Gast-Name</label><input type="text" id="name3" value="SGE"></div>
-            <div class="field-group"><label>Chance</label><span><input type="number" id="pct3" value="12"> %</span></div>
-            <div class="field-group"><label>Farbe</label><input type="color" id="col3" value="#1a1a1a"></div>
-        </div>
-        
-        <div class="btn-container">
-            <button id="spin-btn">Spiel simulieren</button>
-            <button id="reset-btn">Reset</button>
+        <div class="team-block" id="block-away">
+            <div class="team-name" id="lbl-away">SGE</div>
         </div>
     </div>
 
+    <!-- Steuerung & Eingabefelder -->
+    <div class="box">
+        <div id="error">Die Prozentwerte müssen genau 100 ergeben.</div>
+        <div class="input-row">
+            <div class="field-group"><label>Heim-Name</label><input type="text" id="name1" value="FCB" oninput="syncAndDraw()"></div>
+            <div class="field-group"><label>Chance</label><span><input type="number" id="pct1" value="68" min="0" max="100" oninput="syncAndDraw()"> %</span></div>
+            <div class="field-group"><label>Farbe</label><input type="color" id="col1" value="#dd0000" onchange="syncAndDraw()"></div>
+        </div>
+        <div class="input-row">
+            <div class="field-group"><label>Remis</label><input type="text" value="Unentschieden" disabled></div>
+            <div class="field-group"><label>Chance</label><span><input type="number" id="pct2" value="20" min="0" max="100" oninput="syncAndDraw()"> %</span></div>
+            <div class="field-group"><label>Farbe</label><input type="color" id="col2" value="#718096" onchange="syncAndDraw()"></div>
+        </div>
+        <div class="input-row">
+            <div class="field-group"><label>Gast-Name</label><input type="text" id="name3" value="SGE" oninput="syncAndDraw()"></div>
+            <div class="field-group"><label>Chance</label><span><input type="number" id="pct3" value="12" min="0" max="100" oninput="syncAndDraw()"> %</span></div>
+            <div class="field-group"><label>Farbe</label><input type="color" id="col3" value="#1a1a1a" onchange="syncAndDraw()"></div>
+        </div>
+        
+        <div class="btn-container">
+            <button id="spin-btn" onclick="startSimulation()">Spiel simulieren</button>
+            <button id="reset-btn" onclick="resetForm()">Reset</button>
+        </div>
+    </div>
+
+    <!-- Dashboard Statistik / Quoten -->
     <div class="dashboard">
         <div class="dash-item">
             <div class="dash-name">Heim</div>
@@ -229,49 +277,3 @@
         </div>
         <div class="dash-item">
             <div class="dash-name">Gast</div>
-            <div class="dash-pct" id="dash-val3">12%</div>
-            <div class="dash-odds" id="dash-odds3">Quote: 8.33</div>
-        </div>
-    </div>
-
-    <div class="scoreboard-bundesliga">
-        <div class="team-block" id="block-home"><div class="team-name" id="display-name-home">FCB</div></div>
-        <div class="center-block">
-            <div class="score-row" id="result-score">? - ?</div>
-            <div class="time-row" id="result-time">90:00</div>
-        </div>
-        <div class="team-block" id="block-away"><div class="team-name" id="display-name-away">SGE</div></div>
-    </div>
-    
-    <div id="result-ticker" style="margin-top: 15px; font-weight: bold; font-size: 16px; color: #aaa;">Bereit</div>
-</div>
-
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        // DOM-Elemente sauber referenzieren
-        const sc = document.getElementById('result-score');
-        const ticker = document.getElementById('result-ticker');
-        const err = document.getElementById('error');
-        const spinBtn = document.getElementById('spin-btn');
-        const resetBtn = document.getElementById('reset-btn');
-        const timeDiv = document.getElementById('result-time');
-        
-        const hp = document.getElementById('pct1');
-        const dp = document.getElementById('pct2');
-        const ap = document.getElementById('pct3');
-
-        // Deine exakten Ergebnis-Pools
-        const H = ["1:0", "2:0", "2:1", "3:0", "3:1", "3:2", "4:0"];
-        const D = ["0:0", "1:1", "2:2"];
-        const A = ["0:1", "0:2", "1:2", "0:3", "1:3", "2:3", "0:4"];
-
-        let tickerInterval = null;
-        let isRunning = false;
-
-        function update() {
-            const p1 = parseInt(hp.value) || 0;
-            const p2 = parseInt(dp.value) || 0;
-            const p3 = parseInt(ap.value) || 0;
-
-            if ((p1 + p2 + p3) !== 100) {
-                err.style.display = 'block';
