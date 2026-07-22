@@ -3,17 +3,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Matchboard Schritt 2</title>
+    <title>Sport Simulator Layout</title>
     <style>
         body {
-            background-color: #8b1111; /* Roter Hintergrund */
+            background-color: #8b1111; /* Roter Hintergrund aus dem Screenshot */
             color: white;
             font-family: Arial, sans-serif;
+            margin: 0;
             padding: 30px;
+        }
+
+        /* Das Haupt-Raster, das die Seite in zwei Hälften teilt */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            max-width: 1100px;
+            margin: 0 auto;
+            align-items: flex-start;
+        }
+
+        /* Linke Spalte: Eingaben & Buttons */
+        .left-column {
+            display: flex;
+            flex-direction: column;
+            gap: 60px; 
+        }
+
+        /* Rechte Spalte: Anzeigetafel & Rad */
+        .right-column {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 25px; /* Abstand zwischen Tafel und Button */
+            gap: 35px;
+        }
+
+        /* Eingabemaske */
+        .input-box {
+            background-color: #1a0a0a;
+            border: 2px solid #2d1515;
+            border-radius: 8px;
+            padding: 20px;
+            width: 380px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+        .input-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            align-items: flex-end;
+            gap: 10px;
+        }
+        .field-group {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+        .field-group label {
+            font-size: 11px;
+            color: #888;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+            font-weight: bold;
+        }
+        input[type="text"] {
+            width: 130px;
+            padding: 8px;
+            background: #2b1b1b;
+            color: white;
+            border: 1px solid #443333;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        input[type="text"]:disabled {
+            background: #1f1515;
+            color: #665555;
+        }
+        input[type="number"] {
+            width: 60px;
+            padding: 8px;
+            background: #2b1b1b;
+            color: white;
+            border: 1px solid #443333;
+            border-radius: 4px;
+            text-align: center;
+            font-weight: bold;
+        }
+        input[type="color"] {
+            width: 40px;
+            height: 34px;
+            border: 1px solid #443333;
+            border-radius: 4px;
+            cursor: pointer;
+            background: transparent;
+            padding: 0;
+        }
+        .btn-update {
+            background-color: transparent;
+            border: 1px solid #ff3333;
+            color: #ff3333;
+            padding: 10px 20px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 4px;
+            margin-top: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            width: 100%;
+        }
+        .btn-update:hover {
+            background-color: rgba(255,51,51,0.1);
+        }
+
+        /* Der Ergebnis/Start-Button */
+        .btn-start {
+            background-color: #1e7e4e;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 4px;
+            width: 180px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .btn-start:hover {
+            background-color: #155a37;
+        }
+        .btn-start:disabled {
+            background-color: #444;
+            color: #aaa;
+            cursor: not-allowed;
         }
 
         /* Die Anzeigetafel */
@@ -35,9 +159,10 @@
             justify-content: center;
             font-size: 45px;
             font-weight: 900;
-            background-color: #64b931; /* Grünes Startfeld */
+            background-color: #64b931; 
             color: white;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            transition: background-color 0.2s;
         }
         .score-container {
             flex: 1;
@@ -90,88 +215,98 @@
             font-weight: bold;
         }
 
-        /* Der neue Start-Button */
-        .btn-start {
-            background-color: #1e7e4e;
-            color: white;
-            border: none;
-            padding: 15px 40px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            border-radius: 4px;
-            width: 180px;
-            text-align: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-            text-transform: uppercase;
-            letter-spacing: 1px;
+        /* Glücksrad Box */
+        .wheel-box {
+            position: relative;
+            width: 320px;
+            height: 320px;
+            border: 6px solid #b8860b;
+            border-radius: 50%;
+            background: #111;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.6);
         }
-        .btn-start:hover {
-            background-color: #155a37;
+        .wheel-arrow {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 12px solid transparent;
+            border-right: 12px solid transparent;
+            border-top: 25px solid #ffcc00; 
+            z-index: 10;
         }
-        .btn-start:disabled {
-            background-color: #444;
-            color: #aaa;
-            cursor: not-allowed;
+        #wheel-canvas {
+            border-radius: 50%;
         }
     </style>
 </head>
 <body>
 
-    <!-- Die Tafel -->
-    <div class="scoreboard">
-        <div class="team-row">
-            <div class="team-box" id="view-name1">BVB</div>
-            <div class="score-container">
-                <div class="score-box" id="view-score">?:?</div>
-                <div class="time-box" id="view-time">0'</div>
+    <div class="main-grid">
+        
+        <!-- LINKE SPALTE -->
+        <div class="left-column">
+            <!-- Eingabemaske -->
+            <div class="input-box">
+                <div class="input-row">
+                    <div class="field-group"><label>Heim-Name</label><input type="text" id="inp-name1" value="FCB"></div>
+                    <div class="field-group"><label>Chance</label><input type="number" id="inp-pct1" value="67"></div>
+                    <div class="field-group"><label>Farbe</label><input type="color" id="inp-col1" value="#64b931"></div>
+                </div>
+                
+                <div class="input-row">
+                    <div class="field-group"><label>Remis</label><input type="text" value="Unentschieden" disabled></div>
+                    <div class="field-group"><label>Chance</label><input type="number" id="inp-pct2" value="13"></div>
+                    <div class="field-group"><label>Farbe</label><input type="color" id="inp-col2" value="#444444"></div>
+                </div>
+                
+                <div class="input-row">
+                    <div class="field-group"><label>Gast-Name</label><input type="text" id="inp-name3" value="SGE"></div>
+                    <div class="field-group"><label>Chance</label><input type="number" id="inp-pct3" value="20"></div>
+                    <div class="field-group"><label>Farbe</label><input type="color" id="inp-col3" value="#ff3333"></div>
+                </div>
+
+                <button class="btn-update" onclick="updateMatchboard()">Aktualisieren</button>
             </div>
-            <div class="team-box" id="view-name3">BVB</div>
+
+            <!-- Ergebnis/Start Button -->
+            <button class="btn-start" id="start-btn" onclick="startSimulation()">Ergebnis</button>
         </div>
-        <div class="pct-row">
-            <div class="pct-box"><span>Heim</span><div id="view-pct1">67%</div></div>
-            <div class="pct-box"><span>Remis</span><div id="view-pct2">13%</div></div>
-            <div class="pct-box"><span>Gast</span><div id="view-pct3">20%</div></div>
+
+        <!-- RECHTE SPALTE -->
+        <div class="right-column">
+            <!-- Anzeigetafel -->
+            <div class="scoreboard">
+                <div class="team-row">
+                    <div class="team-box" id="view-name1">BVB</div>
+                    <div class="score-container">
+                        <div class="score-box" id="view-score">?:?</div>
+                        <div class="time-box" id="view-time">0'</div>
+                    </div>
+                    <div class="team-box" id="view-name3">BVB</div>
+                </div>
+                <div class="pct-row">
+                    <div class="pct-box"><span>Heim</span><div id="view-pct1">67%</div></div>
+                    <div class="pct-box"><span>Remis</span><div id="view-pct2">13%</div></div>
+                    <div class="pct-box"><span>Gast</span><div id="view-pct3">20%</div></div>
+                </div>
+            </div>
+
+            <!-- Das Glücksrad -->
+            <div class="wheel-box">
+                <div class="wheel-arrow"></div>
+                <canvas id="wheel-canvas" width="308" height="308"></canvas>
+            </div>
         </div>
+
     </div>
 
-    <!-- Der Start-Button -->
-    <button class="btn-start" id="start-btn" onclick="startTimer()">Start</button>
-
 <script>
-    let isRunning = false;
+    const canvas = document.getElementById('wheel-canvas');
+    const ctx = canvas.getContext('2d');
+    const cx = canvas.width / 2;
+    const cy = canvas.height / 2;
+    const radius = canvas.width / 2;
 
-    function startTimer() {
-        if (isRunning) return;
-        isRunning = true;
-
-        const btn = document.getElementById('start-btn');
-        const timeBox = document.getElementById('view-time');
-        const scoreBox = document.getElementById('view-score');
-
-        btn.disabled = true;
-        scoreBox.innerText = "0:0";
-
-        let currentMinute = 0;
-        
-        // Intervall: Zählt die Minuten im Zeitraffer bis 90 hoch
-        const interval = setInterval(() => {
-            currentMinute++;
-            timeBox.innerText = currentMinute + "'";
-
-            if (currentMinute >= 90) {
-                clearInterval(interval);
-                isRunning = false;
-                btn.disabled = false;
-                
-                // Am Ende ein zufälliges Fußball-Ergebnis anzeigen
-                const goalsHome = Math.floor(Math.random() * 4);
-                const goalsAway = Math.floor(Math.random() * 4);
-                scoreBox.innerText = goalsHome + ":" + goalsAway;
-            }
-        }, 30); // Geschwindigkeit des Zeitraffers (ca. 3 Sekunden Gesamtdauer)
-    }
-</script>
-
-</body>
-</html>
