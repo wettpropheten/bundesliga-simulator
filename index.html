@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Bundesliga Real Simulator</title>
+<title>Bundesliga Simulator</title>
 
 <style>
 
@@ -27,26 +27,35 @@ body{
 
 
 .box{
+
     background:#1a0a0a;
     padding:20px;
-    width:380px;
+    width:400px;
     border-radius:10px;
     box-shadow:0 5px 15px black;
+
 }
+
 
 
 .row{
+
     display:flex;
     justify-content:space-between;
     margin-bottom:15px;
+
 }
+
 
 
 label{
+
     display:block;
-    font-size:12px;
     color:#aaa;
+    font-size:12px;
+
 }
+
 
 
 input,
@@ -55,10 +64,11 @@ select{
     background:#2b1b1b;
     color:white;
     border:1px solid #555;
-    padding:8px;
-    width:85px;
+    padding:7px;
+    width:90px;
 
 }
+
 
 
 input[type="color"]{
@@ -75,7 +85,7 @@ button{
 
     width:100%;
     padding:12px;
-    margin-top:15px;
+    margin-top:12px;
     font-weight:bold;
     cursor:pointer;
 
@@ -88,6 +98,16 @@ button{
     background:none;
     color:#ff4444;
     border:1px solid #ff4444;
+
+}
+
+
+
+.reset{
+
+    background:#700000;
+    color:white;
+    border:none;
 
 }
 
@@ -113,23 +133,15 @@ button{
 
 
 
-.reset{
-
-    background:#700000;
-    color:white;
-    border:none;
-
-}
-
-
 
 .scoreboard{
 
+    width:600px;
     background:#222;
     border:3px solid #444;
-    width:600px;
 
 }
+
 
 
 
@@ -146,12 +158,13 @@ button{
 
     width:200px;
     display:flex;
-    align-items:center;
     justify-content:center;
-    font-size:45px;
+    align-items:center;
+    font-size:42px;
     font-weight:bold;
 
 }
+
 
 
 
@@ -173,7 +186,6 @@ button{
     align-items:center;
     font-size:42px;
     font-weight:bold;
-    transition:.3s;
 
 }
 
@@ -190,6 +202,7 @@ button{
     font-size:28px;
 
 }
+
 
 
 
@@ -212,14 +225,6 @@ button{
 
 
 
-.small{
-
-    color:#888;
-    font-size:12px;
-
-}
-
-
 
 .status{
 
@@ -230,6 +235,7 @@ button{
     font-weight:bold;
 
 }
+
 
 
 
@@ -244,12 +250,14 @@ button{
 
 
 
+
 .homeTicker{
 
     width:50%;
     text-align:left;
 
 }
+
 
 
 
@@ -262,30 +270,12 @@ button{
 
 
 
+
 .goal{
 
     color:#00ff66;
-    font-weight:bold;
     font-size:18px;
-    animation:goal .4s;
-
-}
-
-
-
-@keyframes goal{
-
-from{
-
-transform:scale(1.4);
-
-}
-
-to{
-
-transform:scale(1);
-
-}
+    font-weight:bold;
 
 }
 
@@ -293,43 +283,54 @@ transform:scale(1);
 
 </style>
 
+
 </head>
 
 
 <body>
 
 
+
 <div class="main">
 
 
+
 <div>
+
 
 
 <div class="box">
 
 
+
+<h3>Heim</h3>
+
+
+
 <div class="row">
 
 
 <div>
-<label>Heim</label>
-<input id="homeName" value="FCB">
+
+<label>Name</label>
+
+<input id="homeName" value="">
+
 </div>
 
 
+
 <div>
+
 <label>Sieg %</label>
-<input id="homePct" type="number" value="67">
-</div>
 
+<input id="homePct" type="number" value="50">
 
-<div>
-<label>Farbe</label>
-<input id="homeColor" type="color" value="#64b931">
 </div>
 
 
 </div>
+
 
 
 
@@ -337,18 +338,61 @@ transform:scale(1);
 
 
 <div>
-<label>Remis</label>
-<input disabled value="X">
+
+<label>Farbe</label>
+
+<input id="homeColor" type="color" value="#777777">
+
 </div>
 
 
+
 <div>
+
+<label>Schrift</label>
+
+<select id="homeTextColor">
+
+<option value="white">
+Weiß
+</option>
+
+<option value="black">
+Schwarz
+</option>
+
+</select>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+<div class="row">
+
+
+<div>
+
 <label>Remis %</label>
-<input id="drawPct" type="number" value="13">
+
+<input id="drawPct" type="number" value="25">
+
 </div>
 
 
 </div>
+
+
+
+
+
+
+<h3>Gast</h3>
 
 
 
@@ -356,24 +400,66 @@ transform:scale(1);
 
 
 <div>
-<label>Gast</label>
-<input id="awayName" value="SGE">
+
+<label>Name</label>
+
+<input id="awayName" value="">
+
 </div>
 
 
+
 <div>
+
 <label>Sieg %</label>
-<input id="awayPct" type="number" value="20">
+
+<input id="awayPct" type="number" value="25">
+
 </div>
+
+
+</div>
+
+
+
+
+
+<div class="row">
 
 
 <div>
+
 <label>Farbe</label>
-<input id="awayColor" type="color" value="#ff3333">
+
+<input id="awayColor" type="color" value="#777777">
+
+</div>
+
+
+
+<div>
+
+<label>Schrift</label>
+
+
+<select id="awayTextColor">
+
+<option value="white">
+Weiß
+</option>
+
+<option value="black">
+Schwarz
+</option>
+
+</select>
+
+
 </div>
 
 
 </div>
+
 
 
 
@@ -385,28 +471,6 @@ Aktualisieren
 
 
 
-<label style="margin-top:15px">
-
-Schriftfarbe
-
-</label>
-
-
-<select id="fontColor" onchange="changeFontColor()">
-
-<option value="white">
-Weiß
-</option>
-
-
-<option value="black">
-Schwarz
-</option>
-
-
-</select>
-
-
 
 <button class="reset" onclick="resetGame()">
 
@@ -416,7 +480,10 @@ RESET
 
 
 
+
 </div>
+
+
 
 
 
@@ -427,6 +494,7 @@ START
 </button>
 
 
+
 </div>
 <div class="scoreboard">
 
@@ -434,8 +502,7 @@ START
 <div class="teams">
 
 
-<div id="homeView" class="team" style="background:#64b931">
-FCB
+<div id="homeView" class="team">
 </div>
 
 
@@ -443,20 +510,20 @@ FCB
 
 
 <div id="score" class="score">
-0:0
+
 </div>
 
 
 <div id="time" class="time">
-0'
-</div>
-
 
 </div>
 
 
-<div id="awayView" class="team" style="background:#ff3333">
-SGE
+</div>
+
+
+<div id="awayView" class="team">
+
 </div>
 
 
@@ -469,15 +536,9 @@ SGE
 
 <div>
 
-<span class="small">
-Heim
-</span>
+<span>Heim</span><br>
 
-<br>
-
-<span id="hp">
-67%
-</span>
+<span id="hp"></span>
 
 </div>
 
@@ -485,15 +546,9 @@ Heim
 
 <div>
 
-<span class="small">
-Remis
-</span>
+<span>Remis</span><br>
 
-<br>
-
-<span id="dp">
-13%
-</span>
+<span id="dp"></span>
 
 </div>
 
@@ -501,15 +556,9 @@ Remis
 
 <div>
 
-<span class="small">
-Gast
-</span>
+<span>Gast</span><br>
 
-<br>
-
-<span id="ap">
-20%
-</span>
+<span id="ap"></span>
 
 </div>
 
@@ -519,7 +568,7 @@ Gast
 
 
 <div id="status" class="status">
-⚽ ANPFIFF
+
 </div>
 
 
@@ -540,6 +589,7 @@ Gast
 </div>
 
 
+
 </div>
 
 
@@ -554,6 +604,7 @@ let running=false;
 
 
 
+
 function updateBoard(){
 
 
@@ -563,19 +614,38 @@ let away=document.getElementById("awayName").value;
 
 
 
-document.getElementById("homeView").innerHTML=home;
 
-document.getElementById("awayView").innerHTML=away;
+let homeView=document.getElementById("homeView");
+
+let awayView=document.getElementById("awayView");
 
 
 
-document.getElementById("homeView").style.background=
+
+homeView.innerHTML=home;
+
+awayView.innerHTML=away;
+
+
+
+
+homeView.style.background=
 document.getElementById("homeColor").value;
 
 
-
-document.getElementById("awayView").style.background=
+awayView.style.background=
 document.getElementById("awayColor").value;
+
+
+
+
+homeView.style.color=
+document.getElementById("homeTextColor").value;
+
+
+awayView.style.color=
+document.getElementById("awayTextColor").value;
+
 
 
 
@@ -584,8 +654,10 @@ document.getElementById("hp").innerHTML=
 document.getElementById("homePct").value+"%";
 
 
+
 document.getElementById("dp").innerHTML=
 document.getElementById("drawPct").value+"%";
+
 
 
 document.getElementById("ap").innerHTML=
@@ -600,37 +672,37 @@ document.getElementById("awayPct").value+"%";
 
 
 
-function changeFontColor(){
-
-
-let color=document.getElementById("fontColor").value;
-
-
-document.body.style.color=color;
-
-
-document.getElementById("status").style.color=color;
-
-
-document.getElementById("homeTicker").style.color=color;
-
-
-document.getElementById("awayTicker").style.color=color;
-
-
-}
-
-
-
-
-
-
 
 
 function resetGame(){
 
 
+
 running=false;
+
+
+
+document.getElementById("homeName").value="";
+
+document.getElementById("awayName").value="";
+
+
+
+document.getElementById("homeView").innerHTML="";
+
+document.getElementById("awayView").innerHTML="";
+
+
+
+document.getElementById("homeView").style.background="#777777";
+
+document.getElementById("awayView").style.background="#777777";
+
+
+
+document.getElementById("homeView").style.color="white";
+
+document.getElementById("awayView").style.color="white";
 
 
 
@@ -645,12 +717,6 @@ document.getElementById("status").innerHTML="";
 document.getElementById("homeTicker").innerHTML="";
 
 document.getElementById("awayTicker").innerHTML="";
-
-
-
-document.getElementById("homeView").innerHTML="";
-
-document.getElementById("awayView").innerHTML="";
 
 
 
@@ -674,6 +740,7 @@ document.getElementById("start").disabled=false;
 
 
 
+
 function poisson(lambda){
 
 
@@ -684,6 +751,7 @@ let p=1;
 let k=0;
 
 
+
 do{
 
 k++;
@@ -691,8 +759,8 @@ k++;
 p*=Math.random();
 
 
-}
 
+}
 while(p>L);
 
 
@@ -709,11 +777,14 @@ return k-1;
 
 
 
+
 function createResult(){
+
 
 
 let homePercent=
 Number(document.getElementById("homePct").value);
+
 
 
 let awayPercent=
@@ -727,9 +798,15 @@ Number(document.getElementById("drawPct").value);
 
 
 
-let homeXg=(50+(homePercent/2)+7)/45;
 
-let awayXg=(50+(awayPercent/2))/60;
+let homeXg=
+(50+(homePercent/2)+7)/45;
+
+
+
+let awayXg=
+(50+(awayPercent/2))/60;
+
 
 
 
@@ -744,10 +821,15 @@ let away=poisson(awayXg);
 
 if(Math.random()*100 < drawPercent){
 
+
 let draws=[
+
 [0,0],
+
 [1,1],
+
 [2,2]
+
 ];
 
 
@@ -758,7 +840,9 @@ home=d[0];
 
 away=d[1];
 
+
 }
+
 
 
 
@@ -777,9 +861,12 @@ away=t;
 
 
 
+
+
 return{
 
 home:home,
+
 away:away
 
 };
@@ -794,11 +881,14 @@ away:away
 
 
 
+
 function startGame(){
+
 
 
 if(running)
 return;
+
 
 
 running=true;
@@ -825,6 +915,8 @@ let awayTicker=document.getElementById("awayTicker");
 
 
 
+
+
 score.innerHTML="0:0";
 
 time.innerHTML="0'";
@@ -833,10 +925,6 @@ status.innerHTML="⚽ ANPFIFF";
 
 
 
-homeTicker.innerHTML="";
-
-awayTicker.innerHTML="";
-
 
 
 let result=createResult();
@@ -844,6 +932,7 @@ let result=createResult();
 
 
 let goals=[];
+
 
 
 
@@ -863,6 +952,7 @@ minute:Math.floor(Math.random()*90)+1
 
 
 
+
 for(let i=0;i<result.away;i++){
 
 
@@ -879,7 +969,10 @@ minute:Math.floor(Math.random()*90)+1
 
 
 
+
+
 goals.sort((a,b)=>a.minute-b.minute);
+
 
 
 
@@ -892,13 +985,18 @@ let awayScore=0;
 
 
 
+
+
 let timer=setInterval(()=>{
+
 
 
 minute++;
 
 
+
 time.innerHTML=minute+"'";
+
 
 
 
@@ -920,7 +1018,9 @@ status.innerHTML="▶ 2. HALBZEIT";
 
 
 
+
 goals.forEach(goal=>{
+
 
 
 if(goal.minute==minute){
@@ -931,6 +1031,7 @@ if(goal.team=="home"){
 
 
 homeScore++;
+
 
 
 homeTicker.innerHTML+=
@@ -949,6 +1050,7 @@ else{
 
 
 awayScore++;
+
 
 
 awayTicker.innerHTML+=
@@ -980,6 +1082,9 @@ homeScore+":"+awayScore;
 
 
 
+
+
+
 if(minute>=90){
 
 
@@ -996,6 +1101,7 @@ time.innerHTML="90+3'";
 
 
 status.innerHTML="🏁 ENDE";
+
 
 
 running=false;
@@ -1018,10 +1124,14 @@ button.disabled=false;
 
 
 
+
+
 updateBoard();
 
 
+
 </script>
+
 
 
 </body>
