@@ -3,40 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sport Ergebnis-Rechner & Simulator</title>
+    <title>Sport Simulator Layout</title>
     <style>
-        body { 
-            font-family: 'Segoe UI', Arial, sans-serif; 
-            text-align: center; 
-            background: #000000; 
-            color: #ffffff; 
-            padding: 20px; 
+        body {
+            background-color: #8b1111; /* Roter Hintergrund aus dem Screenshot */
+            color: white;
+            font-family: Arial, sans-serif;
             margin: 0;
+            padding: 30px;
         }
-        .container {
-            max-width: 500px;
+
+        /* Das Haupt-Raster, das die Seite in zwei Hälften teilt */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            max-width: 1200px;
             margin: 0 auto;
         }
-        h1 {
-            font-size: 24px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #f5f5f7;
-            margin-bottom: 25px;
+
+        /* Linke Spalte */
+        .left-column {
+            display: flex;
+            flex-direction: column;
+            gap: 150px; /* Großer Abstand nach unten zum Start-Button */
         }
-        .box { 
-            background: #1a1a1a; 
-            border: 1px solid #2d2d2d;
-            padding: 20px; 
-            border-radius: 12px; 
-            margin-bottom: 25px; 
+
+        /* Rechte Spalte */
+        .right-column {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
         }
-        .input-row { 
-            display: flex; 
-            justify-content: space-between; 
-            margin-bottom: 12px; 
-            align-items: flex-end; 
-            gap: 15px;
+
+        /* Eingabemaske (Oben Links) */
+        .input-box {
+            background-color: #1a0a0a;
+            border: 2px solid #2d1515;
+            border-radius: 8px;
+            padding: 20px;
+            width: 380px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+        .input-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            align-items: flex-end;
+            gap: 10px;
         }
         .field-group {
             display: flex;
@@ -50,235 +65,244 @@
             margin-bottom: 4px;
             font-weight: bold;
         }
-        input[type="text"] { 
-            width: 140px; 
-            padding: 8px; 
-            background: #2b2b2b; 
-            color: #ffffff; 
-            border: 1px solid #404040; 
-            border-radius: 6px;
+        input[type="text"] {
+            width: 130px;
+            padding: 8px;
+            background: #2b1b1b;
+            color: white;
+            border: 1px solid #443333;
+            border-radius: 4px;
             font-weight: bold;
         }
-        input[type="text"]:disabled { background: #1f1f1f; color: #777777; border: 1px solid #2a2a2a; }
-        input[type="number"] { 
-            width: 65px; 
-            padding: 8px; 
-            background: #2b2b2b; 
-            color: #ffffff; 
-            border: 1px solid #404040; 
-            border-radius: 6px; 
-            font-weight: bold;
+        input[type="text"]:disabled {
+            background: #1f1515;
+            color: #665555;
+        }
+        input[type="number"] {
+            width: 60px;
+            padding: 8px;
+            background: #2b1b1b;
+            color: white;
+            border: 1px solid #443333;
+            border-radius: 4px;
             text-align: center;
-        }
-        input[type="color"] { width: 45px; height: 34px; border: 1px solid #404040; border-radius: 6px; cursor: pointer; background: transparent; padding: 0; }
-
-        .btn-container {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-        }
-        #spin-btn { 
-            flex: 3;
-            padding: 16px; 
-            font-weight: bold; 
-            font-size: 16px; 
-            cursor: pointer; 
-            border-radius: 8px; 
-            border: none; 
-            background: #2f855a; 
-            color: white; 
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        #spin-btn:hover { background: #276749; }
-        #spin-btn:disabled { background: #4a5568; cursor: not-allowed; opacity: 0.6; }
-
-        #reset-btn {
-            flex: 1;
-            padding: 16px;
             font-weight: bold;
-            font-size: 14px;
+        }
+        input[type="color"] {
+            width: 40px;
+            height: 34px;
+            border: 1px solid #443333;
+            border-radius: 4px;
             cursor: pointer;
-            border-radius: 8px;
-            border: 1px solid #404040;
-            background: #2b2b2b;
-            color: #ef4444;
+            background: transparent;
+            padding: 0;
+        }
+        .btn-update {
+            background-color: transparent;
+            border: 1px solid #ff3333;
+            color: #ff3333;
+            padding: 10px 20px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 4px;
+            margin-top: 10px;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
-        #reset-btn:hover { background: #3f3f46; border-color: #ef4444; }
-
-        #error { color: #f56565; font-weight: bold; margin-bottom: 15px; display: none; font-size: 14px; text-align: center; }
-
-        .dashboard {
-            background: #1a1a1a;
-            border: 1px solid #2d2d2d;
-            border-radius: 12px;
-            padding: 15px;
-            display: flex;
-            justify-content: space-around;
-            margin-bottom: 25px;
+        .btn-update:hover {
+            background-color: rgba(255,51,51,0.1);
         }
-        .dash-item { text-align: center; flex: 1; padding: 5px; }
-        .dash-item:not(:last-child) { border-right: 1px solid #2d2d2d; }
-        .dash-name { font-size: 12px; color: #a0aec0; text-transform: uppercase; margin-bottom: 4px; font-weight: 600; }
-        .dash-pct { font-size: 20px; font-weight: bold; margin-bottom: 2px; }
-        .dash-odds { font-size: 13px; color: #a0aec0; font-weight: bold; }
 
-        .scoreboard-bundesliga {
-            height: 150px;
-            background: #000000;
-            border: 4px solid #b8860b; 
-            box-shadow: 0 0 15px rgba(184, 134, 11, 0.4);
-            display: flex;
-            flex-direction: row;
-            overflow: hidden;
-            border-radius: 12px;
-            margin-bottom: 25px;
+        /* Start-Button (Unten Links) */
+        .btn-start {
+            background-color: #1e7e4e;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 4px;
+            width: 150px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            text-transform: uppercase;
+            align-self: flex-end; /* Schiebt ihn nach rechts rüber zum Rad */
+            margin-right: -40px;
         }
-        .team-block {
+        .btn-start:hover {
+            background-color: #155a37;
+        }
+        .btn-start:disabled {
+            background-color: #444;
+            cursor: not-allowed;
+        }
+
+        /* Anzeigetafel (Oben Rechts) */
+        .scoreboard {
+            width: 100%;
+            max-width: 500px;
+            background-color: #222;
+            border: 3px solid #333;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+        .team-row {
+            display: flex;
+            height: 120px;
+        }
+        .team-box {
             flex: 1;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 10px;
-            box-sizing: border-box;
-        }
-        #block-home { background-color: #dd0000; }
-        #block-away { background-color: #1a1a1a; }
-
-        .team-name {
-            font-size: 42px;
+            font-size: 45px;
             font-weight: 900;
-            color: #ffffff;
-            letter-spacing: 1px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
-            font-family: Arial, sans-serif;
+            background-color: #64b931; /* Grünes BVB-Feld aus deinem Screenshot */
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
-
-        .center-block {
-            width: 160px;
-            background: #ffffff; 
+        .score-box {
+            width: 140px;
+            background-color: #2a2a2a;
             display: flex;
-            flex-direction: column;
-            box-sizing: border-box;
-            border-left: 2px solid #000;
-            border-right: 2px solid #000;
-        }
-        .score-row {
-            height: 80px;
-            line-height: 80px;
-            font-size: 50px;
-            font-weight: 900;
-            color: #000000;
-            font-family: Arial, sans-serif;
-            background: linear-gradient(to bottom, #ffffff 0%, #e0e0e0 100%);
-            border-bottom: 2px solid #666;
-            text-align: center;
-        }
-        .time-row {
-            flex: 1;
-            line-height: 65px;
-            font-size: 36px;
+            align-items: center;
+            justify-content: center;
+            font-size: 45px;
             font-weight: bold;
-            color: #000000;
-            background: #cccccc; 
-            font-family: Arial, sans-serif;
+            border-left: 2px solid #1a1a1a;
+            border-right: 2px solid #1a1a1a;
+        }
+        .pct-row {
+            display: flex;
+            background-color: #151515;
+            padding: 10px 0;
+            border-top: 2px solid #2a2a2a;
+        }
+        .pct-box {
+            flex: 1;
             text-align: center;
+        }
+        .pct-box span {
+            display: block;
+            font-size: 10px;
+            color: #777;
+            text-transform: uppercase;
+            margin-bottom: 2px;
+        }
+        .pct-box div {
+            font-size: 16px;
+            font-weight: bold;
         }
 
-        /* Glücksrad-Stile */
-        .wheel-box {
+        /* Glücksrad (Unten Rechts) */
+        .wheel-container {
             position: relative;
-            width: 300px;
-            height: 300px;
-            margin: 20px auto;
+            width: 320px;
+            height: 320px;
             border: 6px solid #b8860b;
             border-radius: 50%;
             background: #111;
-            box-shadow: 0 0 15px rgba(184, 134, 11, 0.4);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.6);
         }
-        .wheel-arrow {
+        .wheel-pointer {
             position: absolute;
             top: -15px;
             left: 50%;
             transform: translateX(-50%);
             width: 0;
             height: 0;
-            border-left: 10px solid transparent;
-            border-right: 10px solid transparent;
-            border-top: 22px solid #ef4444;
+            border-left: 12px solid transparent;
+            border-right: 12px solid transparent;
+            border-top: 25px solid #ffcc00; /* Gelber Pfeil oben */
             z-index: 10;
         }
         #wheel-canvas {
             border-radius: 50%;
         }
+        
+        #error-msg {
+            color: #ff3333;
+            font-weight: bold;
+            font-size: 12px;
+            margin-bottom: 10px;
+            display: none;
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>Sport Ergebnis-Rechner & Simulator</h1>
-    
-    <!-- Anzeigetafel -->
-    <div class="scoreboard-bundesliga">
-        <div class="team-block" id="block-home">
-            <div class="team-name" id="lbl-home">FCB</div>
-        </div>
-        <div class="center-block">
-            <div class="score-row" id="lbl-score">?:?</div>
-            <div class="time-row">90'</div>
-        </div>
-        <div class="team-block" id="block-away">
-            <div class="team-name" id="lbl-away">SGE</div>
-        </div>
-    </div>
-
-    <!-- Steuerung -->
-    <div class="box">
-        <div id="error">Die Prozentwerte müssen genau 100 ergeben.</div>
-        <div class="input-row">
-            <div class="field-group"><label>Heim-Name</label><input type="text" id="name1" value="FCB" oninput="updateAll()"></div>
-            <div class="field-group"><label>Chance</label><span><input type="number" id="pct1" value="68" min="0" max="100" oninput="updateAll()"> %</span></div>
-            <div class="field-group"><label>Farbe</label><input type="color" id="col1" value="#dd0000" onchange="updateAll()"></div>
-        </div>
-        <div class="input-row">
-            <div class="field-group"><label>Remis</label><input type="text" value="Unentschieden" disabled></div>
-            <div class="field-group"><label>Chance</label><span><input type="number" id="pct2" value="20" min="0" max="100" oninput="updateAll()"> %</span></div>
-            <div class="field-group"><label>Farbe</label><input type="color" id="col2" value="#718096" onchange="updateAll()"></div>
-        </div>
-        <div class="input-row">
-            <div class="field-group"><label>Gast-Name</label><input type="text" id="name3" value="SGE" oninput="updateAll()"></div>
-            <div class="field-group"><label>Chance</label><span><input type="number" id="pct3" value="12" min="0" max="100" oninput="updateAll()"> %</span></div>
-            <div class="field-group"><label>Farbe</label><input type="color" id="col3" value="#1a1a1a" onchange="updateAll()"></div>
-        </div>
+    <div class="main-grid">
         
-        <div class="btn-container">
-            <button id="spin-btn" onclick="startSimulation()">Spiel simulieren</button>
-            <button id="reset-btn" onclick="resetForm()">Reset</button>
+        <!-- LINKE SEITE -->
+        <div class="left-column">
+            <!-- Eingabemaske -->
+            <div class="input-box">
+                <div id="error-msg">Die Chancen müssen zusammen 100% ergeben!</div>
+                
+                <div class="input-row">
+                    <div class="field-group"><label>Heim-Name</label><input type="text" id="inp-name1" value="FCB"></div>
+                    <div class="field-group"><label>Chance</label><input type="number" id="inp-pct1" value="68"></div>
+                    <div class="field-group"><label>Farbe</label><input type="color" id="inp-col1" value="#64b931"></div>
+                </div>
+                
+                <div class="input-row">
+                    <div class="field-group"><label>Remis</label><input type="text" value="Unentschieden" disabled></div>
+                    <div class="field-group"><label>Chance</label><input type="number" id="inp-pct2" value="20"></div>
+                    <div class="field-group"><label>Farbe</label><input type="color" id="inp-col2" value="#444444"></div>
+                </div>
+                
+                <div class="input-row">
+                    <div class="field-group"><label>Gast-Name</label><input type="text" id="inp-name3" value="SGE"></div>
+                    <div class="field-group"><label>Chance</label><input type="number" id="inp-pct3" value="12"></div>
+                    <div class="field-group"><label>Farbe</label><input type="color" id="inp-col3" value="#64b931"></div>
+                </div>
+
+                <button class="btn-update" onclick="applySettings()">Aktualisieren</button>
+            </div>
+
+            <!-- Start Button -->
+            <button class="btn-start" id="start-btn" onclick="startSpin()">Start</button>
         </div>
+
+        <!-- RECHTE SEITE -->
+        <div class="right-column">
+            <!-- Anzeigetafel -->
+            <div class="scoreboard">
+                <div class="team-row">
+                    <div class="team-box" id="view-name1">BVB</div>
+                    <div class="score-box" id="view-score">?:?</div>
+                    <div class="team-box" id="view-name3">BVB</div>
+                </div>
+                <div class="pct-row">
+                    <div class="pct-box"><span>Heim</span><div id="view-pct1">68%</div></div>
+                    <div class="pct-row" style="width:2px; background:#333;"></div>
+                    <div class="pct-box"><span>Remis</span><div id="view-pct2">20%</div></div>
+                    <div class="pct-row" style="width:2px; background:#333;"></div>
+                    <div class="pct-box"><span>Gast</span><div id="view-pct3">12%</div></div>
+                </div>
+            </div>
+
+            <!-- Glücksrad -->
+            <div class="wheel-container">
+                <div class="wheel-pointer"></div>
+                <canvas id="wheel-canvas" width="308" height="308"></canvas>
+            </div>
+        </div>
+
     </div>
 
-    <!-- Dashboard -->
-    <div class="dashboard">
-        <div class="dash-item">
-            <div class="dash-name">Heim</div>
-            <div class="dash-pct" id="dash-val1">68%</div>
-            <div class="dash-odds" id="dash-odds1">Quote: 1.47</div>
-        </div>
-        <div class="dash-item">
-            <div class="dash-name">Remis</div>
-            <div class="dash-pct" id="dash-val2">20%</div>
-            <div class="dash-odds" id="dash-odds2">Quote: 5.00</div>
-        </div>
-        <div class="dash-item">
-            <div class="dash-name">Gast</div>
-            <div class="dash-pct" id="dash-val3">12%</div>
-            <div class="dash-odds" id="dash-odds3">Quote: 8.33</div>
-        </div>
-    </div>
+<script>
+    const canvas = document.getElementById('wheel-canvas');
+    const ctx = canvas.getContext('2d');
+    const cx = canvas.width / 2;
+    const cy = canvas.height / 2;
+    const radius = canvas.width / 2;
 
-    <!-- Das Glücksrad -->
-    <div class="wheel-box">
-        <div class="wheel-arrow"></div>
+    let currentAngle = 0;
+    let isSpinning = false;
+    let wheelSectors = [];
+
+    // Direkt beim Start einmal aufbauen
+    applySettings();
+
+    // Verarbeitet die Eingaben erst beim Klick auf "Aktualisieren"
