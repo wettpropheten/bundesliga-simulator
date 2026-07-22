@@ -6,14 +6,14 @@
     <title>Sport Simulator Schritt für Schritt</title>
     <style>
         body {
-            background-color: #8b1111; /* Roter Hintergrund aus dem Screenshot */
+            background-color: #8b1111; /* Roter Hintergrund */
             color: white;
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 30px;
         }
 
-        /* Das Haupt-Raster, das die Seite in zwei Hälften teilt */
+        /* Haupt-Raster: Links Eingabe, Rechts Anzeige */
         .main-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -23,14 +23,14 @@
             align-items: flex-start;
         }
 
-        /* Linke Spalte: Eingaben & der Ergebnis-Button */
+        /* Linke Spalte */
         .left-column {
             display: flex;
             flex-direction: column;
-            gap: 60px; /* Genügend Abstand nach unten zum Ergebnis-Button */
+            gap: 40px; 
         }
 
-        /* Rechte Spalte: Anzeigetafel */
+        /* Rechte Spalte */
         .right-column {
             display: flex;
             flex-direction: column;
@@ -115,7 +115,7 @@
             background-color: rgba(255,51,51,0.1);
         }
 
-        /* Der grüne ERGEBNIS Button */
+        /* Grüner ERGEBNIS Button */
         .btn-start {
             background-color: #1e7e4e;
             color: white;
@@ -130,7 +130,7 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.3);
             text-transform: uppercase;
             letter-spacing: 1px;
-            align-self: flex-start; /* Linksbündig unter der Box platziert */
+            align-self: flex-start;
         }
         .btn-start:hover {
             background-color: #155a37;
@@ -141,7 +141,7 @@
             cursor: not-allowed;
         }
 
-        /* Die Anzeigetafel */
+        /* Anzeigetafel */
         .scoreboard {
             width: 100%;
             max-width: 500px;
@@ -160,7 +160,6 @@
             justify-content: center;
             font-size: 45px;
             font-weight: 900;
-            background-color: #64b931; 
             color: white;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
@@ -220,7 +219,7 @@
 
     <div class="main-grid">
         
-        <!-- LINKE SPALTE (Eingabe & Button) -->
+        <!-- LINKE SPALTE (Eingabe) -->
         <div class="left-column">
             <div class="input-box">
                 <div class="input-row">
@@ -244,7 +243,6 @@
                 <button class="btn-update" onclick="updateMatchboard()">Aktualisieren</button>
             </div>
 
-            <!-- Hier ist dein ERGEBNIS Button wieder -->
             <button class="btn-start" id="start-btn" onclick="startTimer()">Ergebnis</button>
         </div>
 
@@ -252,17 +250,17 @@
         <div class="right-column">
             <div class="scoreboard">
                 <div class="team-row">
-                    <div class="team-box" id="view-name1">BVB</div>
+                    <div class="team-box" id="view-name1">---</div>
                     <div class="score-container">
                         <div class="score-box" id="view-score">?:?</div>
                         <div class="time-box" id="view-time">0'</div>
                     </div>
-                    <div class="team-box" id="view-name3">BVB</div>
+                    <div class="team-box" id="view-name3">---</div>
                 </div>
                 <div class="pct-row">
-                    <div class="pct-box"><span>Heim</span><div id="view-pct1">50%</div></div>
-                    <div class="pct-box"><span>Remis</span><div id="view-pct2">20%</div></div>
-                    <div class="pct-box"><span>Gast</span><div id="view-pct3">30%</div></div>
+                    <div class="pct-box"><span>Heim</span><div id="view-pct1">0%</div></div>
+                    <div class="pct-box"><span>Remis</span><div id="view-pct2">0%</div></div>
+                    <div class="pct-box"><span>Gast</span><div id="view-pct3">0%</div></div>
                 </div>
             </div>
         </div>
@@ -272,6 +270,7 @@
 <script>
     let isRunning = false;
 
+    // Lädt die Werte SOFORT beim Starten der Seite korrekt
     window.onload = function() {
         updateMatchboard();
     };
@@ -297,3 +296,10 @@
         document.getElementById('view-pct3').innerText = pctAway + "%";
 
         document.getElementById('view-name1').style.backgroundColor = colorHome;
+        document.getElementById('view-name3').style.backgroundColor = colorAway;
+
+        document.getElementById('view-score').innerText = "?:?";
+        document.getElementById('view-time').innerText = "0'";
+    }
+
+    function startTimer() {
