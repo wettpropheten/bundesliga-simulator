@@ -13,6 +13,7 @@
             padding: 30px;
         }
 
+        /* Das Haupt-Raster, das die Seite in zwei Hälften teilt */
         .main-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -22,6 +23,7 @@
             align-items: flex-start;
         }
 
+        /* Linke Spalte: Eingaben & Buttons */
         .left-column {
             display: flex;
             flex-direction: column;
@@ -29,6 +31,7 @@
             align-items: flex-start;
         }
 
+        /* Rechte Spalte: Anzeigetafel */
         .right-column {
             display: flex;
             flex-direction: column;
@@ -36,6 +39,7 @@
             gap: 35px;
         }
 
+        /* Eingabemaske */
         .input-box {
             background-color: #1a0a0a;
             border: 2px solid #2d1515;
@@ -112,6 +116,7 @@
             background-color: rgba(255,51,51,0.1);
         }
 
+        /* Der Start-Button */
         .btn-start {
             background-color: #1e7e4e;
             color: white;
@@ -136,6 +141,7 @@
             cursor: not-allowed;
         }
 
+        /* Die Anzeigetafel */
         .scoreboard {
             width: 100%;
             max-width: 500px;
@@ -154,9 +160,9 @@
             justify-content: center;
             font-size: 45px;
             font-weight: 900;
-            background-color: #64b931; 
             color: white;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            transition: background-color 0.2s;
         }
         .score-container {
             flex: 1;
@@ -214,23 +220,24 @@
 
     <div class="main-grid">
         
+        <!-- LINKE SPALTE (Eingabe) -->
         <div class="left-column">
             <div class="input-box">
                 <div class="input-row">
-                    <div class="field-group"><label>Heim-Name</label><input type="text" id="inp-name1" value="FCB"></div>
-                    <div class="field-group"><label>Chance</label><input type="number" id="inp-pct1" value="67"></div>
+                    <div class="field-group"><label>Heim-Name</label><input type="text" id="inp-name1" value="FCB" maxlength="8"></div>
+                    <div class="field-group"><label>Chance</label><input type="number" id="inp-pct1" value="67" min="0" max="100"></div>
                     <div class="field-group"><label>Farbe</label><input type="color" id="inp-col1" value="#64b931"></div>
                 </div>
                 
                 <div class="input-row">
                     <div class="field-group"><label>Remis</label><input type="text" value="Unentschieden" disabled></div>
-                    <div class="field-group"><label>Chance</label><input type="number" id="inp-pct2" value="13"></div>
+                    <div class="field-group"><label>Chance</label><input type="number" id="inp-pct2" value="13" min="0" max="100"></div>
                     <div class="field-group"><label>Farbe</label><input type="color" id="inp-col2" value="#444444"></div>
                 </div>
                 
                 <div class="input-row">
-                    <div class="field-group"><label>Gast-Name</label><input type="text" id="inp-name3" value="SGE"></div>
-                    <div class="field-group"><label>Chance</label><input type="number" id="inp-pct3" value="20"></div>
+                    <div class="field-group"><label>Gast-Name</label><input type="text" id="inp-name3" value="SGE" maxlength="8"></div>
+                    <div class="field-group"><label>Chance</label><input type="number" id="inp-pct3" value="20" min="0" max="100"></div>
                     <div class="field-group"><label>Farbe</label><input type="color" id="inp-col3" value="#ff3333"></div>
                 </div>
 
@@ -240,15 +247,16 @@
             <button class="btn-start" id="start-btn" onclick="startTimer()">Start</button>
         </div>
 
+        <!-- RECHTE SPALTE (Matchboard) -->
         <div class="right-column">
             <div class="scoreboard">
                 <div class="team-row">
-                    <div class="team-box" id="view-name1" style="background-color: #64b931;">BVB</div>
+                    <div class="team-box" id="view-name1" style="background-color: #64b931;">FCB</div>
                     <div class="score-container">
                         <div class="score-box" id="view-score">?:?</div>
                         <div class="time-box" id="view-time">0'</div>
                     </div>
-                    <div class="team-box" id="view-name3" style="background-color: #64b931;">BVB</div>
+                    <div class="team-box" id="view-name3" style="background-color: #ff3333;">SGE</div>
                 </div>
                 <div class="pct-row">
                     <div class="pct-box"><span>Heim</span><div id="view-pct1">67%</div></div>
@@ -276,29 +284,15 @@
         const colorHome = document.getElementById('inp-col1').value;
         const colorAway = document.getElementById('inp-col3').value;
 
-        document.getElementById('view-name1').innerText = nameHome;
-        document.getElementById('view-name3').innerText = nameAway;
+        // 3. Prozentzahlen-Prüfung (zusammen exakt 100%)
+        const total = Number(pctHome) + Number(pctDraw) + Number(pctAway);
+        if (total !== 100) {
+            alert("Die Wahrscheinlichkeiten müssen zusammen genau 100% ergeben. (Aktuell: " + total + "%)");
+            return;
+        }
 
-        document.getElementById('view-pct1').innerText = pctHome + "%";
-        document.getElementById('view-pct2').innerText = pctDraw + "%";
-        document.getElementById('view-pct3').innerText = pctAway + "%";
+        // 6. Verwendung von textContent statt innerText
+        document.getElementById('view-name1').textContent = nameHome;
+        document.getElementById('view-name3').textContent = nameAway;
 
-        document.getElementById('view-name1').style.backgroundColor = colorHome;
-        document.getElementById('view-name3').style.backgroundColor = colorAway;
-
-        document.getElementById('view-score').innerText = "?:?";
-        document.getElementById('view-time').innerText = "0'";
-    }
-
-    function startTimer() {
-        if (isRunning) return;
-        isRunning = true;
-
-        const btn = document.getElementById('start-btn');
-        const timeBox = document.getElementById('view-time');
-        const scoreBox = document.getElementById('view-score');
-
-        btn.disabled = true;
-        scoreBox.innerText = "0:0";
-
-        let currentMinute = 0;
+        document.getElementById('view-pct1').textContent = pctHome + "%";
