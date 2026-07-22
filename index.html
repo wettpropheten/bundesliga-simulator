@@ -44,55 +44,81 @@ body{
 
 label{
     display:block;
-    color:#aaa;
     font-size:12px;
+    color:#aaa;
 }
 
 
-input{
+input,
+select{
+
     background:#2b1b1b;
     color:white;
     border:1px solid #555;
     padding:8px;
-    width:80px;
+    width:85px;
+
 }
 
 
 input[type="color"]{
+
     width:45px;
     height:35px;
     padding:0;
+
 }
 
 
 
 button{
+
     width:100%;
     padding:12px;
     margin-top:15px;
     font-weight:bold;
     cursor:pointer;
+
 }
+
 
 
 .update{
+
     background:none;
     color:#ff4444;
     border:1px solid #ff4444;
+
 }
+
 
 
 .start{
+
+    width:200px;
     background:#168044;
     color:white;
     border:none;
-    width:200px;
     font-size:22px;
+
 }
 
 
+
 .start:disabled{
+
     background:#555;
+
+}
+
+
+
+.reset{
+
+    background:#700000;
+    color:white;
+    border:none;
+
 }
 
 
@@ -120,8 +146,8 @@ button{
 
     width:200px;
     display:flex;
-    justify-content:center;
     align-items:center;
+    justify-content:center;
     font-size:45px;
     font-weight:bold;
 
@@ -188,8 +214,8 @@ button{
 
 .small{
 
-    font-size:12px;
     color:#888;
+    font-size:12px;
 
 }
 
@@ -197,8 +223,8 @@ button{
 
 .status{
 
-    text-align:center;
     background:#111;
+    text-align:center;
     padding:12px;
     font-size:22px;
     font-weight:bold;
@@ -250,18 +276,22 @@ button{
 @keyframes goal{
 
 from{
+
 transform:scale(1.4);
+
 }
 
 to{
+
 transform:scale(1);
+
 }
 
 }
+
 
 
 </style>
-
 
 </head>
 
@@ -348,8 +378,42 @@ transform:scale(1);
 
 
 <button class="update" onclick="updateBoard()">
+
 Aktualisieren
+
 </button>
+
+
+
+<label style="margin-top:15px">
+
+Schriftfarbe
+
+</label>
+
+
+<select id="fontColor" onchange="changeFontColor()">
+
+<option value="white">
+Weiß
+</option>
+
+
+<option value="black">
+Schwarz
+</option>
+
+
+</select>
+
+
+
+<button class="reset" onclick="resetGame()">
+
+RESET
+
+</button>
+
 
 
 </div>
@@ -357,7 +421,9 @@ Aktualisieren
 
 
 <button id="start" class="start" onclick="startGame()">
+
 START
+
 </button>
 
 
@@ -371,7 +437,6 @@ START
 <div id="homeView" class="team" style="background:#64b931">
 FCB
 </div>
-
 
 
 <div class="middle">
@@ -390,7 +455,6 @@ FCB
 </div>
 
 
-
 <div id="awayView" class="team" style="background:#ff3333">
 SGE
 </div>
@@ -404,20 +468,49 @@ SGE
 
 
 <div>
-<span class="small">Heim</span><br>
-<span id="hp">67%</span>
+
+<span class="small">
+Heim
+</span>
+
+<br>
+
+<span id="hp">
+67%
+</span>
+
 </div>
 
 
+
 <div>
-<span class="small">Remis</span><br>
-<span id="dp">13%</span>
+
+<span class="small">
+Remis
+</span>
+
+<br>
+
+<span id="dp">
+13%
+</span>
+
 </div>
 
 
+
 <div>
-<span class="small">Gast</span><br>
-<span id="ap">20%</span>
+
+<span class="small">
+Gast
+</span>
+
+<br>
+
+<span id="ap">
+20%
+</span>
+
 </div>
 
 
@@ -451,6 +544,8 @@ SGE
 
 
 
+
+
 <script>
 
 
@@ -459,24 +554,29 @@ let running=false;
 
 
 
-
 function updateBoard(){
 
 
 let home=document.getElementById("homeName").value;
+
 let away=document.getElementById("awayName").value;
 
 
+
 document.getElementById("homeView").innerHTML=home;
+
 document.getElementById("awayView").innerHTML=away;
+
 
 
 document.getElementById("homeView").style.background=
 document.getElementById("homeColor").value;
 
 
+
 document.getElementById("awayView").style.background=
 document.getElementById("awayColor").value;
+
 
 
 
@@ -500,39 +600,22 @@ document.getElementById("awayPct").value+"%";
 
 
 
-// Stärke + Heimvorteil
-
-function calculateExpectedGoals(){
+function changeFontColor(){
 
 
-let homePercent=
-Number(document.getElementById("homePct").value);
+let color=document.getElementById("fontColor").value;
 
 
-let awayPercent=
-Number(document.getElementById("awayPct").value);
+document.body.style.color=color;
 
 
-
-let homeStrength=
-50+(homePercent/2)+7;
+document.getElementById("status").style.color=color;
 
 
-let awayStrength=
-50+(awayPercent/2);
+document.getElementById("homeTicker").style.color=color;
 
 
-
-
-return{
-
-
-home:Math.max(0.3,homeStrength/45),
-
-away:Math.max(0.2,awayStrength/60)
-
-
-};
+document.getElementById("awayTicker").style.color=color;
 
 
 }
@@ -544,7 +627,52 @@ away:Math.max(0.2,awayStrength/60)
 
 
 
-// Poisson Torberechnung
+function resetGame(){
+
+
+running=false;
+
+
+
+document.getElementById("score").innerHTML="";
+
+document.getElementById("time").innerHTML="";
+
+document.getElementById("status").innerHTML="";
+
+
+
+document.getElementById("homeTicker").innerHTML="";
+
+document.getElementById("awayTicker").innerHTML="";
+
+
+
+document.getElementById("homeView").innerHTML="";
+
+document.getElementById("awayView").innerHTML="";
+
+
+
+document.getElementById("hp").innerHTML="";
+
+document.getElementById("dp").innerHTML="";
+
+document.getElementById("ap").innerHTML="";
+
+
+
+document.getElementById("start").disabled=false;
+
+
+}
+
+
+
+
+
+
+
 
 function poisson(lambda){
 
@@ -580,70 +708,72 @@ return k-1;
 
 
 
+
 function createResult(){
 
 
-let xg=calculateExpectedGoals();
+let homePercent=
+Number(document.getElementById("homePct").value);
+
+
+let awayPercent=
+Number(document.getElementById("awayPct").value);
 
 
 
-let home=poisson(xg.home);
-
-let away=poisson(xg.away);
-
-
-
-
-if(home>6)
-home=6;
-
-
-if(away>6)
-away=6;
-
-
-
-
-// Remiswahrscheinlichkeit berücksichtigen
-
-let draw=
+let drawPercent=
 Number(document.getElementById("drawPct").value);
 
 
 
-if(Math.random()*100 < draw){
 
-let draws=["0:0","1:1","2:2"];
+let homeXg=(50+(homePercent/2)+7)/45;
 
-let d=
-draws[Math.floor(Math.random()*draws.length)];
+let awayXg=(50+(awayPercent/2))/60;
 
 
-let p=d.split(":");
 
 
-home=Number(p[0]);
-away=Number(p[1]);
+let home=poisson(homeXg);
+
+let away=poisson(awayXg);
+
+
+
+
+
+if(Math.random()*100 < drawPercent){
+
+let draws=[
+[0,0],
+[1,1],
+[2,2]
+];
+
+
+let d=draws[Math.floor(Math.random()*draws.length)];
+
+
+home=d[0];
+
+away=d[1];
 
 }
 
 
 
-
-// Überraschungen
 
 if(Math.random()<0.10){
 
 
-let temp=home;
+let t=home;
 
 home=away;
 
-away=temp;
+away=t;
 
 
 }
-
 
 
 
@@ -664,10 +794,7 @@ away:away
 
 
 
-
-
 function startGame(){
-
 
 
 if(running)
@@ -677,6 +804,7 @@ return;
 running=true;
 
 
+
 let button=document.getElementById("start");
 
 button.disabled=true;
@@ -684,11 +812,15 @@ button.disabled=true;
 
 
 let score=document.getElementById("score");
+
 let time=document.getElementById("time");
+
 let status=document.getElementById("status");
 
 
+
 let homeTicker=document.getElementById("homeTicker");
+
 let awayTicker=document.getElementById("awayTicker");
 
 
@@ -700,7 +832,9 @@ time.innerHTML="0'";
 status.innerHTML="⚽ ANPFIFF";
 
 
+
 homeTicker.innerHTML="";
+
 awayTicker.innerHTML="";
 
 
@@ -715,10 +849,12 @@ let goals=[];
 
 for(let i=0;i<result.home;i++){
 
+
 goals.push({
 
-minute:Math.floor(Math.random()*88)+1,
-team:"home"
+team:"home",
+
+minute:Math.floor(Math.random()*90)+1
 
 });
 
@@ -727,14 +863,14 @@ team:"home"
 
 
 
-
 for(let i=0;i<result.away;i++){
 
 
 goals.push({
 
-minute:Math.floor(Math.random()*88)+1,
-team:"away"
+team:"away",
+
+minute:Math.floor(Math.random()*90)+1
 
 });
 
@@ -766,14 +902,15 @@ time.innerHTML=minute+"'";
 
 
 
-if(minute===45){
+if(minute==45){
 
 status.innerHTML="⏸ HALBZEIT";
 
 }
 
 
-if(minute===46){
+
+if(minute==46){
 
 status.innerHTML="▶ 2. HALBZEIT";
 
@@ -783,16 +920,14 @@ status.innerHTML="▶ 2. HALBZEIT";
 
 
 
-
 goals.forEach(goal=>{
 
 
-
-if(goal.minute===minute){
-
+if(goal.minute==minute){
 
 
-if(goal.team==="home"){
+
+if(goal.team=="home"){
 
 
 homeScore++;
@@ -805,6 +940,7 @@ minute+
 "' ⚽ "+
 document.getElementById("homeName").value+
 "</div>";
+
 
 
 }
@@ -823,23 +959,14 @@ minute+
 document.getElementById("awayName").value+
 "</div>";
 
+
+
 }
 
 
 
 score.innerHTML=
 homeScore+":"+awayScore;
-
-
-
-score.style.transform="scale(1.3)";
-
-
-setTimeout(()=>{
-
-score.style.transform="scale(1)";
-
-},300);
 
 
 
@@ -861,9 +988,6 @@ clearInterval(timer);
 
 
 
-setTimeout(()=>{
-
-
 score.innerHTML=
 result.home+":"+result.away;
 
@@ -877,10 +1001,6 @@ status.innerHTML="🏁 ENDE";
 running=false;
 
 button.disabled=false;
-
-
-
-},1000);
 
 
 
