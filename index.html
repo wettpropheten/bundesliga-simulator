@@ -26,7 +26,7 @@
         .left-column {
             display: flex;
             flex-direction: column;
-            gap: 150px; /* Großer Abstand nach unten zum Start-Button */
+            gap: 120px; 
         }
 
         /* Rechte Spalte */
@@ -113,21 +113,21 @@
             background-color: rgba(255,51,51,0.1);
         }
 
-        /* Start-Button (Unten Links) */
+        /* Ergebnis-Button (Unten Links) */
         .btn-start {
             background-color: #1e7e4e;
             color: white;
             border: none;
-            padding: 15px 40px;
+            padding: 15px 35px;
             font-size: 18px;
             font-weight: bold;
             cursor: pointer;
             border-radius: 4px;
-            width: 150px;
+            width: 160px;
             text-align: center;
             box-shadow: 0 4px 6px rgba(0,0,0,0.3);
             text-transform: uppercase;
-            align-self: flex-end; /* Schiebt ihn nach rechts rüber zum Rad */
+            align-self: flex-end; 
             margin-right: -40px;
         }
         .btn-start:hover {
@@ -135,6 +135,7 @@
         }
         .btn-start:disabled {
             background-color: #444;
+            color: #aaa;
             cursor: not-allowed;
         }
 
@@ -157,20 +158,38 @@
             justify-content: center;
             font-size: 45px;
             font-weight: 900;
-            background-color: #64b931; /* Grünes BVB-Feld aus deinem Screenshot */
+            background-color: #64b931; 
             color: white;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
-        .score-box {
+        .score-container {
             width: 140px;
             background-color: #2a2a2a;
             display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 45px;
-            font-weight: bold;
+            flex-direction: column;
             border-left: 2px solid #1a1a1a;
             border-right: 2px solid #1a1a1a;
+        }
+        .score-box {
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            font-weight: bold;
+            background: linear-gradient(to bottom, #ffffff 0%, #e0e0e0 100%);
+            color: black;
+            border-bottom: 2px solid #666;
+        }
+        .time-box {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            font-weight: bold;
+            background-color: #cccccc;
+            color: black;
         }
         .pct-row {
             display: flex;
@@ -213,7 +232,7 @@
             height: 0;
             border-left: 12px solid transparent;
             border-right: 12px solid transparent;
-            border-top: 25px solid #ffcc00; /* Gelber Pfeil oben */
+            border-top: 25px solid #ffcc00; 
             z-index: 10;
         }
         #wheel-canvas {
@@ -237,31 +256,31 @@
         <div class="left-column">
             <!-- Eingabemaske -->
             <div class="input-box">
-                <div id="error-msg">Die Chancen müssen zusammen 100% ergeben!</div>
+                <div id="error-msg">Die Chancen müssen zusammen genau 100% ergeben!</div>
                 
                 <div class="input-row">
                     <div class="field-group"><label>Heim-Name</label><input type="text" id="inp-name1" value="FCB"></div>
-                    <div class="field-group"><label>Chance</label><input type="number" id="inp-pct1" value="68"></div>
+                    <div class="field-group"><label>Chance</label><input type="number" id="inp-pct1" value="67"></div>
                     <div class="field-group"><label>Farbe</label><input type="color" id="inp-col1" value="#64b931"></div>
                 </div>
                 
                 <div class="input-row">
                     <div class="field-group"><label>Remis</label><input type="text" value="Unentschieden" disabled></div>
-                    <div class="field-group"><label>Chance</label><input type="number" id="inp-pct2" value="20"></div>
+                    <div class="field-group"><label>Chance</label><input type="number" id="inp-pct2" value="13"></div>
                     <div class="field-group"><label>Farbe</label><input type="color" id="inp-col2" value="#444444"></div>
                 </div>
                 
                 <div class="input-row">
                     <div class="field-group"><label>Gast-Name</label><input type="text" id="inp-name3" value="SGE"></div>
-                    <div class="field-group"><label>Chance</label><input type="number" id="inp-pct3" value="12"></div>
-                    <div class="field-group"><label>Farbe</label><input type="color" id="inp-col3" value="#64b931"></div>
+                    <div class="field-group"><label>Chance</label><input type="number" id="inp-pct3" value="20"></div>
+                    <div class="field-group"><label>Farbe</label><input type="color" id="inp-col3" value="#3b82f6"></div>
                 </div>
 
                 <button class="btn-update" onclick="applySettings()">Aktualisieren</button>
             </div>
 
-            <!-- Start Button -->
-            <button class="btn-start" id="start-btn" onclick="startSpin()">Start</button>
+            <!-- Ergebnis Button -->
+            <button class="btn-start" id="start-btn" onclick="startSimulation()">Ergebnis</button>
         </div>
 
         <!-- RECHTE SEITE -->
@@ -270,15 +289,16 @@
             <div class="scoreboard">
                 <div class="team-row">
                     <div class="team-box" id="view-name1">BVB</div>
-                    <div class="score-box" id="view-score">?:?</div>
+                    <div class="score-container">
+                        <div class="score-box" id="view-score">?:?</div>
+                        <div class="time-box" id="view-time">0'</div>
+                    </div>
                     <div class="team-box" id="view-name3">BVB</div>
                 </div>
                 <div class="pct-row">
-                    <div class="pct-box"><span>Heim</span><div id="view-pct1">68%</div></div>
-                    <div class="pct-row" style="width:2px; background:#333;"></div>
-                    <div class="pct-box"><span>Remis</span><div id="view-pct2">20%</div></div>
-                    <div class="pct-row" style="width:2px; background:#333;"></div>
-                    <div class="pct-box"><span>Gast</span><div id="view-pct3">12%</div></div>
+                    <div class="pct-box"><span>Heim</span><div id="view-pct1">67%</div></div>
+                    <div class="pct-box"><span>Remis</span><div id="view-pct2">13%</div></div>
+                    <div class="pct-box"><span>Gast</span><div id="view-pct3">20%</div></div>
                 </div>
             </div>
 
@@ -292,17 +312,3 @@
     </div>
 
 <script>
-    const canvas = document.getElementById('wheel-canvas');
-    const ctx = canvas.getContext('2d');
-    const cx = canvas.width / 2;
-    const cy = canvas.height / 2;
-    const radius = canvas.width / 2;
-
-    let currentAngle = 0;
-    let isSpinning = false;
-    let wheelSectors = [];
-
-    // Direkt beim Start einmal aufbauen
-    applySettings();
-
-    // Verarbeitet die Eingaben erst beim Klick auf "Aktualisieren"
