@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
 
 <meta charset="UTF-8">
@@ -7,198 +8,278 @@
 
 <title>Bundesliga Simulator</title>
 
+
 <style>
 
+
 body{
-    background:#8b1111;
-    color:white;
-    font-family:Arial,sans-serif;
-    margin:0;
-    padding:30px;
+
+background:#8b1111;
+color:white;
+font-family:Arial,sans-serif;
+margin:0;
+padding:30px;
+
 }
+
 
 
 .main{
-    display:flex;
-    justify-content:center;
-    gap:50px;
-    flex-wrap:wrap;
+
+display:flex;
+justify-content:center;
+gap:50px;
+flex-wrap:wrap;
+
 }
+
 
 
 .box{
-    background:#1a0a0a;
-    padding:20px;
-    width:300px;
-    border-radius:10px;
-    box-shadow:0 5px 10px black;
+
+background:#1a0a0a;
+padding:20px;
+width:300px;
+max-width:100%;
+box-sizing:border-box;
+border-radius:10px;
+box-shadow:0 5px 15px black;
+
 }
+
 
 
 label{
-    display:block;
-    color:#aaa;
-    font-size:12px;
-    margin-bottom:5px;
+
+display:block;
+color:#aaa;
+font-size:12px;
+margin-bottom:5px;
+
 }
 
 
-select,input{
-    background:#222;
-    color:white;
-    border:1px solid #555;
-    padding:8px;
-    width:100px;    
+
+select,
+input{
+
+background:#222;
+color:white;
+border:1px solid #555;
+padding:8px;
+width:100%;
+box-sizing:border-box;
+
 }
+
 
 
 .row{
-    display:flex;
-    justify-content:space-between;
-    margin-bottom:10px;
+
+display:flex;
+justify-content:space-between;
+gap:10px;
+margin-bottom:15px;
+
 }
+
+
+
+.row > div{
+
+flex:1;
+
+}
+
 
 
 button{
-    width:100%;
-    padding:12px;
-    margin-top:12px;
-    font-weight:bold;
-    cursor:pointer;
+
+width:100%;
+padding:12px;
+margin-top:12px;
+font-weight:bold;
+cursor:pointer;
+
 }
+
 
 
 .start{
-    width:200px;
-    background:#168044;
-    color:white;
-    border:none;
-    font-size:22px;
+
+width:200px;
+background:#168044;
+color:white;
+border:none;
+font-size:22px;
+
 }
+
 
 
 .start:disabled{
-    background:#555;
+
+background:#555;
+
 }
+
 
 
 .update{
-    background:#333;
-    color:white;
-    border:1px solid #777;
+
+background:#333;
+color:white;
+border:1px solid #777;
+
 }
 
 
+
 .reset{
-    background:#700000;
-    color:white;
-    border:none;
+
+background:#700000;
+color:white;
+border:none;
+
 }
 
 
 
 .scoreboard{
-    width:600px;
-    background:#222;
-    border:3px solid #444;
+
+width:600px;
+background:#222;
+border:3px solid #444;
+
 }
+
 
 
 .teams{
-    display:flex;
-    height:130px;
+
+display:flex;
+height:130px;
+
 }
 
 
+
 .team{
-    width:200px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    font-size:45px;
-    font-weight:bold;
+
+width:200px;
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:45px;
+font-weight:bold;
+
 }
 
 
 
 .middle{
-    flex:1;
+
+flex:1;
+
 }
+
 
 
 .score{
-    height:70px;
-    background:white;
-    color:black;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    font-size:42px;
-    font-weight:bold;
+
+height:70px;
+background:white;
+color:black;
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:42px;
+font-weight:bold;
+
 }
 
 
+
 .time{
-    height:60px;
-    background:#ccc;
-    color:black;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    font-size:28px;
+
+height:60px;
+background:#ccc;
+color:black;
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:28px;
+
 }
 
 
 
 .percent{
-    display:flex;
-    background:#111;
-    padding:15px;
+
+display:flex;
+background:#111;
+padding:15px;
+
 }
 
 
+
 .percent div{
-    flex:1;
-    text-align:center;
+
+flex:1;
+text-align:center;
+
 }
 
 
 
 .status{
-    background:#111;
-    text-align:center;
-    padding:12px;
-    font-size:22px;
-    font-weight:bold;
+
+background:#111;
+text-align:center;
+padding:12px;
+font-size:22px;
+font-weight:bold;
+
 }
 
 
 
 .ticker{
-    display:flex;
-    background:#050505;
-    min-height:150px;
-    padding:15px;
+
+display:flex;
+background:#050505;
+min-height:150px;
+padding:15px;
+
 }
 
 
 
 .homeTicker{
-    width:50%;
-    text-align:left;
+
+width:50%;
+text-align:left;
+
 }
+
 
 
 .awayTicker{
-    width:50%;
-    text-align:right;
+
+width:50%;
+text-align:right;
+
 }
 
 
+
 .goal{
-    color:#00ff66;
-    font-weight:bold;
-    font-size:18px;
+
+color:#00ff66;
+font-weight:bold;
+font-size:18px;
+
 }
 
 
@@ -208,6 +289,7 @@ button{
 
 
 <body>
+
 
 
 <div class="main">
@@ -227,6 +309,7 @@ button{
 <div>
 
 <label>Mannschaft</label>
+
 
 <select id="homeTeam">
 
@@ -253,10 +336,7 @@ button{
 
 </div>
 
-
 </div>
-
-
 
 
 
@@ -264,7 +344,6 @@ button{
 
 
 <div class="row">
-
 
 <div>
 
@@ -297,9 +376,7 @@ button{
 
 </div>
 
-
 </div>
-
 
 
 
@@ -308,6 +385,7 @@ button{
 
 
 <div class="row">
+
 
 <div>
 
@@ -318,6 +396,7 @@ button{
 </div>
 
 
+
 <div>
 
 <label>Remis %</label>
@@ -325,6 +404,7 @@ button{
 <input id="drawPct" value="25">
 
 </div>
+
 
 
 <div>
@@ -367,6 +447,9 @@ START
 
 
 </div>
+
+
+
 <div class="scoreboard">
 
 
@@ -380,14 +463,17 @@ START
 
 
 <div id="score" class="score">
+
 </div>
 
 
 <div id="time" class="time">
+
 </div>
 
 
 </div>
+
 
 
 <div id="awayView" class="team"></div>
@@ -401,20 +487,29 @@ START
 
 
 <div>
+
 Heim<br>
+
 <span id="hp"></span>
+
 </div>
 
 
 <div>
+
 Remis<br>
+
 <span id="dp"></span>
+
 </div>
 
 
 <div>
+
 Gast<br>
+
 <span id="ap"></span>
+
 </div>
 
 
@@ -423,6 +518,7 @@ Gast<br>
 
 
 <div id="status" class="status">
+
 </div>
 
 
