@@ -307,38 +307,35 @@
     }
 
 
-    function startTimer() {
-        if (isRunning) return;
+   function startTimer() {
+    if (isRunning) return;
 
-        isRunning = true;
+    isRunning = true;
 
-        const btn = document.getElementById('start-btn');
-        const timeBox = document.getElementById('view-time');
-        const scoreBox = document.getElementById('view-score');
+    const btn = document.getElementById('start-btn');
+    const timeBox = document.getElementById('view-time');
+    const scoreBox = document.getElementById('view-score');
 
-        btn.disabled = true;
-        scoreBox.textContent = "0:0";
+    btn.disabled = true;
+    scoreBox.textContent = "0:0";
 
-        let currentMinute = 0;
+    let currentMinute = 0;
 
-        const timer = setInterval(() => {
-            currentMinute++;
+    // 90 Spielminuten in 10 Sekunden
+    // 1 Sekunde = 9 Spielminuten
+    const timer = setInterval(() => {
 
-            timeBox.textContent = currentMinute + "'";
+        currentMinute += 9;
 
-            if (currentMinute >= 90) {
-                clearInterval(timer);
+        if (currentMinute >= 90) {
+            currentMinute = 90;
+            clearInterval(timer);
 
-                isRunning = false;
-                btn.disabled = false;
+            isRunning = false;
+            btn.disabled = false;
+        }
 
-                timeBox.textContent = "90'";
-            }
+        timeBox.textContent = currentMinute + "'";
 
-        }, 1000);
-    }
-
-</script>
-
-</body>
-</html>
+    }, 1000);
+}
