@@ -1,439 +1,630 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sport Simulator Layout</title>
-    <style>
-        body {
-            background-color: #8b1111;
-            color: white;
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 30px;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        /* Das Haupt-Raster, das die Seite in zwei Hälften teilt */
-        .main-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            max-width: 1100px;
-            margin: 0 auto;
-            align-items: flex-start;
-        }
+<title>Bundesliga Sport Simulator</title>
 
-        /* Linke Spalte: Eingaben & Buttons */
-        .left-column {
-            display: flex;
-            flex-direction: column;
-            gap: 40px; 
-            align-items: flex-start;
-        }
+<style>
 
-        /* Rechte Spalte: Anzeigetafel */
-        .right-column {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 35px;
-        }
+body {
+    background:#8b1111;
+    color:white;
+    font-family:Arial,sans-serif;
+    margin:0;
+    padding:30px;
+}
 
-        /* Eingabemaske */
-        .input-box {
-            background-color: #1a0a0a;
-            border: 2px solid #2d1515;
-            border-radius: 8px;
-            padding: 20px;
-            width: 380px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-        }
-        .input-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 12px;
-            align-items: flex-end;
-            gap: 10px;
-        }
-        .field-group {
-            display: flex;
-            flex-direction: column;
-            text-align: left;
-        }
-        .field-group label {
-            font-size: 11px;
-            color: #888;
-            text-transform: uppercase;
-            margin-bottom: 4px;
-            font-weight: bold;
-        }
-        input[type="text"] {
-            width: 130px;
-            padding: 8px;
-            background: #2b1b1b;
-            color: white;
-            border: 1px solid #443333;
-            border-radius: 4px;
-            font-weight: bold;
-        }
-        input[type="text"]:disabled {
-            background: #1f1515;
-            color: #665555;
-        }
-        input[type="number"] {
-            width: 60px;
-            padding: 8px;
-            background: #2b1b1b;
-            color: white;
-            border: 1px solid #443333;
-            border-radius: 4px;
-            text-align: center;
-            font-weight: bold;
-        }
-        input[type="color"] {
-            width: 40px;
-            height: 34px;
-            border: 1px solid #443333;
-            border-radius: 4px;
-            cursor: pointer;
-            background: transparent;
-            padding: 0;
-        }
-        .btn-update {
-            background-color: transparent;
-            border: 1px solid #ff3333;
-            color: #ff3333;
-            padding: 10px 20px;
-            font-weight: bold;
-            cursor: pointer;
-            border-radius: 4px;
-            margin-top: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            width: 100%;
-        }
-        .btn-update:hover {
-            background-color: rgba(255,51,51,0.1);
-        }
+.main {
+    display:flex;
+    justify-content:center;
+    gap:50px;
+    flex-wrap:wrap;
+}
 
-        /* Der Start-Button */
-        .btn-start {
-            background-color: #1e7e4e;
-            color: white;
-            border: none;
-            padding: 15px 40px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            border-radius: 4px;
-            width: 180px;
-            text-align: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        .btn-start:hover {
-            background-color: #155a37;
-        }
-        .btn-start:disabled {
-            background-color: #444;
-            color: #aaa;
-            cursor: not-allowed;
-        }
 
-        /* Die Anzeigetafel */
-        .scoreboard {
-            width: 100%;
-            max-width: 500px;
-            background-color: #222;
-            border: 3px solid #333;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-        }
-        .team-row {
-            display: flex;
-            height: 120px;
-        }
-        .team-box {
-            width: 180px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 45px;
-            font-weight: 900;
-            color: white;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-            transition: background-color 0.2s;
-        }
-        .score-container {
-            flex: 1;
-            background-color: #2a2a2a;
-            display: flex;
-            flex-direction: column;
-            border-left: 2px solid #1a1a1a;
-            border-right: 2px solid #1a1a1a;
-        }
-        .score-box {
-            height: 70px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 40px;
-            font-weight: bold;
-            background: linear-gradient(to bottom, #ffffff 0%, #e0e0e0 100%);
-            color: black;
-            border-bottom: 2px solid #666;
-        }
-        .time-box {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 26px;
-            font-weight: bold;
-            background-color: #cccccc;
-            color: black;
-        }
-        .pct-row {
-            display: flex;
-            background-color: #151515;
-            padding: 10px 0;
-            border-top: 2px solid #2a2a2a;
-        }
-        .pct-box {
-            flex: 1;
-            text-align: center;
-        }
-        .pct-box span {
-            display: block;
-            font-size: 10px;
-            color: #777;
-            text-transform: uppercase;
-            margin-bottom: 2px;
-        }
-        .pct-box div {
-            font-size: 16px;
-            font-weight: bold;
-        }
-    </style>
+.box {
+    background:#1a0a0a;
+    padding:20px;
+    border-radius:10px;
+    width:380px;
+    box-shadow:0 5px 15px black;
+}
+
+
+.row {
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:15px;
+}
+
+
+label {
+    display:block;
+    font-size:12px;
+    color:#aaa;
+    margin-bottom:5px;
+}
+
+
+input {
+    background:#2b1b1b;
+    color:white;
+    border:1px solid #555;
+    padding:8px;
+    width:90px;
+}
+
+
+input[type="color"] {
+    width:45px;
+    height:35px;
+    padding:0;
+}
+
+
+button {
+    width:100%;
+    padding:12px;
+    margin-top:15px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+
+.update {
+    background:none;
+    color:#ff4444;
+    border:1px solid #ff4444;
+}
+
+
+.start {
+    background:#168044;
+    color:white;
+    border:none;
+    width:200px;
+    font-size:20px;
+}
+
+
+.start:disabled {
+    background:#555;
+}
+
+
+.scoreboard {
+
+    background:#222;
+    border:3px solid #444;
+    width:520px;
+
+}
+
+
+.teams {
+
+    display:flex;
+    height:130px;
+
+}
+
+
+.team {
+
+    width:180px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:45px;
+    font-weight:bold;
+
+}
+
+
+.middle {
+
+    flex:1;
+    display:flex;
+    flex-direction:column;
+
+}
+
+
+.score {
+
+    height:70px;
+    background:white;
+    color:black;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:40px;
+    font-weight:bold;
+
+}
+
+
+.time {
+
+    flex:1;
+    background:#ccc;
+    color:black;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:28px;
+
+}
+
+
+.percent {
+
+    display:flex;
+    background:#111;
+    padding:10px;
+
+}
+
+
+.percent div {
+
+    flex:1;
+    text-align:center;
+
+}
+
+
+.small {
+
+    font-size:11px;
+    color:#888;
+
+}
+
+
+</style>
+
 </head>
+
+
 <body>
 
-    <div class="main-grid">
-        
-        <!-- LINKE SPALTE (Eingabe) -->
-        <div class="left-column">
-            <div class="input-box">
-                <div class="input-row">
-                    <div class="field-group"><label>Heim-Name</label><input type="text" id="inp-name1" value="FCB" maxlength="8"></div>
-                    <div class="field-group"><label>Chance</label><input type="number" id="inp-pct1" value="67" min="0" max="100"></div>
-                    <div class="field-group"><label>Farbe</label><input type="color" id="inp-col1" value="#64b931"></div>
-                </div>
-                
-                <div class="input-row">
-                    <div class="field-group"><label>Remis</label><input type="text" value="Unentschieden" disabled></div>
-                    <div class="field-group"><label>Chance</label><input type="number" id="inp-pct2" value="13" min="0" max="100"></div>
-                    <div class="field-group"><label>Farbe</label><input type="color" id="inp-col2" value="#444444"></div>
-                </div>
-                
-                <div class="input-row">
-                    <div class="field-group"><label>Gast-Name</label><input type="text" id="inp-name3" value="SGE" maxlength="8"></div>
-                    <div class="field-group"><label>Chance</label><input type="number" id="inp-pct3" value="20" min="0" max="100"></div>
-                    <div class="field-group"><label>Farbe</label><input type="color" id="inp-col3" value="#ff3333"></div>
-                </div>
 
-                <button class="btn-update" onclick="updateMatchboard()">Aktualisieren</button>
-            </div>
+<div class="main">
 
-            <button class="btn-start" id="start-btn" onclick="startTimer()">Start</button>
-        </div>
 
-        <!-- RECHTE SPALTE (Matchboard) -->
-        <div class="right-column">
-            <div class="scoreboard">
-                <div class="team-row">
-                    <div class="team-box" id="view-name1" style="background-color: #64b931;">FCB</div>
-                    <div class="score-container">
-                        <div class="score-box" id="view-score">?:?</div>
-                        <div class="time-box" id="view-time">0'</div>
-                    </div>
-                    <div class="team-box" id="view-name3" style="background-color: #ff3333;">SGE</div>
-                </div>
-                <div class="pct-row">
-                    <div class="pct-box"><span>Heim</span><div id="view-pct1">67%</div></div>
-                    <div class="pct-box"><span>Remis</span><div id="view-pct2">13%</div></div>
-                    <div class="pct-box"><span>Gast</span><div id="view-pct3">20%</div></div>
-                </div>
-            </div>
-        </div>
+<div>
 
-    </div>
 
+<div class="box">
+
+
+<div class="row">
+
+<div>
+<label>Heim</label>
+<input id="homeName" value="FCB">
+</div>
+
+<div>
+<label>Sieg %</label>
+<input id="homePct" type="number" value="67">
+</div>
+
+<div>
+<label>Farbe</label>
+<input id="homeColor" type="color" value="#64b931">
+</div>
+
+</div>
+
+
+
+<div class="row">
+
+<div>
+<label>Remis</label>
+<input disabled value="Unentschieden">
+</div>
+
+<div>
+<label>Remis %</label>
+<input id="drawPct" type="number" value="13">
+</div>
+
+</div>
+
+
+
+<div class="row">
+
+<div>
+<label>Gast</label>
+<input id="awayName" value="SGE">
+</div>
+
+<div>
+<label>Sieg %</label>
+<input id="awayPct" type="number" value="20">
+</div>
+
+<div>
+<label>Farbe</label>
+<input id="awayColor" type="color" value="#ff3333">
+</div>
+
+</div>
+
+
+<button class="update" onclick="updateBoard()">
+Aktualisieren
+</button>
+
+
+</div>
+
+
+
+<button id="start" class="start" onclick="startGame()">
+START
+</button>
+
+
+</div>
+
+
+
+
+
+<div class="scoreboard">
+
+
+<div class="teams">
+
+
+<div id="homeView" class="team" style="background:#64b931">
+FCB
+</div>
+
+
+<div class="middle">
+
+<div id="score" class="score">
+?:?
+</div>
+
+
+<div id="time" class="time">
+0'
+</div>
+
+
+</div>
+
+
+
+<div id="awayView" class="team" style="background:#ff3333">
+SGE
+</div>
+
+
+</div>
+
+
+
+<div class="percent">
+
+
+<div>
+<span class="small">Heim</span>
+<br>
+<span id="hp">67%</span>
+</div>
+
+
+<div>
+<span class="small">Remis</span>
+<br>
+<span id="dp">13%</span>
+</div>
+
+
+<div>
+<span class="small">Gast</span>
+<br>
+<span id="ap">20%</span>
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+</div>
 <script>
-    let isRunning = false;
 
-    function updateMatchboard() {
-        if (isRunning) return;
+let running = false;
 
-        const nameHome = document.getElementById('inp-name1').value;
-        const nameAway = document.getElementById('inp-name3').value;
 
-        const pctHome = document.getElementById('inp-pct1').value;
-        const pctDraw = document.getElementById('inp-pct2').value;
-        const pctAway = document.getElementById('inp-pct3').value;
+function updateBoard(){
 
-        const colorHome = document.getElementById('inp-col1').value;
-        const colorAway = document.getElementById('inp-col3').value;
+    if(running) return;
 
-        // 3. Prozentzahlen-Prüfung (zusammen exakt 100%)
-        const total = Number(pctHome) + Number(pctDraw) + Number(pctAway);
-        if (total !== 100) {
-            alert("Die Wahrscheinlichkeiten müssen zusammen genau 100% ergeben. (Aktuell: " + total + "%)");
-            return;
-        }
 
-        // 6. Verwendung von textContent statt innerText
-        document.getElementById('view-name1').textContent = nameHome;
-        document.getElementById('view-name3').textContent = nameAway;
+    let home = document.getElementById("homeName").value;
+    let away = document.getElementById("awayName").value;
 
-        document.getElementById('view-pct1').textContent = pctHome + "%";
-                document.getElementById('view-pct2').textContent = pctDraw + "%";
-        document.getElementById('view-pct3').textContent = pctAway + "%";
+    let hp = Number(document.getElementById("homePct").value);
+    let dp = Number(document.getElementById("drawPct").value);
+    let ap = Number(document.getElementById("awayPct").value);
 
-        document.getElementById('view-name1').style.backgroundColor = colorHome;
-        document.getElementById('view-name3').style.backgroundColor = colorAway;
 
-        document.getElementById('view-score').textContent = "?:?";
-        document.getElementById('view-time').textContent = "0'";
+    if(hp + dp + ap !== 100){
+
+        alert("Die Wahrscheinlichkeiten müssen zusammen 100% ergeben!");
+        return;
+
     }
 
 
-   function startTimer() {
-    if (isRunning) return;
-
-    isRunning = true;
-
-    const btn = document.getElementById('start-btn');
-    const timeBox = document.getElementById('view-time');
-    const scoreBox = document.getElementById('view-score');
-
-    btn.disabled = true;
-
-    let minute = 0;
-    let homeGoals = 0;
-    let awayGoals = 0;
-
-    scoreBox.textContent = "0:0";
-
-    // Wahrscheinlichkeiten aus Eingabe
-    const homeChance = Number(document.getElementById('inp-pct1').value);
-    const drawChance = Number(document.getElementById('inp-pct2').value);
-    const awayChance = Number(document.getElementById('inp-pct3').value);
+    document.getElementById("homeView").innerText = home;
+    document.getElementById("awayView").innerText = away;
 
 
-    // Zielergebnis bestimmen
-    function generateResult() {
-
-        const random = Math.random() * 100;
-
-        let home;
-        let away;
-
-        if (random < homeChance) {
-            // Heimsieg
-            home = randomGoals(1.6);
-            away = randomGoals(0.8);
-
-            if (home <= away) home = away + 1;
-
-        } else if (random < homeChance + drawChance) {
-            // Unentschieden
-            home = randomGoals(1.1);
-            away = home;
-
-        } else {
-            // Auswärtssieg
-            home = randomGoals(0.8);
-            away = randomGoals(1.5);
-
-            if (away <= home) away = home + 1;
-        }
-
-        return {
-            home,
-            away
-        };
-    }
+    document.getElementById("hp").innerText = hp + "%";
+    document.getElementById("dp").innerText = dp + "%";
+    document.getElementById("ap").innerText = ap + "%";
 
 
-    // Bundesliga ähnliche Torverteilung
-    function randomGoals(avg) {
+    document.getElementById("homeView").style.background =
+    document.getElementById("homeColor").value;
 
-        let goals = 0;
 
-        for(let i = 0; i < 6; i++) {
+    document.getElementById("awayView").style.background =
+    document.getElementById("awayColor").value;
 
-            if(Math.random() < avg / 6) {
-                goals++;
-            }
+
+}
+
+
+
+function randomGoals(){
+
+    let goals = 0;
+
+    for(let i=0;i<6;i++){
+
+        if(Math.random() < 0.25){
+
+            goals++;
 
         }
 
-        return goals;
+    }
+
+    return goals;
+
+}
+
+
+
+
+function createResult(){
+
+
+    let hp =
+    Number(document.getElementById("homePct").value);
+
+    let dp =
+    Number(document.getElementById("drawPct").value);
+
+    let ap =
+    Number(document.getElementById("awayPct").value);
+
+
+
+    let chance = Math.random()*100;
+
+
+
+    let homeGoals;
+    let awayGoals;
+
+
+
+    // Heim gewinnt
+    if(chance < hp){
+
+
+        homeGoals = randomGoals();
+        awayGoals = randomGoals();
+
+
+        if(homeGoals <= awayGoals){
+
+            homeGoals = awayGoals + 1;
+
+        }
+
+
     }
 
 
-    const finalResult = generateResult();
+    // Unentschieden
+    else if(chance < hp + dp){
 
 
-    const timer = setInterval(() => {
+        let goals = randomGoals();
+
+
+        homeGoals = goals;
+        awayGoals = goals;
+
+
+    }
+
+
+    // Gast gewinnt
+    else{
+
+
+        homeGoals = randomGoals();
+        awayGoals = randomGoals();
+
+
+        if(awayGoals <= homeGoals){
+
+            awayGoals = homeGoals + 1;
+
+        }
+
+
+    }
+
+
+    return {
+
+        home:homeGoals,
+        away:awayGoals
+
+    };
+
+
+}
+
+
+
+
+
+function startGame(){
+
+
+    if(running) return;
+
+
+    running=true;
+
+
+    let button=document.getElementById("start");
+
+    let time=document.getElementById("time");
+
+    let score=document.getElementById("score");
+
+
+    button.disabled=true;
+
+
+
+    let minute=0;
+
+    let homeScore=0;
+
+    let awayScore=0;
+
+
+
+    score.innerText="0:0";
+
+
+
+    let final=createResult();
+
+
+
+    let timer=setInterval(function(){
+
+
 
         minute += 9;
 
-        // Tor-Chance während des Spiels
-        if(minute < 90) {
 
-            let goalChance = Math.random();
 
-            if(goalChance < 0.12) {
+        // Torwahrscheinlichkeit während des Spiels
 
-                if(homeGoals < finalResult.home &&
-                   Math.random() < 0.55) {
+        if(Math.random()<0.18 && minute < 90){
 
-                    homeGoals++;
 
-                }
-                else if(awayGoals < finalResult.away){
 
-                    awayGoals++;
+            if(homeScore < final.home &&
+               Math.random()<0.55){
 
-                }
 
-                scoreBox.textContent =
-                homeGoals + ":" + awayGoals;
+                homeScore++;
+
+
             }
+
+            else if(awayScore < final.away){
+
+
+                awayScore++;
+
+
+            }
+
+
+
+            score.innerText =
+            homeScore + ":" + awayScore;
+
+
         }
 
 
-        timeBox.textContent = minute + "'";
+
+        time.innerText = minute + "'";
 
 
-        // Spielende
-        if(minute >= 90) {
+
+
+
+        if(minute>=90){
+
 
             clearInterval(timer);
 
-            // Endergebnis setzen
-            homeGoals = finalResult.home;
-            awayGoals = finalResult.away;
-
-            scoreBox.textContent =
-            homeGoals + ":" + awayGoals;
 
 
-            isRunning = false;
-            btn.disabled = false;
+            homeScore=final.home;
+
+            awayScore=final.away;
+
+
+
+            score.innerText =
+            homeScore + ":" + awayScore;
+
+
+
+            time.innerText="90'";
+
+
+            running=false;
+
+            button.disabled=false;
+
+
         }
 
 
+
+
     },1000);
+
+
+
 }
+
+
+
+</script>
+
+
+</body>
+</html>
