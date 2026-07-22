@@ -449,16 +449,18 @@ function updateBoard(){
     let home = document.getElementById("homeName").value;
     let away = document.getElementById("awayName").value;
 
-    let homeColor = document.getElementById("homeColor").value;
-    let awayColor = document.getElementById("awayColor").value;
-
 
     document.getElementById("homeView").innerHTML = home;
     document.getElementById("awayView").innerHTML = away;
 
 
-    document.getElementById("homeView").style.background = homeColor;
-    document.getElementById("awayView").style.background = awayColor;
+    document.getElementById("homeView").style.background =
+    document.getElementById("homeColor").value;
+
+
+    document.getElementById("awayView").style.background =
+    document.getElementById("awayColor").value;
+
 
 
     document.getElementById("hp").innerHTML =
@@ -477,92 +479,185 @@ function updateBoard(){
 
 
 
+
+
+// Ergebnis-Matrix nach Wahrscheinlichkeitsbereich
+
+function getHomeWinScores(prob){
+
+
+    if(prob <= 10)
+        return ["0:3","0:4","1:3"];
+
+
+    if(prob <= 25)
+        return ["0:2","1:2","1:3"];
+
+
+    if(prob <= 40)
+        return ["1:1","1:2","2:1"];
+
+
+    if(prob <= 60)
+        return ["1:0","1:1","2:1"];
+
+
+    if(prob <= 75)
+        return ["2:0","2:1","3:1"];
+
+
+    if(prob <= 90)
+        return ["3:0","3:1","4:1"];
+
+
+    return ["4:0","5:0","6:0"];
+
+}
+
+
+
+
+function getDrawScores(){
+
+    return [
+        "0:0",
+        "1:1",
+        "2:2",
+        "2:2",
+        "1:1"
+    ];
+
+}
+
+
+
+
+function getAwayWinScores(){
+
+    return [
+
+        "0:1",
+        "0:2",
+        "1:2",
+        "1:3"
+
+    ];
+
+}
+
+
+
+
+
+
 function createResult(){
 
 
-    let hp = Number(document.getElementById("homePct").value);
-    let dp = Number(document.getElementById("drawPct").value);
-    let ap = Number(document.getElementById("awayPct").value);
+    let home =
+    Number(document.getElementById("homePct").value);
+
+
+    let draw =
+    Number(document.getElementById("drawPct").value);
+
+
+    let away =
+    Number(document.getElementById("awayPct").value);
 
 
 
-    let chance = Math.random()*100;
+    let r=Math.random()*100;
+
+
+    let result;
 
 
 
-    let winner;
+    if(r < home){
 
-
-    if(chance < hp){
-
-        winner="home";
+        result="home";
 
     }
-    else if(chance < hp+dp){
+    else if(r < home+draw){
 
-        winner="draw";
+        result="draw";
 
     }
     else{
 
-        winner="away";
+        result="away";
 
     }
 
 
 
-    function randomGoals(){
 
-        let r=Math.random();
+    let list;
 
-        if(r<0.18) return 0;
-        if(r<0.55) return 1;
-        if(r<0.82) return 2;
-        if(r<0.95) return 3;
 
-        return 4;
+
+    if(result==="home"){
+
+        list=getHomeWinScores(home);
+
+    }
+
+
+    if(result==="draw"){
+
+        list=getDrawScores();
+
+    }
+
+
+    if(result==="away"){
+
+        list=getAwayWinScores();
 
     }
 
 
 
-    let home=randomGoals();
-    let away=randomGoals();
+    // Überraschungen ermöglichen
+    // ca. 8% Abweichung
+
+    if(Math.random()<0.08){
 
 
+        if(result==="home")
+            list=getAwayWinScores();
 
-    if(winner==="home" && home<=away){
 
-        home=away+1;
+        if(result==="away")
+            list=getHomeWinScores(70);
+
 
     }
 
 
 
-    if(winner==="away" && away<=home){
 
-        away=home+1;
-
-    }
+    let score =
+    list[Math.floor(Math.random()*list.length)];
 
 
 
-    if(winner==="draw"){
-
-        away=home;
-
-    }
+    let parts=score.split(":");
 
 
 
     return {
 
-        home:home,
-        away:away
+        home:Number(parts[0]),
+        away:Number(parts[1])
 
     };
 
+
 }
+
+
+
 
 
 
@@ -571,11 +666,11 @@ function createResult(){
 function startGame(){
 
 
-    if(running) return;
+    if(running)
+        return;
 
 
     running=true;
-
 
 
     let button=document.getElementById("start");
@@ -587,7 +682,6 @@ function startGame(){
     let score=document.getElementById("score");
     let time=document.getElementById("time");
     let status=document.getElementById("status");
-
 
     let homeTicker=document.getElementById("homeTicker");
     let awayTicker=document.getElementById("awayTicker");
@@ -606,7 +700,7 @@ function startGame(){
 
 
 
-    let result=createResult();
+    let final=createResult();
 
 
 
@@ -614,11 +708,11 @@ function startGame(){
 
 
 
-    for(let i=0;i<result.home;i++){
+    for(let i=0;i<final.home;i++){
 
         goals.push({
 
-            minute:Math.floor(Math.random()*90)+1,
+            minute:Math.floor(Math.random()*88)+1,
             team:"home"
 
         });
@@ -627,11 +721,12 @@ function startGame(){
 
 
 
-    for(let i=0;i<result.away;i++){
+
+    for(let i=0;i<final.away;i++){
 
         goals.push({
 
-            minute:Math.floor(Math.random()*90)+1,
+            minute:Math.floor(Math.random()*88)+1,
             team:"away"
 
         });
@@ -644,10 +739,11 @@ function startGame(){
 
 
 
+
     let minute=0;
 
-    let homeScore=0;
 
+    let homeScore=0;
     let awayScore=0;
 
 
@@ -678,6 +774,8 @@ function startGame(){
 
 
 
+
+
         goals.forEach(goal=>{
 
 
@@ -694,10 +792,10 @@ function startGame(){
                     homeTicker.innerHTML +=
 
                     "<div class='goal'>"+
-                    minute+"' ⚽ "+
+                    minute+
+                    "' ⚽ "+
                     document.getElementById("homeName").value+
                     "</div>";
-
 
                 }
                 else{
@@ -709,16 +807,16 @@ function startGame(){
                     awayTicker.innerHTML +=
 
                     "<div class='goal'>"+
-                    minute+"' ⚽ "+
+                    minute+
+                    "' ⚽ "+
                     document.getElementById("awayName").value+
                     "</div>";
-
 
                 }
 
 
 
-                score.style.transform="scale(1.25)";
+                score.style.transform="scale(1.3)";
 
 
                 setTimeout(()=>{
@@ -729,11 +827,12 @@ function startGame(){
 
 
 
-                score.innerHTML =
+                score.innerHTML=
                 homeScore+":"+awayScore;
 
 
             }
+
 
 
         });
@@ -749,15 +848,15 @@ function startGame(){
 
 
 
-            score.innerHTML =
-            result.home+":"+result.away;
+            score.innerHTML=
+            final.home+":"+final.away;
+
 
 
             time.innerHTML="90'";
 
 
             status.innerHTML="🏁 ENDE";
-
 
 
             running=false;
@@ -769,17 +868,13 @@ function startGame(){
 
 
 
+
     },160);
+
 
 
 }
 
 
 
-
 updateBoard();
-
-</script>
-
-</body>
-</html>
