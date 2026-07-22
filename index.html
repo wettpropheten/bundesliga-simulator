@@ -152,7 +152,7 @@
             height: 120px;
         }
         .team-box {
-            flex: 1;
+            width: 180px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -163,7 +163,7 @@
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
         .score-container {
-            width: 140px;
+            flex: 1;
             background-color: #2a2a2a;
             display: flex;
             flex-direction: column;
@@ -238,14 +238,6 @@
         #wheel-canvas {
             border-radius: 50%;
         }
-        
-        #error-msg {
-            color: #ff3333;
-            font-weight: bold;
-            font-size: 12px;
-            margin-bottom: 10px;
-            display: none;
-        }
     </style>
 </head>
 <body>
@@ -256,8 +248,6 @@
         <div class="left-column">
             <!-- Eingabemaske -->
             <div class="input-box">
-                <div id="error-msg">Die Chancen müssen zusammen genau 100% ergeben!</div>
-                
                 <div class="input-row">
                     <div class="field-group"><label>Heim-Name</label><input type="text" id="inp-name1" value="FCB"></div>
                     <div class="field-group"><label>Chance</label><input type="number" id="inp-pct1" value="67"></div>
@@ -273,7 +263,7 @@
                 <div class="input-row">
                     <div class="field-group"><label>Gast-Name</label><input type="text" id="inp-name3" value="SGE"></div>
                     <div class="field-group"><label>Chance</label><input type="number" id="inp-pct3" value="20"></div>
-                    <div class="field-group"><label>Farbe</label><input type="color" id="inp-col3" value="#3b82f6"></div>
+                    <div class="field-group"><label>Farbe</label><input type="color" id="inp-col3" value="#ff3333"></div>
                 </div>
 
                 <button class="btn-update" onclick="applySettings()">Aktualisieren</button>
@@ -312,3 +302,13 @@
     </div>
 
 <script>
+    const canvas = document.getElementById('wheel-canvas');
+    const ctx = canvas.getContext('2d');
+    const cx = canvas.width / 2;
+    const cy = canvas.height / 2;
+    const radius = canvas.width / 2;
+
+    let currentAngle = 0;
+    let isSimulating = false;
+    let wheelSectors = [];
+
