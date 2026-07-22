@@ -296,3 +296,49 @@
         document.getElementById('view-name3').textContent = nameAway;
 
         document.getElementById('view-pct1').textContent = pctHome + "%";
+                document.getElementById('view-pct2').textContent = pctDraw + "%";
+        document.getElementById('view-pct3').textContent = pctAway + "%";
+
+        document.getElementById('view-name1').style.backgroundColor = colorHome;
+        document.getElementById('view-name3').style.backgroundColor = colorAway;
+
+        document.getElementById('view-score').textContent = "?:?";
+        document.getElementById('view-time').textContent = "0'";
+    }
+
+
+    function startTimer() {
+        if (isRunning) return;
+
+        isRunning = true;
+
+        const btn = document.getElementById('start-btn');
+        const timeBox = document.getElementById('view-time');
+        const scoreBox = document.getElementById('view-score');
+
+        btn.disabled = true;
+        scoreBox.textContent = "0:0";
+
+        let currentMinute = 0;
+
+        const timer = setInterval(() => {
+            currentMinute++;
+
+            timeBox.textContent = currentMinute + "'";
+
+            if (currentMinute >= 90) {
+                clearInterval(timer);
+
+                isRunning = false;
+                btn.disabled = false;
+
+                timeBox.textContent = "90'";
+            }
+
+        }, 1000);
+    }
+
+</script>
+
+</body>
+</html>
