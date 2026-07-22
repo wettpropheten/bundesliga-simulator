@@ -23,7 +23,6 @@ body {
     flex-wrap:wrap;
 }
 
-
 .box {
     background:#1a0a0a;
     padding:20px;
@@ -32,13 +31,11 @@ body {
     box-shadow:0 5px 15px black;
 }
 
-
 .row {
     display:flex;
     justify-content:space-between;
     margin-bottom:15px;
 }
-
 
 label {
     display:block;
@@ -46,7 +43,6 @@ label {
     color:#aaa;
     margin-bottom:5px;
 }
-
 
 input {
     background:#2b1b1b;
@@ -56,13 +52,11 @@ input {
     width:90px;
 }
 
-
 input[type="color"] {
     width:45px;
     height:35px;
     padding:0;
 }
-
 
 button {
     width:100%;
@@ -72,13 +66,11 @@ button {
     cursor:pointer;
 }
 
-
 .update {
     background:none;
     color:#ff4444;
     border:1px solid #ff4444;
 }
-
 
 .start {
     background:#168044;
@@ -88,52 +80,42 @@ button {
     font-size:20px;
 }
 
-
 .start:disabled {
     background:#555;
 }
 
 
 .scoreboard {
-
     background:#222;
     border:3px solid #444;
     width:520px;
-
 }
 
 
 .teams {
-
     display:flex;
     height:130px;
-
 }
 
 
 .team {
-
     width:180px;
     display:flex;
     align-items:center;
     justify-content:center;
     font-size:45px;
     font-weight:bold;
-
 }
 
 
 .middle {
-
     flex:1;
     display:flex;
     flex-direction:column;
-
 }
 
 
 .score {
-
     height:70px;
     background:white;
     color:black;
@@ -142,12 +124,11 @@ button {
     justify-content:center;
     font-size:40px;
     font-weight:bold;
-
+    transition:.3s;
 }
 
 
 .time {
-
     flex:1;
     background:#ccc;
     color:black;
@@ -155,34 +136,26 @@ button {
     align-items:center;
     justify-content:center;
     font-size:28px;
-
 }
 
 
 .percent {
-
     display:flex;
     background:#111;
     padding:10px;
-
 }
 
 
 .percent div {
-
     flex:1;
     text-align:center;
-
 }
 
 
 .small {
-
     font-size:11px;
     color:#888;
-
 }
-
 
 </style>
 
@@ -275,9 +248,6 @@ START
 </div>
 
 
-
-
-
 <div class="scoreboard">
 
 
@@ -311,11 +281,7 @@ SGE
 
 
 </div>
-
-
-
 <div class="percent">
-
 
 <div>
 <span class="small">Heim</span>
@@ -337,79 +303,54 @@ SGE
 <span id="ap">20%</span>
 </div>
 
-
 </div>
 
 
 </div>
 
 
-
 </div>
+
+
 
 <script>
-alert("JavaScript läuft");
+
+
 let running = false;
 
-function startGame(){
-
-    if(running) return;
 
 
-    let home = document.getElementById("homeName").value;
-    let away = document.getElementById("awayName").value;
-
-    let hp = Number(document.getElementById("homePct").value);
-    let dp = Number(document.getElementById("drawPct").value);
-    let ap = Number(document.getElementById("awayPct").value);
+function updateBoard(){
 
 
-    if(hp + dp + ap !== 100){
-
-        alert("Die Wahrscheinlichkeiten müssen zusammen 100% ergeben!");
-        return;
-
-    }
+    let homeName = document.getElementById("homeName").value;
+    let awayName = document.getElementById("awayName").value;
 
 
-    document.getElementById("homeView").innerText = home;
-    document.getElementById("awayView").innerText = away;
+    let homeColor = document.getElementById("homeColor").value;
+    let awayColor = document.getElementById("awayColor").value;
 
 
-    document.getElementById("hp").innerText = hp + "%";
-    document.getElementById("dp").innerText = dp + "%";
-    document.getElementById("ap").innerText = ap + "%";
+    let homePct = Number(document.getElementById("homePct").value);
+    let drawPct = Number(document.getElementById("drawPct").value);
+    let awayPct = Number(document.getElementById("awayPct").value);
 
 
-    document.getElementById("homeView").style.background =
-    document.getElementById("homeColor").value;
+
+    document.getElementById("homeView").innerText = homeName;
+    document.getElementById("awayView").innerText = awayName;
 
 
-    document.getElementById("awayView").style.background =
-    document.getElementById("awayColor").value;
+    document.getElementById("homeView").style.background = homeColor;
+    document.getElementById("awayView").style.background = awayColor;
 
+
+    document.getElementById("hp").innerText = homePct+"%";
+    document.getElementById("dp").innerText = drawPct+"%";
+    document.getElementById("ap").innerText = awayPct+"%";
 
 }
 
-
-
-function randomGoals(){
-
-    let goals = 0;
-
-    for(let i=0;i<6;i++){
-
-        if(Math.random() < 0.25){
-
-            goals++;
-
-        }
-
-    }
-
-    return goals;
-
-}
 
 
 
@@ -417,74 +358,70 @@ function randomGoals(){
 function createResult(){
 
 
-    let hp =
-    Number(document.getElementById("homePct").value);
-
-    let dp =
-    Number(document.getElementById("drawPct").value);
-
-    let ap =
-    Number(document.getElementById("awayPct").value);
+    let home = Number(document.getElementById("homePct").value);
+    let draw = Number(document.getElementById("drawPct").value);
+    let away = Number(document.getElementById("awayPct").value);
 
 
 
-    let chance = Math.random()*100;
+    let random = Math.random()*100;
+
+
+    let result;
+
+
+    if(random < home){
+
+        result="home";
+
+    }
+    else if(random < home + draw){
+
+        result="draw";
+
+    }
+    else{
+
+        result="away";
+
+    }
 
 
 
-    let homeGoals;
-    let awayGoals;
+    let homeGoals = 0;
+    let awayGoals = 0;
 
 
 
-    // Heim gewinnt
-    if(chance < hp){
+    if(result==="home"){
 
 
-        homeGoals = randomGoals();
-        awayGoals = randomGoals();
-
-
-        if(homeGoals <= awayGoals){
-
-            homeGoals = awayGoals + 1;
-
-        }
+        homeGoals = Math.floor(Math.random()*3)+1;
+        awayGoals = Math.floor(Math.random()*2);
 
 
     }
 
 
-    // Unentschieden
-    else if(chance < hp + dp){
+    else if(result==="away"){
 
 
-        let goals = randomGoals();
-
-
-        homeGoals = goals;
-        awayGoals = goals;
+        awayGoals = Math.floor(Math.random()*3)+1;
+        homeGoals = Math.floor(Math.random()*2);
 
 
     }
 
 
-    // Gast gewinnt
     else{
 
 
-        homeGoals = randomGoals();
-        awayGoals = randomGoals();
-
-
-        if(awayGoals <= homeGoals){
-
-            awayGoals = homeGoals + 1;
-
-        }
+        homeGoals = Math.floor(Math.random()*3);
+        awayGoals = homeGoals;
 
 
     }
+
 
 
     return {
@@ -501,88 +438,112 @@ function createResult(){
 
 
 
+
+
 function startGame(){
+
 
     if(running) return;
 
-    running = true;
 
-    const button = document.getElementById("start");
-    const time = document.getElementById("time");
-    const score = document.getElementById("score");
-
-    button.disabled = true;
+    running=true;
 
 
-    let minute = 0;
-    let homeScore = 0;
-    let awayScore = 0;
+    const button=document.getElementById("start");
+    const time=document.getElementById("time");
+    const score=document.getElementById("score");
 
 
-    score.innerText = "0:0";
-    time.innerText = "0'";
+    button.disabled=true;
 
 
-    let final = createResult();
+
+    let minute=0;
+
+    let homeScore=0;
+
+    let awayScore=0;
 
 
-    // zufällige Spielminuten für Tore erzeugen
-    let goalTimes = [];
+
+    score.innerText="0:0";
+    time.innerText="0'";
+
+
+
+    let final=createResult();
+
+
+
+    let goalTimes=[];
+
 
 
     for(let i=0;i<final.home;i++){
 
+
         goalTimes.push({
-            minute: Math.floor(Math.random()*85)+1,
+
+            minute:Math.floor(Math.random()*85)+1,
             team:"home"
+
         });
 
+
     }
+
 
 
     for(let i=0;i<final.away;i++){
 
+
         goalTimes.push({
-            minute: Math.floor(Math.random()*85)+1,
+
+            minute:Math.floor(Math.random()*85)+1,
             team:"away"
+
         });
+
 
     }
 
 
-    // nach Minute sortieren
+
     goalTimes.sort((a,b)=>a.minute-b.minute);
 
 
 
-    let second = 0;
+    let second=0;
 
 
-    let timer = setInterval(()=>{
+
+    let timer=setInterval(()=>{
 
 
         second++;
 
 
-        // 10 Sekunden = 90 Minuten
-        minute = Math.floor(second * 9);
+        minute=Math.floor(second*9);
 
 
-        if(minute > 90){
-            minute = 90;
+
+        if(minute>90){
+
+            minute=90;
+
         }
 
 
-        time.innerText = minute + "'";
+
+        time.innerText=minute+"'";
 
 
 
-        // Tore prüfen
 
         goalTimes.forEach(goal=>{
 
 
-            if(goal.minute === minute){
+            if(goal.minute===minute){
 
 
                 if(goal.team==="home"){
@@ -597,12 +558,11 @@ function startGame(){
                 }
 
 
+
                 score.innerText =
-                homeScore + ":" + awayScore;
+                homeScore+":"+awayScore;
 
 
-
-                // Tor Animation
 
                 score.style.transform="scale(1.3)";
 
@@ -623,25 +583,20 @@ function startGame(){
 
 
 
-        // Spielende
 
-        if(second >= 10){
+        if(second>=10){
 
 
             clearInterval(timer);
 
 
-            // endgültiges Ergebnis setzen
-
-            homeScore = final.home;
-            awayScore = final.away;
-
 
             score.innerText =
-            homeScore + ":" + awayScore;
+            final.home+":"+final.away;
 
 
             time.innerText="90'";
+
 
 
             running=false;
@@ -655,4 +610,14 @@ function startGame(){
 
     },1000);
 
+
+
 }
+
+
+
+</script>
+
+
+</body>
+</html>
