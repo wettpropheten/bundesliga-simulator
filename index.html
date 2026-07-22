@@ -23,7 +23,6 @@ body {
     flex-wrap:wrap;
 }
 
-
 .box {
     background:#1a0a0a;
     padding:20px;
@@ -32,13 +31,11 @@ body {
     box-shadow:0 5px 15px black;
 }
 
-
 .row {
     display:flex;
     justify-content:space-between;
     margin-bottom:15px;
 }
-
 
 label {
     display:block;
@@ -46,7 +43,6 @@ label {
     color:#aaa;
     margin-bottom:5px;
 }
-
 
 input {
     background:#2b1b1b;
@@ -56,13 +52,11 @@ input {
     width:90px;
 }
 
-
 input[type="color"] {
     width:45px;
     height:35px;
     padding:0;
 }
-
 
 button {
     width:100%;
@@ -72,13 +66,11 @@ button {
     cursor:pointer;
 }
 
-
 .update {
     background:none;
     color:#ff4444;
     border:1px solid #ff4444;
 }
-
 
 .start {
     background:#168044;
@@ -88,52 +80,37 @@ button {
     font-size:20px;
 }
 
-
 .start:disabled {
     background:#555;
 }
 
-
 .scoreboard {
-
     background:#222;
     border:3px solid #444;
     width:520px;
-
 }
-
 
 .teams {
-
     display:flex;
     height:130px;
-
 }
 
-
 .team {
-
     width:180px;
     display:flex;
     align-items:center;
     justify-content:center;
     font-size:45px;
     font-weight:bold;
-
 }
 
-
 .middle {
-
     flex:1;
     display:flex;
     flex-direction:column;
-
 }
 
-
 .score {
-
     height:70px;
     background:white;
     color:black;
@@ -142,12 +119,9 @@ button {
     justify-content:center;
     font-size:40px;
     font-weight:bold;
-
 }
 
-
 .time {
-
     flex:1;
     background:#ccc;
     color:black;
@@ -155,34 +129,51 @@ button {
     align-items:center;
     justify-content:center;
     font-size:28px;
-
 }
 
-
 .percent {
-
     display:flex;
     background:#111;
     padding:10px;
-
 }
-
 
 .percent div {
-
     flex:1;
     text-align:center;
-
 }
-
 
 .small {
-
     font-size:11px;
     color:#888;
-
 }
 
+.wheel-container {
+    position: relative;
+    width: 320px;
+    height: 320px;
+    border: 6px solid #b8860b;
+    border-radius: 50%;
+    background: #111;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+    margin-top: 30px;
+}
+
+.wheel-pointer {
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    border-top: 25px solid #ffcc00; 
+    z-index: 10;
+}
+
+#wheel-canvas {
+    border-radius: 50%;
+}
 
 </style>
 
@@ -205,12 +196,12 @@ button {
 
 <div>
 <label>Heim</label>
-<input id="homeName" value="FCB">
+<input id="homeName" value="FCB" maxlength="8">
 </div>
 
 <div>
 <label>Sieg %</label>
-<input id="homePct" type="number" value="67">
+<input id="homePct" type="number" value="67" min="0" max="100">
 </div>
 
 <div>
@@ -231,7 +222,7 @@ button {
 
 <div>
 <label>Remis %</label>
-<input id="drawPct" type="number" value="13">
+<input id="drawPct" type="number" value="13" min="0" max="100">
 </div>
 
 </div>
@@ -242,12 +233,12 @@ button {
 
 <div>
 <label>Gast</label>
-<input id="awayName" value="SGE">
+<input id="awayName" value="SGE" maxlength="8">
 </div>
 
 <div>
 <label>Sieg %</label>
-<input id="awayPct" type="number" value="20">
+<input id="awayPct" type="number" value="20" min="0" max="100">
 </div>
 
 <div>
@@ -278,68 +269,77 @@ START
 
 
 
-<div class="scoreboard">
+<div class="right-column" style="display: flex; flex-direction: column; align-items: center;">
+    
+    <div class="scoreboard">
 
 
-<div class="teams">
+    <div class="teams">
 
 
-<div id="homeView" class="team" style="background:#64b931">
-FCB
-</div>
+    <div id="homeView" class="team" style="background:#64b931">
+    FCB
+    </div>
 
 
-<div class="middle">
+    <div class="middle">
 
-<div id="score" class="score">
-?:?
-</div>
-
-
-<div id="time" class="time">
-0'
-</div>
+    <div id="score" class="score">
+    ?:?
+    </div>
 
 
-</div>
+    <div id="time" class="time">
+    0'
+    </div>
 
 
-
-<div id="awayView" class="team" style="background:#ff3333">
-SGE
-</div>
-
-
-</div>
+    </div>
 
 
 
-<div class="percent">
+    <div id="awayView" class="team" style="background:#ff3333">
+    SGE
+    </div>
 
 
-<div>
-<span class="small">Heim</span>
-<br>
-<span id="hp">67%</span>
-</div>
+    </div>
 
 
-<div>
-<span class="small">Remis</span>
-<br>
-<span id="dp">13%</span>
-</div>
+
+    <div class="percent">
 
 
-<div>
-<span class="small">Gast</span>
-<br>
-<span id="ap">20%</span>
-</div>
+    <div>
+    <span class="small">Heim</span>
+    <br>
+    <span id="hp">67%</span>
+    </div>
 
 
-</div>
+    <div>
+    <span class="small">Remis</span>
+    <br>
+    <span id="dp">13%</span>
+    </div>
 
+
+    <div>
+    <span class="small">Gast</span>
+    <br>
+    <span id="ap">20%</span>
+    </div>
+
+
+    </div>
+
+
+    </div>
+
+    <div class="wheel-container">
+        <div class="wheel-pointer"></div>
+        <canvas id="wheel-canvas" width="308" height="308"></canvas>
+    </div>
 
 </div>
 
@@ -349,12 +349,16 @@ SGE
 <script>
 
 let running = false;
+let currentAngle = 0;
+let wheelSectors = [];
 
+document.addEventListener("DOMContentLoaded", function() {
+    updateBoard();
+});
 
 function updateBoard(){
 
     if(running) return;
-
 
     let home = document.getElementById("homeName").value;
     let away = document.getElementById("awayName").value;
@@ -363,268 +367,158 @@ function updateBoard(){
     let dp = Number(document.getElementById("drawPct").value);
     let ap = Number(document.getElementById("awayPct").value);
 
-
     if(hp + dp + ap !== 100){
-
         alert("Die Wahrscheinlichkeiten müssen zusammen 100% ergeben!");
         return;
-
     }
 
+    document.getElementById("homeView").textContent = home;
+    document.getElementById("awayView").textContent = away;
 
-    document.getElementById("homeView").innerText = home;
-    document.getElementById("awayView").innerText = away;
+    document.getElementById("hp").textContent = hp + "%";
+    document.getElementById("dp").textContent = dp + "%";
+    document.getElementById("ap").textContent = ap + "%";
 
+    let homeColor = document.getElementById("homeColor").value;
+    let awayColor = document.getElementById("awayColor").value;
+    let drawColor = "#444444"; 
 
-    document.getElementById("hp").innerText = hp + "%";
-    document.getElementById("dp").innerText = dp + "%";
-    document.getElementById("ap").innerText = ap + "%";
+    document.getElementById("homeView").style.background = homeColor;
+    document.getElementById("awayView").style.background = awayColor;
 
+    wheelSectors = [];
+    for (let i = 0; i < hp; i++) wheelSectors.push({ color: homeColor });
+    for (let i = 0; i < dp; i++) wheelSectors.push({ color: drawColor });
+    for (let i = 0; i < ap; i++) wheelSectors.push({ color: awayColor });
 
-    document.getElementById("homeView").style.background =
-    document.getElementById("homeColor").value;
-
-
-    document.getElementById("awayView").style.background =
-    document.getElementById("awayColor").value;
-
-
+    drawWheel(currentAngle);
 }
 
+function drawWheel(angleOffset) {
+    const canvas = document.getElementById('wheel-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const cx = canvas.width / 2;
+    const cy = canvas.height / 2;
+    const radius = canvas.width / 2;
 
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const sliceAngle = (2 * Math.PI) / 100;
+    let startAngle = angleOffset;
+
+    wheelSectors.forEach((sector) => {
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.arc(cx, cy, radius, startAngle, startAngle + sliceAngle);
+        ctx.closePath();
+        ctx.fillStyle = sector.color;
+        ctx.fill();
+        
+        ctx.strokeStyle = 'rgba(0, 0, 0, 0.15)';
+        ctx.lineWidth = 0.5;
+        ctx.stroke();
+
+        startAngle += sliceAngle;
+    });
+
+    ctx.beginPath();
+    ctx.arc(cx, cy, 8, 0, 2 * Math.PI);
+    ctx.fillStyle = '#ffffff';
+    ctx.fill();
+}
 
 function randomGoals(){
-
     let goals = 0;
-
     for(let i=0;i<6;i++){
-
         if(Math.random() < 0.25){
-
             goals++;
-
         }
-
     }
-
     return goals;
-
 }
 
-
-
-
 function createResult(){
-
-
-    let hp =
-    Number(document.getElementById("homePct").value);
-
-    let dp =
-    Number(document.getElementById("drawPct").value);
-
-    let ap =
-    Number(document.getElementById("awayPct").value);
-
-
+    let hp = Number(document.getElementById("homePct").value);
+    let dp = Number(document.getElementById("drawPct").value);
+    let ap = Number(document.getElementById("awayPct").value);
 
     let chance = Math.random()*100;
-
-
-
     let homeGoals;
     let awayGoals;
 
-
-
-    // Heim gewinnt
     if(chance < hp){
-
-
         homeGoals = randomGoals();
         awayGoals = randomGoals();
-
-
         if(homeGoals <= awayGoals){
-
             homeGoals = awayGoals + 1;
-
         }
-
-
     }
-
-
-    // Unentschieden
     else if(chance < hp + dp){
-
-
         let goals = randomGoals();
-
-
         homeGoals = goals;
         awayGoals = goals;
-
-
     }
-
-
-    // Gast gewinnt
     else{
-
-
         homeGoals = randomGoals();
         awayGoals = randomGoals();
-
-
         if(awayGoals <= homeGoals){
-
             awayGoals = homeGoals + 1;
-
         }
-
-
     }
 
-
-    return {
-
-        home:homeGoals,
-        away:awayGoals
-
-    };
-
-
+    return { home: homeGoals, away: awayGoals };
 }
-
-
-
-
 
 function startGame(){
-
-
     if(running) return;
-
-
     running=true;
 
-
     let button=document.getElementById("start");
-
     let time=document.getElementById("time");
-
     let score=document.getElementById("score");
 
-
     button.disabled=true;
-
-
-
-    let minute=0;
-
-    let homeScore=0;
-
-    let awayScore=0;
-
-
-
-    score.innerText="0:0";
-
-
+    score.textContent="0:0";
 
     let final=createResult();
+    
+    // --- OPTIMIERT: Tore werden vorab fest auf echte Minuten verteilt ---
+    let homeGoalMinutes = [];
+    let awayGoalMinutes = [];
+    
+    for(let i = 0; i < final.home; i++) {
+        homeGoalMinutes.push(Math.floor(Math.random() * 88) + 1);
+    }
+    for(let i = 0; i < final.away; i++) {
+        awayGoalMinutes.push(Math.floor(Math.random() * 88) + 1);
+    }
 
+    const duration = 10000; // Genau 10 Sekunden
+    const startTime = performance.now();
+    const startAngle = currentAngle;
+    const totalRotation = (Math.random() * 4 + 8) * 2 * Math.PI; 
 
+    // --- OPTIMIERT: Intervall auf 16ms (60 FPS) für maximale Flüssigkeit ---
+    let timer = setInterval(function(){
+        const elapsed = performance.now() - startTime;
+        const progress = Math.min(elapsed / duration, 1);
 
-    let timer=setInterval(function(){
+        // Rad drehen (Flüssiges Ease-Out)
+        const easeOut = 1 - Math.pow(1 - progress, 3);
+        currentAngle = startAngle + totalRotation * easeOut;
+        drawWheel(currentAngle);
 
+        // Minuten-Zeitraffer absolut flüssig hochzählen
+        let minute = Math.floor(progress * 90);
+        time.textContent = minute + "'";
 
+        // Live-Tore basierend auf der aktuellen Minute direkt anzeigen
+        let currentHomeScore = homeGoalMinutes.filter(m => m <= minute).length;
+        let currentAwayScore = awayGoalMinutes.filter(m => m <= minute).length;
+        score.textContent = currentHomeScore + ":" + currentAwayScore;
 
-        minute += 9;
-
-
-
-        // Torwahrscheinlichkeit während des Spiels
-
-        if(Math.random()<0.18 && minute < 90){
-
-
-
-            if(homeScore < final.home &&
-               Math.random()<0.55){
-
-
-                homeScore++;
-
-
-            }
-
-            else if(awayScore < final.away){
-
-
-                awayScore++;
-
-
-            }
-
-
-
-            score.innerText =
-            homeScore + ":" + awayScore;
-
-
-        }
-
-
-
-        time.innerText = minute + "'";
-
-
-
-
-
-        if(minute>=90){
-
-
+        if(progress >= 1 || minute >= 90){
             clearInterval(timer);
 
-
-
-            homeScore=final.home;
-
-            awayScore=final.away;
-
-
-
-            score.innerText =
-            homeScore + ":" + awayScore;
-
-
-
-            time.innerText="90'";
-
-
-            running=false;
-
-            button.disabled=false;
-
-
-        }
-
-
-
-
-    },1000);
-
-
-
-}
-
-
-
-</script>
-
-
-</body>
-</html>
+            score.textContent = final.home + ":" + final.away;
+            time.textContent="90'";
