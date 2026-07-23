@@ -1,333 +1,614 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bundesliga Simulator PRO 8.0 - MATCHCENTER ONLY</title>
-    <style>
-        :root {
-            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
-            --glass-bg: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --glass-glow: rgba(99, 102, 241, 0.1);
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --accent: #6366f1;
-            --accent-success: #10b981;
-            --accent-danger: #ef4444;
-        }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        }
+<meta charset="UTF-8">
+<title>Bundesliga 3D Match Simulator</title>
 
-        body {
-            background: var(--bg-gradient);
-            color: var(--text-main);
-            min-height: 100vh;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-        }
+<style>
 
-        .container {
-            width: 100%;
-            max-width: 1000px;
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 20px;
-        }
+body{
+    margin:0;
+    background:
+    linear-gradient(180deg,#081018,#1b2735);
+    font-family:Arial,Helvetica,sans-serif;
+    color:white;
+}
 
-        @media (min-width: 768px) {
-            .container {
-                grid-template-columns: 1fr 1fr;
-            }
-            .full-width {
-                grid-column: span 2;
-            }
-        }
 
-        /* 3D Glassmorphism Panel */
-        .glass-panel {
-            background: var(--glass-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 24px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 
-                        inset 0 1px 1px rgba(255, 255, 255, 0.1),
-                        0 0 30px var(--glass-glow);
-            transform: perspective(1000px) translateZ(0);
-            transition: transform 0.3s ease;
-        }
+.container{
+    width:95%;
+    max-width:1200px;
+    margin:auto;
+    padding:20px;
+}
 
-        h2 {
-            font-size: 1.2rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: var(--text-muted);
-            margin-bottom: 20px;
-            border-bottom: 1px solid var(--glass-border);
-            padding-bottom: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
 
-        /* Input Editor */
-        .json-textarea {
-            width: 100%;
-            height: 280px;
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            color: #67e8f9;
-            font-family: 'Courier New', Courier, monospace;
-            padding: 12px;
-            font-size: 0.85rem;
-            resize: none;
-        }
+.panel{
 
-        .btn {
-            background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
-            border: none;
-            color: white;
-            padding: 12px 24px;
-            font-weight: bold;
-            border-radius: 12px;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
-            transition: all 0.2s ease;
-        }
+    background:rgba(255,255,255,0.12);
+    border-radius:25px;
+    padding:25px;
+    box-shadow:
+    0 20px 50px black,
+    inset 0 0 20px rgba(255,255,255,.1);
 
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.6);
-        }
+    transform:perspective(900px)
+    rotateX(3deg);
 
-        /* Matchcenter Core UI */
-        .stadium-info {
-            text-align: center;
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 15px;
-        }
+}
 
-        .scoreboard {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 20px 0;
-        }
 
-        .team-box {
-            flex: 1;
-            text-align: center;
-        }
+h1{
+text-align:center;
+}
 
-        .team-logo-placeholder {
-            width: 70px;
-            height: 70px;
-            background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
-            border: 1px solid var(--glass-border);
-            border-radius: 50%;
-            margin: 0 auto 10px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 2rem;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-        }
 
-        .team-name {
-            font-size: 1.25rem;
-            font-weight: 800;
-            letter-spacing: 0.5px;
-        }
+.team{
 
-        .score-box {
-            font-size: 3.5rem;
-            font-weight: 900;
-            font-variant-numeric: tabular-nums;
-            letter-spacing: -2px;
-            padding: 0 20px;
-            background: linear-gradient(to bottom, #fff 40%, #cbd5e1 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+display:inline-block;
+width:45%;
+vertical-align:top;
 
-        .match-clock {
-            text-align: center;
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: var(--accent-danger);
-            background: rgba(239, 68, 68, 0.1);
-            padding: 4px 16px;
-            border-radius: 20px;
-            width: fit-content;
-            margin: 10px auto 25px;
-            border: 1px solid rgba(239, 68, 68, 0.2);
-        }
+background:rgba(0,0,0,.3);
+padding:15px;
+border-radius:15px;
 
-        /* Probabilities Indicator */
-        .prob-container {
-            margin-top: 15px;
-        }
-        .prob-header {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            color: var(--text-muted);
-            letter-spacing: 1px;
-            margin-bottom: 6px;
-            text-align: center;
-        }
-        .prob-bar {
-            display: flex;
-            height: 12px;
-            border-radius: 6px;
-            overflow: hidden;
-            background: rgba(0,0,0,0.3);
-            border: 1px solid var(--glass-border);
-        }
-        .prob-segment {
-            height: 100%;
-            transition: width 0.5s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.65rem;
-            font-weight: bold;
-        }
-        .prob-home { background: #4f46e5; }
-        .prob-draw { background: #64748b; }
-        .prob-away { background: #06b6d4; }
+}
 
-        .prob-labels {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.75rem;
-            margin-top: 6px;
-            color: var(--text-muted);
-        }
 
-        /* Speed Controls */
-        .controls-row {
-            display: flex;
-            gap: 8px;
-            margin-top: 15px;
-        }
-        .btn-speed {
-            flex: 1;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid var(--glass-border);
-            color: var(--text-main);
-            padding: 6px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.75rem;
-            font-weight: bold;
-        }
-        .btn-speed.active {
-            background: var(--accent);
-            border-color: var(--accent);
-        }
+input,select{
 
-        /* Live Ticker UI */
-        .ticker-box {
-            height: 400px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column-reverse;
-            gap: 8px;
-            padding-right: 4px;
-        }
+width:90%;
+padding:10px;
+margin:5px;
 
-        .ticker-entry {
-            display: flex;
-            gap: 12px;
-            background: rgba(255,255,255,0.01);
-            border: 1px solid transparent;
-            padding: 10px 14px;
-            border-radius: 12px;
-            animation: fadeIn 0.3s ease forwards;
-            font-size: 0.9rem;
-            line-height: 1.4;
-        }
+border-radius:10px;
+border:none;
 
-        .ticker-entry.goal {
-            background: rgba(16, 185, 129, 0.08);
-            border-color: rgba(16, 185, 129, 0.2);
-        }
-        .ticker-entry.card {
-            background: rgba(234, 179, 8, 0.08);
-            border-color: rgba(234, 179, 8, 0.2);
-        }
+}
 
-        .ticker-minute {
-            font-weight: 800;
-            color: var(--accent);
-            min-width: 35px;
-            font-variant-numeric: tabular-nums;
-        }
 
-        /* Analysis Stats */
-        .stats-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-            margin-top: 10px;
-        }
-        .stat-row {
-            display: grid;
-            grid-template-columns: 1fr 60px 1fr;
-            align-items: center;
-            text-align: center;
-            font-size: 0.9rem;
-        }
-        .stat-val-home { text-align: left; font-weight: bold; }
-        .stat-val-away { text-align: right; font-weight: bold; }
-        .stat-label {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            color: var(--text-muted);
-            letter-spacing: 0.5px;
-        }
+button{
 
-        .quality-stars {
-            color: #eab308;
-            letter-spacing: 2px;
-            font-size: 1.1rem;
-        }
+padding:12px 25px;
+margin:10px;
 
-        /* Utilities */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+border-radius:15px;
+border:none;
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-4px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-    </style>
+font-weight:bold;
+cursor:pointer;
+
+}
+
+
+button:hover{
+
+transform:scale(1.05);
+
+}
+
+
+
+.field{
+
+margin-top:30px;
+
+height:320px;
+
+background:
+linear-gradient(90deg,#16803c,#23a052);
+
+border-radius:25px;
+
+box-shadow:
+inset 0 0 50px black;
+
+position:relative;
+
+overflow:hidden;
+
+}
+
+
+
+.line{
+
+position:absolute;
+
+border:3px solid white;
+opacity:.7;
+
+}
+
+
+
+.ball{
+
+position:absolute;
+
+font-size:45px;
+
+top:130px;
+left:20%;
+
+animation:
+
+moveball 3s infinite alternate;
+
+}
+
+
+
+@keyframes moveball{
+
+from{
+
+left:15%;
+
+}
+
+to{
+
+left:75%;
+
+}
+
+}
+
+
+
+.score{
+
+font-size:40px;
+text-align:center;
+
+}
+
+
+
+.clock{
+
+font-size:30px;
+text-align:center;
+
+}
+
+
+
+.log{
+
+background:black;
+
+padding:20px;
+
+height:250px;
+
+overflow:auto;
+
+border-radius:15px;
+
+margin-top:20px;
+
+}
+
+
+
+</style>
+
+
 </head>
+
+
 <body>
+
 
 <div class="container">
 
-    <!-- DATA INPUT EDITOR -->
-    <div class="glass-panel">
-        <h2><span>📝 Spieldaten (JSON)</span></h2>
-        <textarea id="jsonInput" class="json-textarea"></textarea>
-        <div class="controls-row">
-            <button class="btn-speed active" id="speedNormal" onclick="setSpeed(1000, 'Normal')">Normal (1s = 1m)</button>
+
+<div class="panel">
+
+
+<h1>⚽ Bundesliga 3D Match Simulator</h1>
+
+
+
+<div class="team">
+
+
+<h2>🏠 Heim Mannschaft</h2>
+
+
+Name:
+
+<input id="homeName"
+value="FC Bayern München">
+
+
+Tabellenplatz:
+
+<input id="homePlace"
+value="1">
+
+
+Punkte:
+
+<input id="homePoints"
+value="45">
+
+
+Angriff:
+
+<input id="homeAttack"
+value="92">
+
+
+Abwehr:
+
+<input id="homeDefense"
+value="86">
+
+
+Expected Goals:
+
+<input id="homeXG"
+value="2.10">
+
+
+Siegchance %
+
+<input id="homeChance"
+value="58">
+
+
+Form:
+
+<input id="homeForm"
+value="SSSUS">
+
+
+Heimform:
+
+<input id="homeHomeForm"
+value="SSSSU">
+
+
+</div>
+
+
+
+
+
+<div class="team">
+
+
+<h2>✈️ Auswärts Mannschaft</h2>
+
+
+Name:
+
+<input id="awayName"
+value="Borussia Dortmund">
+
+
+Tabellenplatz:
+
+<input id="awayPlace"
+value="4">
+
+
+Punkte:
+
+<input id="awayPoints"
+value="34">
+
+
+Angriff:
+
+<input id="awayAttack"
+value="86">
+
+
+Abwehr:
+
+<input id="awayDefense"
+value="82">
+
+
+Expected Goals:
+
+<input id="awayXG"
+value="1.35">
+
+
+Siegchance %
+
+<input id="awayChance"
+value="22">
+
+
+Form:
+
+<input id="awayForm"
+value="SUSNS">
+
+
+Auswärtsform:
+
+<input id="awayAwayForm"
+value="SUSN">
+
+
+</div>
+
+
+
+<br>
+
+
+
+<button onclick="startGame()">
+▶ START
+</button>
+
+
+<button onclick="resetGame()">
+⟳ RESET
+</button>
+
+
+<button onclick="updateData()">
+🔄 AKTUALISIEREN
+</button>
+
+
+
+
+<div class="field">
+
+<div class="line"
+style="
+left:50%;
+height:100%;
+">
+</div>
+
+
+<div class="ball">
+⚽
+</div>
+
+</div>
+
+
+
+
+<div class="clock"
+id="clock">
+00:00
+</div>
+
+
+<div class="score"
+id="score">
+0 : 0
+</div>
+
+
+
+<div class="log"
+id="log">
+
+Simulator bereit...
+
+</div>
+
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+<script>
+
+
+let minute=0;
+
+let homeGoals=0;
+
+let awayGoals=0;
+
+let timer;
+
+
+
+function write(text){
+
+let log=document.getElementById("log");
+
+log.innerHTML +=
+
+"<br>"+minute+
+":00 - "+
+text;
+
+log.scrollTop=log.scrollHeight;
+
+}
+
+
+
+
+
+function startGame(){
+
+
+clearInterval(timer);
+
+
+write("⚽ ANPFIFF");
+
+
+
+let homeXG=
+parseFloat(
+document.getElementById("homeXG").value
+);
+
+
+
+let awayXG=
+parseFloat(
+document.getElementById("awayXG").value
+);
+
+
+
+timer=setInterval(function(){
+
+
+minute++;
+
+
+document.getElementById("clock").innerHTML=
+minute+":00";
+
+
+
+let chance=Math.random();
+
+
+
+if(chance < homeXG/200){
+
+
+homeGoals++;
+
+
+write(
+"⚽ TOR "+
+document.getElementById("homeName").value
+);
+
+
+}
+
+
+
+if(chance >0.75 &&
+chance <0.75+(awayXG/200)){
+
+
+awayGoals++;
+
+
+write(
+"⚽ TOR "+
+document.getElementById("awayName").value
+);
+
+
+}
+
+
+
+document.getElementById("score").innerHTML=
+
+homeGoals+
+" : "+
+awayGoals;
+
+
+
+if(minute>=90){
+
+
+clearInterval(timer);
+
+
+write("⏱ ABPFIFF");
+
+
+write(
+"ENDSTAND "+
+homeGoals+
+":"+
+awayGoals
+);
+
+
+}
+
+
+
+},300);
+
+
+
+}
+
+
+
+
+
+function resetGame(){
+
+
+clearInterval(timer);
+
+
+minute=0;
+
+homeGoals=0;
+
+awayGoals=0;
+
+
+
+document.getElementById("clock").innerHTML="00:00";
+
+document.getElementById("score").innerHTML="0 : 0";
+
+
+document.getElementById("log").innerHTML=
+
+"Simulation zurückgesetzt...";
+
+
+}
+
+
+
+
+
+function updateData(){
+
+
+document.getElementById("log").innerHTML=
+
+"✅ Daten aktualisiert<br><br>"+
+
+document.getElementById("homeName").value+
+
+" gegen "+
+
+document.getElementById("awayName").value;
+
+
+
+}
+
+
+
+</script>
+
+
+</body>
+
+</html>
