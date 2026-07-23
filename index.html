@@ -1479,66 +1479,59 @@ createCards();
 
 updateMatch();
 
-// =======================================
-// TEIL 5
-// WAHRSCHEINLICHKEITS ENGINE
-// =======================================
 
+// =======================================
+// TEIL 6-8
+// KOMPLETTE MATCH ENGINE
+// WAHRSCHEINLICHKEIT + SIMULATION
+// =======================================
 
 
 let timer = null;
 
-
 let minute = 0;
-
 
 let homeScore = 0;
 
-
 let awayScore = 0;
 
-
 let paused = false;
-
 
 let turbo = false;
 
 
 
-
-
-
 // =======================================
-// TEAMSTÄRKE BERECHNEN
+// TEAMSTÄRKE
 // =======================================
 
 
 function teamStrength(team){
 
 
-
 let strength = 0;
 
 
+// Siegchance
 
-// Ergebniswahrscheinlichkeit
-
-strength += team.win * 0.02;
+strength += team.win * 1.5;
 
 
-// xG Einfluss
+// xG Angriff
 
-strength += team.xg * 10;
+strength += team.xg * 20;
+
+
+// Niederlagen schwächen
+
+strength -= team.loss * 0.5;
 
 
 
 return strength;
 
 
-
 }
-
-
 
 
 
@@ -1549,43 +1542,40 @@ return strength;
 // =======================================
 
 
-// =======================================
-// TEIL 8
-// REALISTISCHE TORWAHRSCHEINLICHKEIT
-// =======================================
-
-
 function goalChance(team, opponent, home){
 
 
 
-let chance;
+let attack =
+teamStrength(team);
 
 
 
-// Basis aus xG
-
-chance = team.xg / 100;
-
-
-
-// Stärkevergleich
-
-let strengthDifference =
-
-teamStrength(team)
-
--
-
+let defence =
 teamStrength(opponent);
 
 
 
+let difference =
+attack - defence;
 
 
-chance += strengthDifference / 6000;
+
+// Grundchance
+
+let chance = 0.008;
 
 
+
+// Stärkeunterschied
+
+chance += difference / 50000;
+
+
+
+// xG Einfluss
+
+chance += team.xg / 500;
 
 
 
@@ -1593,147 +1583,89 @@ chance += strengthDifference / 6000;
 
 if(home){
 
-chance *= 1.20;
+chance += 0.004;
 
 }
 
 
 
+// Grenzen
 
+if(chance < 0.003){
 
-
-// Zufall begrenzen
-
-
-if(chance < 0.004){
-
-chance = 0.004;
+chance = 0.003;
 
 }
 
 
 
-if(chance > 0.055){
+if(chance > 0.06){
 
-chance = 0.055;
+chance = 0.06;
 
 }
-
-
 
 
 
 return chance;
 
 
-
 }
-
 
 
 
 
 
 // =======================================
-// TORZAHL VERTEILUNG
-// =======================================
-
-
-function calculateExpectedGoals(team){
-
-
-
-let random = Math.random()*100;
-
-
-
-if(random < team.goals.low){
-
-
-return Math.floor(Math.random()*2);
-
-
-}
-
-
-
-else if(random < team.goals.low + team.goals.mid){
-
-
-return 2 + Math.floor(Math.random()*2);
-
-
-}
-
-
-
-else{
-
-
-return 4 + Math.floor(Math.random()*3);
-
-
-}
-
-
-
-}
-
-
-
-
-
-
-// =======================================
-// TORART AUSWÄHLEN
+// TORART
 // =======================================
 
 
 function goalType(team){
 
 
-
-let r = Math.random()*100;
+let r =
+Math.random()*100;
 
 
 
 if(r < team.goals.low){
 
 
-return "normales Tor";
+return "normales Tor ⚽";
+
 
 }
 
 
+else if(
+r < team.goals.low + team.goals.mid
+){
 
-else if(r < team.goals.low + team.goals.mid){
 
+return "schönes Tor 🔥";
 
-return "schönes Tor";
 
 }
-
 
 
 else{
 
 
-return "Traumtor";
+return "Traumtor 🚀";
+
+
+}
+
 
 }
 
 
 
-}
-// =======================================
-// TEIL 6
-// SPIELSIMULATION + LIVETICKER
-// =======================================
-
 
 
 // =======================================
-// TICKER EINTRAG
+// LIVETICKER
 // =======================================
 
 
@@ -1756,6 +1688,7 @@ row.className="event";
 
 
 let left="";
+
 let right="";
 
 
@@ -1781,8 +1714,6 @@ if(side==="system"){
 right=text;
 
 }
-
-
 
 
 
@@ -1819,8 +1750,6 @@ box.scrollHeight;
 
 
 
-
-
 // =======================================
 // TOR
 // =======================================
@@ -1840,16 +1769,13 @@ if(side==="home"){
 homeScore++;
 
 
-team=teams[homeSelect.value];
-
+team =
+teams[homeSelect.value];
 
 
 addEvent(
-
 "home",
-
-"⚽ TOR ("+goalType(team)+")"
-
+"⚽ TOR - "+goalType(team)
 );
 
 
@@ -1864,23 +1790,18 @@ else{
 awayScore++;
 
 
-team=teams[awaySelect.value];
-
+team =
+teams[awaySelect.value];
 
 
 addEvent(
-
 "away",
-
-"⚽ TOR ("+goalType(team)+")"
-
+"⚽ TOR - "+goalType(team)
 );
 
 
 
 }
-
-
 
 
 
@@ -1901,10 +1822,8 @@ awayScore;
 
 
 
-
-
 // =======================================
-// EINE SPIELMINUTE
+// SPIELMINUTE
 // =======================================
 
 
@@ -1918,18 +1837,12 @@ return;
 
 
 
-
 minute++;
 
 
 
-
-document.getElementById("minute").innerHTML=
-
+document.getElementById("minute").innerHTML =
 minute;
-
-
-
 
 
 
@@ -1945,33 +1858,20 @@ teams[awaySelect.value];
 
 
 
-
 let homeChance =
-
 goalChance(
-
 home,
-
 away,
-
 true
-
 );
-
-
 
 
 
 let awayChance =
-
 goalChance(
-
 away,
-
 home,
-
 false
-
 );
 
 
@@ -1979,11 +1879,7 @@ false
 
 
 
-
-
-// Heimtor
-
-if(Math.random()<homeChance){
+if(Math.random() < homeChance){
 
 scoreGoal("home");
 
@@ -1991,7 +1887,9 @@ scoreGoal("home");
 
 
 
-if(Math.random()<awayChance){
+
+
+if(Math.random() < awayChance){
 
 scoreGoal("away");
 
@@ -2002,49 +1900,31 @@ scoreGoal("away");
 
 
 
-
-
-// Karten Wahrscheinlichkeit
-
+// Karten
 
 if(Math.random()<0.02){
 
 
-
 addEvent(
-
 "home",
-
 "🟨 GELBE KARTE"
-
 );
 
 
 }
-
-
-
-
 
 
 
 if(Math.random()<0.02){
 
 
-
 addEvent(
-
 "away",
-
 "🟨 GELBE KARTE"
-
 );
 
 
 }
-
-
-
 
 
 
@@ -2052,17 +1932,12 @@ addEvent(
 
 // Halbzeit
 
-
 if(minute===45){
 
 
-
 addEvent(
-
 "system",
-
 "⏱ HALBZEIT"
-
 );
 
 
@@ -2072,14 +1947,9 @@ addEvent(
 
 
 
-
-
-
-// Abpfiff
-
+// Ende
 
 if(minute>=90){
-
 
 
 clearInterval(timer);
@@ -2090,29 +1960,25 @@ timer=null;
 
 
 addEvent(
-
 "system",
-
 "🏁 ABPFIFF"
-
 );
 
 
-
 }
 
 
 
 }
-// =======================================
-// TEIL 7
-// START / PAUSE / ZEITRAFFER / RESET
-// =======================================
 
 
 
+
+
+
+
 // =======================================
-// SPIEL ZURÜCKSETZEN
+// RESET SPIEL
 // =======================================
 
 
@@ -2142,9 +2008,7 @@ document.getElementById("awayGoals").innerHTML="0";
 
 document.getElementById("ticker").innerHTML=`
 
-
 <div class="event">
-
 
 <div class="home">
 SYSTEM
@@ -2160,18 +2024,13 @@ SYSTEM
 Spiel bereit
 </div>
 
-
-
 </div>
-
-
 
 `;
 
 
 
 }
-
 
 
 
@@ -2194,46 +2053,31 @@ return;
 
 
 
-
-
 resetGame();
-
 
 
 paused=false;
 
 
 
-
 addEvent(
-
 "system",
-
 "▶ ANPFIFF"
-
 );
-
-
 
 
 
 timer=setInterval(
 
-
 simulateMinute,
 
-
 turbo ? 100 : 1000
-
 
 );
 
 
 
 }
-
-
-
 
 
 
@@ -2249,15 +2093,11 @@ turbo ? 100 : 1000
 function pauseSimulation(){
 
 
-
-paused=!paused;
-
+paused =
+!paused;
 
 
 }
-
-
-
 
 
 
@@ -2273,33 +2113,23 @@ paused=!paused;
 function turboSimulation(){
 
 
-
 turbo=true;
-
-
 
 
 
 if(timer){
 
 
-
 clearInterval(timer);
-
-
 
 
 timer=setInterval(
 
-
 simulateMinute,
-
 
 100
 
-
 );
-
 
 
 }
@@ -2307,18 +2137,13 @@ simulateMinute,
 else{
 
 
-
 startSimulation();
 
 
-
 }
 
 
-
 }
-
-
 
 
 
@@ -2334,15 +2159,14 @@ startSimulation();
 function resetSimulation(){
 
 
-
 clearInterval(timer);
-
 
 
 timer=null;
 
 
 paused=false;
+
 
 turbo=false;
 
@@ -2353,6 +2177,7 @@ resetGame();
 
 
 }
+
 </script>
 
 
