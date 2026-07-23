@@ -1552,47 +1552,43 @@ let strengthDiff =
 teamStrength(team)-teamStrength(opponent);
 
 
-let chance = 0.018;
+// niedrigere Basis
+let chance = 0.008;
 
 
-// Stärke
-
-chance += strengthDiff / 2000;
-
-
-// xG
-
-chance += team.xg / 300;
+// Stärke-Effekt kleiner
+chance += strengthDiff / 4000;
 
 
-// Heimbonus
+// xG realistischer
+chance += team.xg / 600;
 
+
+// Heimvorteil kleiner
 if(home){
 
-chance += 0.006;
+chance += 0.002;
 
 }
 
 
 // Grenzen
 
-if(chance < 0.005){
+if(chance < 0.003){
 
-chance = 0.005;
+chance = 0.003;
 
 }
 
 
-if(chance > 0.08){
+if(chance > 0.035){
 
-chance = 0.08;
+chance = 0.035;
 
 }
 
 
 return chance;
-
-
 
 }
 
