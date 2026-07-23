@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fussball Match Simulator</title>
     <style>
-        /* Globale Stile */
+        /* Globale Stile & Layout-Rettung */
         body {
             margin: 0;
             padding: 0;
@@ -15,29 +15,48 @@
             display: flex;
             height: 100vh;
             overflow: hidden;
+            box-sizing: border-box;
         }
 
-        /* Layout-Struktur */
+        *, *:before, *:after {
+            box-sizing: inherit;
+        }
+
+        /* Die Haupt-Zwei-Spalten-Struktur */
         .app-container {
             display: flex;
             width: 100%;
             height: 100%;
         }
 
-        /* LINKE SPALTE: Daten & Steuerung */
+        /* LINKE SPALTE: Komplett isoliert */
         .sidebar-left {
             width: 340px;
             min-width: 340px;
             background-color: #1e293b;
-            border-right: 1px solid #334155;
+            border-right: 2px solid #334155;
             padding: 20px;
             display: flex;
             flex-direction: column;
             gap: 15px;
-            box-sizing: border-box;
+            overflow-y: auto;
+            height: 100%;
+        }
+
+        /* RECHTER BEREICH: Nimmt den restlichen Platz ein */
+        .main-content {
+            flex: 1;
+            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
             overflow-y: auto;
         }
 
+        /* Boxen in der linken Sidebar */
         .control-box {
             background: #0f172a;
             border: 1px solid #334155;
@@ -48,7 +67,7 @@
 
         .control-box h3 {
             margin: 0 0 12px 0;
-            font-size: 15px;
+            font-size: 14px;
             letter-spacing: 0.05em;
             text-transform: uppercase;
             color: #38bdf8;
@@ -78,13 +97,14 @@
             background-color: #1e293b;
             color: #f8fafc;
             outline: none;
-            transition: border-color 0.2s;
+            width: 100%;
         }
 
         .form-group input:focus, .form-group select:focus {
             border-color: #38bdf8;
         }
 
+        /* Kompaktes 2-Spalten-Raster für die Mannschaftsdaten-Eingabe */
         .form-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -121,31 +141,14 @@
             font-weight: bold;
             font-size: 14px;
             cursor: pointer;
-            transition: background 0.2s, transform 0.1s;
+            transition: background 0.2s;
         }
 
         .btn-save:hover {
             background-color: #059669;
         }
 
-        .btn-save:active {
-            transform: scale(0.98);
-        }
-
-        /* RECHTER BEREICH: Haupt-Simulator & Spielfeld */
-        .main-content {
-            flex: 1;
-            padding: 40px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
-            overflow-y: auto;
-            box-sizing: border-box;
-        }
-
-        /* Anzeigetafel */
+        /* Elemente der rechten Seite (Anzeigetafel & Ticker) */
         .scoreboard {
             background-color: #1e293b;
             border: 2px solid #334155;
@@ -176,13 +179,12 @@
             color: #e2e8f0;
         }
 
-        /* Action Buttons */
         .simulation-controls {
             margin-bottom: 30px;
         }
 
         .btn-sim {
-            padding: 12px 30px;
+            padding: 12px 40px;
             font-size: 16px;
             font-weight: bold;
             background-color: #38bdf8;
@@ -197,7 +199,6 @@
             background-color: #0ea5e9;
         }
 
-        /* Ticker / Details */
         .match-details {
             width: 100%;
             max-width: 600px;
@@ -208,14 +209,16 @@
             min-height: 100px;
             max-height: 200px;
             overflow-y: auto;
-            box-sizing: border-box;
         }
 
         .ticker-entry {
             font-size: 14px;
-            padding: 4px 0;
+            padding: 6px 0;
             border-bottom: 1px solid #334155;
             color: #cbd5e1;
+        }
+        .ticker-entry:last-child {
+            border-bottom: none;
         }
     </style>
 </head>
@@ -223,10 +226,10 @@
 
     <div class="app-container">
         
-        <!-- LINKE SPALTE -->
+        <!-- ==================== LINKE SEITE ==================== -->
         <div class="sidebar-left">
             
-            <!-- Heimteam -->
+            <!-- Heim-Auswahl -->
             <div class="control-box">
                 <h3>Heim</h3>
                 <div class="form-group">
@@ -235,7 +238,7 @@
                 </div>
             </div>
 
-            <!-- Gastteam -->
+            <!-- Gast-Auswahl -->
             <div class="control-box">
                 <h3>Gast</h3>
                 <div class="form-group">
@@ -244,7 +247,7 @@
                 </div>
             </div>
 
-            <!-- Wahrscheinlichkeiten -->
+            <!-- Wahrscheinlichkeits-Anzeige -->
             <div class="control-box">
                 <h3>Wahrscheinlichkeit</h3>
                 <div class="form-row">
@@ -261,7 +264,7 @@
                 </div>
             </div>
 
-            <!-- Mannschaftsdaten Pflege -->
+            <!-- Mannschaftsdaten-Formular -->
             <div class="control-box">
                 <h3>Mannschaftsdaten</h3>
                 
@@ -284,7 +287,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="team-form">Form (5er-Reihe):</label>
+                        <label for="team-form">Form (5er):</label>
                         <input type="text" id="team-form" maxlength="5" placeholder="SSUSS" style="text-transform: uppercase;">
                     </div>
 
@@ -315,8 +318,3 @@
 
                     <div class="form-group">
                         <label for="team-defense">Defensiv:</label>
-                        <input type="number" id="team-defense" step="0.01" min="0.5" max="2.0" value="1.00">
-                    </div>
-                </div>
-
-                <button type="button" class="btn-save" onclick="saveTeamData()">Speichern</button>
