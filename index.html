@@ -651,7 +651,18 @@ Spiel bereit
 
 
 const teams={
+Object.keys(teams).forEach(name=>{
 
+let saved = localStorage.getItem("team_"+name);
+
+
+if(saved){
+
+teams[name] = JSON.parse(saved);
+
+}
+
+});
 
 
 "FC Augsburg":{
@@ -1449,7 +1460,9 @@ teams['${name}'].goals.high=Number(this.value)
 
 >
 
-
+<button onclick="saveTeam('${name}')">
+💾 Mannschaft speichern
+</button>
 
 
 
@@ -2162,7 +2175,17 @@ resetGame();
 
 
 }
+function saveTeam(name){
 
+localStorage.setItem(
+"team_"+name,
+JSON.stringify(teams[name])
+);
+
+
+alert(name+" gespeichert ✅");
+
+}
 </script>
 
 
