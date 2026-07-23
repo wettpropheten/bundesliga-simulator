@@ -651,19 +651,7 @@ Spiel bereit
 
 
 const teams={
-Object.keys(teams).forEach(name=>{
-
-let saved = localStorage.getItem("team_"+name);
-
-
-if(saved){
-
-teams[name] = JSON.parse(saved);
-
-}
-
-});
-
+  
 
 "FC Augsburg":{
 
@@ -1023,6 +1011,22 @@ high:15
 
 }
 
+};
+
+
+// gespeicherte Mannschaftsdaten laden
+
+Object.keys(teams).forEach(name=>{
+
+let saved = localStorage.getItem("team_"+name);
+
+if(saved){
+
+teams[name] = JSON.parse(saved);
+
+}
+
+});
 
 
 };
@@ -2182,10 +2186,10 @@ localStorage.setItem(
 JSON.stringify(teams[name])
 );
 
-
 alert(name+" gespeichert ✅");
 
 }
+
 </script>
 
 
