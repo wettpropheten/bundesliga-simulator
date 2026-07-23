@@ -1499,6 +1499,9 @@ let paused = false;
 
 let turbo = false;
 
+let stoppageTime = 0;
+  
+let matchEnded = false;
 
 
 // =======================================
@@ -1545,69 +1548,50 @@ return strength;
 function goalChance(team, opponent, home){
 
 
-
-let attack =
-teamStrength(team);
-
+let strengthDiff =
+teamStrength(team)-teamStrength(opponent);
 
 
-let defence =
-teamStrength(opponent);
+let chance = 0.018;
 
 
+// Stärke
 
-let difference =
-attack - defence;
-
-
-
-// Grundchance
-
-let chance = 0.008;
+chance += strengthDiff / 2000;
 
 
+// xG
 
-// Stärkeunterschied
-
-chance += difference / 50000;
-
+chance += team.xg / 300;
 
 
-// xG Einfluss
-
-chance += team.xg / 500;
-
-
-
-// Heimvorteil
+// Heimbonus
 
 if(home){
 
-chance += 0.004;
+chance += 0.006;
 
 }
-
 
 
 // Grenzen
 
-if(chance < 0.003){
+if(chance < 0.005){
 
-chance = 0.003;
-
-}
-
-
-
-if(chance > 0.06){
-
-chance = 0.06;
+chance = 0.005;
 
 }
 
+
+if(chance > 0.08){
+
+chance = 0.08;
+
+}
 
 
 return chance;
+
 
 
 }
@@ -1830,8 +1814,7 @@ awayScore;
 function simulateMinute(){
 
 
-
-if(paused)
+if(paused || matchEnded)
 
 return;
 
@@ -1841,41 +1824,42 @@ minute++;
 
 
 
+let displayMinute = minute;
+
+
+if(minute > 90){
+
+displayMinute =
+"90+"+(minute-90);
+
+}
+else{
+
+displayMinute =
+String(minute).padStart(2,"0");
+
+}
+
+
 document.getElementById("minute").innerHTML =
-minute;
+displayMinute;
 
 
 
 let home =
 teams[homeSelect.value];
 
-
-
 let away =
 teams[awaySelect.value];
 
 
 
-
-
 let homeChance =
-goalChance(
-home,
-away,
-true
-);
-
+goalChance(home,away,true);
 
 
 let awayChance =
-goalChance(
-away,
-home,
-false
-);
-
-
-
+goalChance(away,home,false);
 
 
 
@@ -1886,9 +1870,6 @@ scoreGoal("home");
 }
 
 
-
-
-
 if(Math.random() < awayChance){
 
 scoreGoal("away");
@@ -1897,66 +1878,79 @@ scoreGoal("away");
 
 
 
-
-
-
 // Karten
-
 if(Math.random()<0.02){
-
 
 addEvent(
 "home",
 "🟨 GELBE KARTE"
 );
 
-
 }
 
 
-
 if(Math.random()<0.02){
-
 
 addEvent(
 "away",
 "🟨 GELBE KARTE"
 );
 
-
 }
 
 
 
-
-
 // Halbzeit
-
 if(minute===45){
-
 
 addEvent(
 "system",
 "⏱ HALBZEIT"
 );
 
+}
+
+
+// Nachspielzeit bestimmen
+if(minute===90){
+
+let extra = 2;
+
+if(Math.random()<0.50)
+extra++;
+
+if(Math.random()<0.30)
+extra++;
+
+if(Math.random()<0.15)
+extra++;
+
+if(Math.random()<0.05)
+extra++;
+
+stoppageTime = extra;
+
+
+addEvent(
+"system",
+"⏱ Nachspielzeit: +"+stoppageTime+" Minuten"
+);
 
 }
 
 
 
+// Abpfiff nach 90+Nachspielzeit
+if(
+minute >= 90 + stoppageTime
+){
 
-
-// Ende
-
-if(minute>=90){
+matchEnded=true;
 
 
 clearInterval(timer);
 
-
 timer=null;
-
 
 
 addEvent(
@@ -1964,9 +1958,7 @@ addEvent(
 "🏁 ABPFIFF"
 );
 
-
 }
-
 
 
 }
@@ -1984,23 +1976,20 @@ addEvent(
 
 function resetGame(){
 
-
-
 minute=0;
-
 
 homeScore=0;
 
-
 awayScore=0;
 
+stoppageTime=0;
+
+matchEnded=false;
 
 
-document.getElementById("minute").innerHTML="00";
-
+document.getElementById("minute").innerHTML="00'";
 
 document.getElementById("homeGoals").innerHTML="0";
-
 
 document.getElementById("awayGoals").innerHTML="0";
 
