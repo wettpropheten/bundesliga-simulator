@@ -3,302 +3,331 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sport Ergebnis-Rechner & Simulator</title>
+    <title>Bundesliga Simulator PRO 8.0 - MATCHCENTER ONLY</title>
     <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-glow: rgba(99, 102, 241, 0.1);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #6366f1;
+            --accent-success: #10b981;
+            --accent-danger: #ef4444;
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
+
         body {
-            background-color: #a61c1c;
-            color: white;
+            background: var(--bg-gradient);
+            color: var(--text-main);
+            min-height: 100vh;
             padding: 20px;
             display: flex;
-            flex-direction: column;
-            align-items: center;
+            justify-content: center;
+            align-items: flex-start;
         }
-        .main-container {
-            display: flex;
+
+        .container {
             width: 100%;
             max-width: 1000px;
+            display: grid;
+            grid-template-columns: 1fr;
             gap: 20px;
-            margin-bottom: 20px;
         }
-        /* Linkes Control Panel */
-        .control-panel {
-            background-color: #0b0b0b;
-            width: 35%;
-            padding: 20px;
-            border-radius: 4px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-        .control-panel h2 {
-            font-size: 16px;
-            text-align: center;
-            text-transform: uppercase;
-            margin-bottom: 10px;
-            line-height: 1.3;
-        }
-        .field-group {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-        .field-group label {
-            font-size: 10px;
-            color: #aaa;
-            text-transform: uppercase;
-        }
-        .select-field {
-            background-color: #222;
-            color: white;
-            border: 1px solid #444;
-            padding: 8px;
-            border-radius: 4px;
-            width: 100%;
-            cursor: pointer;
-        }
-        .btn {
-            padding: 10px;
-            border: none;
-            border-radius: 4px;
-            font-weight: bold;
-            cursor: pointer;
-            text-transform: uppercase;
-            font-size: 12px;
-        }
-        .btn-update { background-color: #a61c1c; color: white; }
-        .btn-reset { background-color: #333; color: #aaa; }
-        .btn-start { background-color: #222; color: #555; }
-        .btn-start.active { background-color: #d97706; color: white; }
 
-        /* Rechtes Grafik Panel */
-        .graph-panel {
-            background-color: #1a1a1a;
-            width: 65%;
-            border-radius: 4px;
-            display: flex;
-            flex-direction: column;
+        @media (min-width: 768px) {
+            .container {
+                grid-template-columns: 1fr 1fr;
+            }
+            .full-width {
+                grid-column: span 2;
+            }
         }
-        .bars-container {
-            height: 120px;
-            display: flex;
-            background-color: #555;
+
+        /* 3D Glassmorphism Panel */
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 
+                        inset 0 1px 1px rgba(255, 255, 255, 0.1),
+                        0 0 30px var(--glass-glow);
+            transform: perspective(1000px) translateZ(0);
+            transition: transform 0.3s ease;
         }
-        .bar-wrapper {
-            flex: 1;
+
+        h2 {
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 8px;
             display: flex;
-            align-items: flex-end;
-            position: relative;
-            background-color: #333;
-            border-right: 2px solid #1a1a1a;
+            justify-content: space-between;
+            align-items: center;
         }
-        .bar-wrapper:last-child { border-right: none; }
-        .bar-wrapper:nth-child(2) { background-color: #e5e5e5; }
-        .bar {
+
+        /* Input Editor */
+        .json-textarea {
             width: 100%;
-            height: 0%;
-            transition: height 0.5s ease;
+            height: 280px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            color: #67e8f9;
+            font-family: 'Courier New', Courier, monospace;
+            padding: 12px;
+            font-size: 0.85rem;
+            resize: none;
         }
-        .bar-heim { background-color: #444; }
-        .bar-remis { background-color: #ccc; }
-        .bar-gast { background-color: #444; }
-        
-        .labels-container {
-            background-color: #0b0b0b;
+
+        .btn {
+            background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+            border: none;
+            color: white;
+            padding: 12px 24px;
+            font-weight: bold;
+            border-radius: 12px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+            transition: all 0.2s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.6);
+        }
+
+        /* Matchcenter Core UI */
+        .stadium-info {
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 15px;
+        }
+
+        .scoreboard {
             display: flex;
-            padding: 10px 0;
+            justify-content: space-between;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        .team-box {
+            flex: 1;
             text-align: center;
         }
-        .label-box {
-            flex: 1;
-        }
-        .label-title {
-            font-size: 11px;
-            color: #aaa;
-            margin-bottom: 2px;
-        }
-        .label-percent {
-            font-size: 18px;
-            font-weight: bold;
-        }
-        .simulation-output {
-            background-color: #222;
-            flex-grow: 1;
-            padding: 20px;
+
+        .team-logo-placeholder {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
+            border: 1px solid var(--glass-border);
+            border-radius: 50%;
+            margin: 0 auto 10px;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            min-height: 150px;
-            font-size: 14px;
-            color: #ccc;
-            text-align: center;
-        }
-        .result-highlight {
-            font-size: 24px;
-            font-weight: bold;
-            color: #d97706;
-            margin-top: 10px;
+            font-size: 2rem;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
         }
 
-        /* Unterer Bereich: Mannschaftskarten */
-        .bottom-section {
-            width: 100%;
-            max-width: 1000px;
+        .team-name {
+            font-size: 1.25rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
         }
-        .bottom-title {
+
+        .score-box {
+            font-size: 3.5rem;
+            font-weight: 900;
+            font-variant-numeric: tabular-nums;
+            letter-spacing: -2px;
+            padding: 0 20px;
+            background: linear-gradient(to bottom, #fff 40%, #cbd5e1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .match-clock {
             text-align: center;
-            font-size: 14px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--accent-danger);
+            background: rgba(239, 68, 68, 0.1);
+            padding: 4px 16px;
+            border-radius: 20px;
+            width: fit-content;
+            margin: 10px auto 25px;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        /* Probabilities Indicator */
+        .prob-container {
+            margin-top: 15px;
+        }
+        .prob-header {
+            font-size: 0.75rem;
             text-transform: uppercase;
-            margin-bottom: 15px;
+            color: var(--text-muted);
             letter-spacing: 1px;
+            margin-bottom: 6px;
+            text-align: center;
         }
-        .cards-grid {
+        .prob-bar {
             display: flex;
-            flex-direction: column;
-            gap: 15px;
+            height: 12px;
+            border-radius: 6px;
+            overflow: hidden;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid var(--glass-border);
         }
-        .team-card {
-            background-color: #044e3a;
-            padding: 15px;
-            border-radius: 4px;
+        .prob-segment {
+            height: 100%;
+            transition: width 0.5s ease;
             display: flex;
             align-items: center;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-        .team-badge {
-            background-color: #022c21;
-            padding: 8px 15px;
+            justify-content: center;
+            font-size: 0.65rem;
             font-weight: bold;
-            font-size: 14px;
-            border-radius: 4px;
-            min-width: 70px;
-            text-align: center;
         }
-        .input-group {
+        .prob-home { background: #4f46e5; }
+        .prob-draw { background: #64748b; }
+        .prob-away { background: #06b6d4; }
+
+        .prob-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            margin-top: 6px;
+            color: var(--text-muted);
+        }
+
+        /* Speed Controls */
+        .controls-row {
+            display: flex;
+            gap: 8px;
+            margin-top: 15px;
+        }
+        .btn-speed {
+            flex: 1;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--glass-border);
+            color: var(--text-main);
+            padding: 6px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+        .btn-speed.active {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        /* Live Ticker UI */
+        .ticker-box {
+            height: 400px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column-reverse;
+            gap: 8px;
+            padding-right: 4px;
+        }
+
+        .ticker-entry {
+            display: flex;
+            gap: 12px;
+            background: rgba(255,255,255,0.01);
+            border: 1px solid transparent;
+            padding: 10px 14px;
+            border-radius: 12px;
+            animation: fadeIn 0.3s ease forwards;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .ticker-entry.goal {
+            background: rgba(16, 185, 129, 0.08);
+            border-color: rgba(16, 185, 129, 0.2);
+        }
+        .ticker-entry.card {
+            background: rgba(234, 179, 8, 0.08);
+            border-color: rgba(234, 179, 8, 0.2);
+        }
+
+        .ticker-minute {
+            font-weight: 800;
+            color: var(--accent);
+            min-width: 35px;
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* Analysis Stats */
+        .stats-grid {
             display: flex;
             flex-direction: column;
-            gap: 3px;
-            flex: 1;
-            min-width: 100px;
+            gap: 14px;
+            margin-top: 10px;
         }
-        .input-group label {
-            font-size: 10px;
-            color: #a3e635;
+        .stat-row {
+            display: grid;
+            grid-template-columns: 1fr 60px 1fr;
+            align-items: center;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+        .stat-val-home { text-align: left; font-weight: bold; }
+        .stat-val-away { text-align: right; font-weight: bold; }
+        .stat-label {
+            font-size: 0.75rem;
             text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
         }
-        .input-group input {
-            background-color: #022c21;
-            color: white;
-            border: 1px solid #047857;
-            padding: 6px;
-            border-radius: 4px;
-            font-size: 12px;
+
+        .quality-stars {
+            color: #eab308;
+            letter-spacing: 2px;
+            font-size: 1.1rem;
+        }
+
+        /* Utilities */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-4px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
 
-    <div class="main-container">
-        <!-- LINKES PANEL: EINSTELLUNGEN -->
-        <div class="control-panel">
-            <h2>Sport Ergebnis-Rechner &<br>Simulator</h2>
-            
-            <div class="field-group">
-                <label>Heim-Name</label>
-                <select id="select-heim" class="select-field">
-                    <option value="FCB" selected>FCB</option>
-                    <option value="BVB">BVB</option>
-                </select>
-            </div>
+<div class="container">
 
-            <div class="field-group">
-                <label>Gast-Name</label>
-                <select id="select-gast" class="select-field">
-                    <option value="FCB">FCB</option>
-                    <option value="BVB" selected>BVB</option>
-                </select>
-            </div>
-
-            <button class="btn btn-update" onclick="aktualisieren()">Aktualisieren</button>
-            <button class="btn btn-reset" onclick="resetForm()">Reset</button>
-            <button id="btn-start" class="btn btn-start" onclick="simulieren()" disabled>Start</button>
-        </div>
-
-        <!-- RECHTES PANEL: GRAFIK & SIMULATION -->
-        <div class="graph-panel">
-            <div class="bars-container">
-                <div class="bar-wrapper"><div id="bar-heim" class="bar bar-heim"></div></div>
-                <div class="bar-wrapper"><div id="bar-remis" class="bar bar-remis"></div></div>
-                <div class="bar-wrapper"><div id="bar-gast" class="bar bar-gast"></div></div>
-            </div>
-            
-            <div class="labels-container">
-                <div class="label-box">
-                    <div class="label-title">Heim</div>
-                    <div id="txt-heim" class="label-percent">0%</div>
-                </div>
-                <div class="label-box">
-                    <div class="label-title">Remis</div>
-                    <div id="txt-remis" class="label-percent">0%</div>
-                </div>
-                <div class="label-box">
-                    <div class="label-title">Gast</div>
-                    <div id="txt-gast" class="label-percent">0%</div>
-                </div>
-            </div>
-
-            <div id="simulation-text" class="simulation-output">
-                Klicke zuerst auf "Aktualisieren", um die Daten zu laden.
-            </div>
-        </div>
-    </div>
-
-    <!-- UNTERER BEREICH: MANNSCHAFTSKARTEN -->
-    <div class="bottom-section">
-        <div class="bottom-title">Aktuelle Daten Eingabe der Mannschaften</div>
-        
-        <div class="cards-grid">
-            <!-- Karte FCB -->
-            <div class="team-card" id="card-FCB">
-                <div class="team-badge">FCB</div>
-                <div class="input-group">
-                    <label>Angriff (1-100)</label>
-                    <input type="number" class="val-angriff" value="75" min="1" max="100">
-                </div>
-                <div class="input-group">
-                    <label>Abwehr (1-100)</label>
-                    <input type="number" class="val-abwehr" value="70" min="1" max="100">
-                </div>
-                <div class="input-group">
-                    <label>Form (1-5)</label>
-                    <input type="number" class="val-form" value="4" min="1" max="5">
-                </div>
-                <div class="input-group">
-                    <label>Heimvorteil (+)</label>
-                    <input type="number" class="val-heimvorteil" value="5" min="0" max="20">
-                </div>
-            </div>
-
-            <!-- Karte BVB -->
-            <div class="team-card" id="card-BVB">
-                <div class="team-badge">BVB</div>
-                <div class="input-group">
-                    <label>Angriff (1-100)</label>
-                    <input type="number" class="val-angriff" value="72" min="1" max="100">
-                </div>
-                <div class="input-group">
-                    <label>Abwehr (1-100)</label>
-                    <input type="number" class="val-abwehr" value="68" min="1" max="100">
-                </div>
-                <div class="input-group">
-                    <label>Form (1-5)</label>
-                    <input type="number" class="val-form" value="3" min="1" max="5">
-                </div>
-                <div class="input-group">
+    <!-- DATA INPUT EDITOR -->
+    <div class="glass-panel">
+        <h2><span>📝 Spieldaten (JSON)</span></h2>
+        <textarea id="jsonInput" class="json-textarea"></textarea>
+        <div class="controls-row">
+            <button class="btn-speed active" id="speedNormal" onclick="setSpeed(1000, 'Normal')">Normal (1s = 1m)</button>
