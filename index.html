@@ -27,6 +27,7 @@
         /* LINKE SPALTE: Daten & Steuerung */
         .sidebar-left {
             width: 340px;
+            min-width: 340px;
             background-color: #1e293b;
             border-right: 1px solid #334155;
             padding: 20px;
@@ -134,13 +135,14 @@
         /* RECHTER BEREICH: Haupt-Simulator & Spielfeld */
         .main-content {
             flex: 1;
-            padding: 20px;
+            padding: 40px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
             overflow-y: auto;
+            box-sizing: border-box;
         }
 
         /* Anzeigetafel */
@@ -206,6 +208,7 @@
             min-height: 100px;
             max-height: 200px;
             overflow-y: auto;
+            box-sizing: border-box;
         }
 
         .ticker-entry {
@@ -317,7 +320,3 @@
                 </div>
 
                 <button type="button" class="btn-save" onclick="saveTeamData()">Speichern</button>
-            </div>
-        </div>
-
-        <!-- RECHTE SEITE (HAUPTINHALT) -->
