@@ -4,177 +4,12 @@
 <head>
 
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Bundesliga Simulator</title>
 
-
-<style>
-
-body{
-
-background:#7b1111;
-font-family:Arial;
-color:white;
-margin:0;
-padding:20px;
-
-}
-
-
-h1{
-
-text-align:center;
-
-}
-
-
-
-.container{
-
-display:flex;
-gap:25px;
-justify-content:center;
-flex-wrap:wrap;
-
-}
-
-
-
-.box{
-
-background:#1b0909;
-padding:20px;
-border-radius:15px;
-box-shadow:0 0 15px black;
-
-width:320px;
-
-}
-
-
-
-select,
-input,
-button{
-
-width:100%;
-padding:10px;
-margin-top:8px;
-background:#222;
-color:white;
-border:1px solid #555;
-
-}
-
-
-
-button{
-
-cursor:pointer;
-font-weight:bold;
-
-}
-
-
-
-.start{
-
-background:#008844;
-font-size:20px;
-
-}
-
-
-
-.scoreboard{
-
-background:#111;
-width:600px;
-max-width:100%;
-border-radius:15px;
-overflow:hidden;
-
-}
-
-
-
-.teams{
-
-display:flex;
-
-}
-
-
-
-.team{
-
-width:50%;
-height:130px;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:40px;
-font-weight:bold;
-
-}
-
-
-
-.score{
-
-background:white;
-color:black;
-font-size:45px;
-text-align:center;
-padding:20px;
-
-}
-
-
-
-.time{
-
-background:#ccc;
-color:black;
-text-align:center;
-font-size:25px;
-padding:10px;
-
-}
-
-
-
-.status{
-
-padding:15px;
-background:#222;
-text-align:center;
-font-size:20px;
-
-}
-
-
-
-.ticker{
-
-min-height:150px;
-padding:15px;
-background:#050505;
-
-}
-
-
-.goal{
-
-color:#00ff66;
-font-weight:bold;
-
-}
-
-
-
-</style>
+<link rel="stylesheet" href="style.css">
 
 </head>
 
@@ -182,57 +17,43 @@ font-weight:bold;
 <body>
 
 
-
-<h1>
-⚽ Bundesliga Simulator
-</h1>
+<h1>⚽ Bundesliga Simulator</h1>
 
 
-<div class="container">
+<div class="main">
 
 
 <div class="box">
 
 
-<h2>Heimmannschaft</h2>
+<h2>🏠 Heim Mannschaft</h2>
 
 
-<select id="homeTeam"></select>
+<select id="homeSelect"></select>
 
 
-<h2>Gastmannschaft</h2>
+<div id="homeInfo" class="info"></div>
 
 
-<select id="awayTeam"></select>
-
-
-
-<h2>Wahrscheinlichkeit</h2>
-
-
-Heimsieg %
-
-<input id="homeProb" value="50">
+</div>
 
 
 
-Remis %
 
-<input id="drawProb" value="25">
-
+<div class="box">
 
 
-Gastsieg %
-
-<input id="awayProb" value="25">
+<h2>✈️ Gast Mannschaft</h2>
 
 
+<select id="awaySelect"></select>
 
-<button class="start" onclick="startGame()">
 
-START
+<div id="awayInfo" class="info"></div>
 
-</button>
+
+</div>
+
 
 
 </div>
@@ -241,371 +62,794 @@ START
 
 
 
+<div class="box match">
 
-<div class="scoreboard">
+
+<h2>🏟 Spiel</h2>
+
 
 
 <div class="teams">
 
-
-<div id="homeView" class="team">
-
-HOME
-
-</div>
+<span id="homeName">
+Heim
+</span>
 
 
-<div id="awayView" class="team">
-
-AWAY
-
-</div>
-
-
-</div>
-
-
-
-<div id="score" class="score">
-
+<b id="score">
 0 : 0
+</b>
+
+
+<span id="awayName">
+Gast
+</span>
+
 
 </div>
 
 
 
-<div id="time" class="time">
+
+<div id="minute">
 
 0'
-
-</div>
-
-
-<div id="status" class="status">
-
-Bereit
-
-</div>
-
-
-
-<div id="ticker" class="ticker">
-
-Spielverlauf
-
-</div>
-
-
-
-</div>
-
-
-
 </div>
 
 
 
 
+<div class="stats">
 
-<script>
 
+<div>
+Ballbesitz
+<br>
+<span id="possession">
+50 : 50
+</span>
+</div>
 
-// =====================================
-// BUNDESLIGA DATENSATZ
-// =====================================
 
+<div>
+Schüsse
+<br>
+<span id="shots">
+0 : 0
+</span>
+</div>
 
-const teams={
 
+<div>
+Ecken
+<br>
+<span id="corners">
+0 : 0
+</span>
+</div>
 
 
-FCB:{
+<div>
+Gelbe Karten
+<br>
+<span id="cards">
+0 : 0
+</span>
+</div>
 
-short:"FCB",
-name:"FC Bayern München",
-strength:92,
-attack:94,
-defense:89,
-homeBonus:4,
-stadium:"Allianz Arena",
-capacity:75024,
-form:["S","S","U","S","S"]
 
-},
+</div>
 
 
 
-BVB:{
 
-short:"BVB",
-name:"Borussia Dortmund",
-strength:86,
-attack:88,
-defense:84,
-homeBonus:4,
-stadium:"Signal Iduna Park",
-capacity:81365,
-form:["S","U","S","N","S"]
+<button onclick="startSimulation()">
+▶ Spiel starten
+</button>
 
-},
 
 
+<button onclick="resetSimulation()">
+🔄 Zurücksetzen
+</button>
 
-B04:{
 
-short:"B04",
-name:"Bayer 04 Leverkusen",
-strength:90,
-attack:91,
-defense:88,
-homeBonus:3,
-stadium:"BayArena",
-capacity:30210,
-form:["S","S","S","U","S"]
 
-},
 
+<h2>
+📢 Spielverlauf
+</h2>
 
 
-RBL:{
+<div id="events">
 
-short:"RBL",
-name:"RB Leipzig",
-strength:84,
-attack:86,
-defense:82,
-homeBonus:3,
-stadium:"Red Bull Arena",
-capacity:47069,
-form:["S","U","S","N","S"]
+</div>
 
-},
 
 
+</div>
 
-VFB:{
 
-short:"VFB",
-name:"VfB Stuttgart",
-strength:82,
-attack:84,
-defense:80,
-homeBonus:3,
-stadium:"MHPArena",
-capacity:60449,
-form:["S","S","U","N","S"]
 
-},
 
 
 
-SGE:{
 
-short:"SGE",
-name:"Eintracht Frankfurt",
-strength:80,
-attack:82,
-defense:79,
-homeBonus:3,
-stadium:"Deutsche Bank Park",
-capacity:58000,
-form:["S","U","S","N","U"]
 
-},
 
+<h2 class="title">
+⚙️ Mannschafts Einstellungen
+</h2>
 
 
-SCF:{
 
-short:"SCF",
-name:"SC Freiburg",
-strength:78,
-attack:79,
-defense:78,
-homeBonus:3,
-stadium:"Europa Park Stadion",
-capacity:34700,
-form:["U","S","N","S","U"]
 
-},
+<div id="teamEditor" class="editor">
 
+</div>
 
 
-TSG:{
 
-short:"TSG",
-name:"TSG Hoffenheim",
-strength:76,
-attack:77,
-defense:75,
-homeBonus:2,
-stadium:"PreZero Arena",
-capacity:30150,
-form:["N","S","U","N","S"]
 
-},
 
+<script src="script.js"></script>
 
 
-SVW:{
+</body>
 
-short:"SVW",
-name:"Werder Bremen",
-strength:75,
-attack:76,
-defense:74,
-homeBonus:3,
-stadium:"Weserstadion",
-capacity:42100,
-form:["S","N","U","S","N"]
 
-},
+</html>
+*{
+box-sizing:border-box;
+}
 
 
+body{
 
-BMG:{
+margin:0;
 
-short:"BMG",
-name:"Borussia Mönchengladbach",
-strength:75,
-attack:76,
-defense:74,
-homeBonus:3,
-stadium:"Borussia Park",
-capacity:54057,
-form:["N","U","S","N","U"]
+padding:20px;
 
-},
+font-family:Arial,Helvetica,sans-serif;
 
+background:
+linear-gradient(135deg,#081008,#003300);
 
-
-M05:{
-
-short:"M05",
-name:"Mainz 05",
-strength:74,
-attack:75,
-defense:74,
-homeBonus:3,
-stadium:"MEWA Arena",
-capacity:34000,
-form:["S","U","N","U","S"]
-
-},
-
-
-
-FCU:{
-
-short:"FCU",
-name:"Union Berlin",
-strength:74,
-attack:74,
-defense:75,
-homeBonus:4,
-stadium:"Alte Försterei",
-capacity:22012,
-form:["N","N","U","S","U"]
-
-},
-
-
-
-HSV:{
-
-short:"HSV",
-name:"Hamburger SV",
-strength:73,
-attack:74,
-defense:72,
-homeBonus:3,
-stadium:"Volksparkstadion",
-capacity:57000,
-form:["S","S","U","N","S"]
-
-},
-
-
-
-FCA:{
-
-short:"FCA",
-name:"FC Augsburg",
-strength:72,
-attack:72,
-defense:72,
-homeBonus:3,
-stadium:"WWK Arena",
-capacity:30660,
-form:["U","N","S","U","N"]
-
-},
-
-
-
-S04:{
-
-short:"S04",
-name:"FC Schalke 04",
-strength:72,
-attack:73,
-defense:71,
-homeBonus:4,
-stadium:"Veltins Arena",
-capacity:62271,
-form:["S","N","N","U","S"]
-
-},
-
-
-
-KOE:{
-
-short:"KOE",
-name:"1. FC Köln",
-strength:70,
-attack:70,
-defense:70,
-homeBonus:4,
-stadium:"RheinEnergie Stadion",
-capacity:50000,
-form:["U","N","S","N","U"]
-
-},
-
-
-
-ELV:{
-
-short:"ELV",
-name:"SV Elversberg",
-strength:68,
-attack:68,
-defense:68,
-homeBonus:2,
-stadium:"URSAPHARM Arena",
-capacity:10000,
-form:["S","S","U","S","N"]
-
-},
-
-
-
-SCP:{
-
-short:"SCP",
-name:"SC Paderborn 07",
-strength:68,
-attack:69,
-defense:67,
-homeBonus:2,
-stadium:"Home Deluxe Arena",
-capacity:15000,
-form:["S","U","S","N","U"]
+color:white;
 
 }
 
 
+
+h1{
+
+text-align:center;
+
+font-size:42px;
+
+margin-bottom:30px;
+
+}
+
+
+
+.title{
+
+text-align:center;
+
+margin-top:40px;
+
+}
+
+
+
+
+.main{
+
+display:grid;
+
+grid-template-columns:1fr 1fr;
+
+gap:20px;
+
+max-width:1400px;
+
+margin:auto;
+
+}
+
+
+
+
+.box{
+
+background:#111;
+
+border-radius:15px;
+
+padding:20px;
+
+box-shadow:0 0 20px #000;
+
+margin-bottom:25px;
+
+}
+
+
+
+
+select,
+input{
+
+width:100%;
+
+padding:8px;
+
+margin:5px 0 12px;
+
+background:#222;
+
+color:white;
+
+border:1px solid #555;
+
+border-radius:6px;
+
+font-size:16px;
+
+}
+
+
+
+
+button{
+
+width:100%;
+
+padding:15px;
+
+margin-top:12px;
+
+border-radius:10px;
+
+border:none;
+
+background:#009944;
+
+color:white;
+
+font-size:18px;
+
+font-weight:bold;
+
+cursor:pointer;
+
+}
+
+
+
+button:hover{
+
+background:#00cc55;
+
+}
+
+
+
+
+
+.info{
+
+background:#222;
+
+padding:15px;
+
+border-radius:10px;
+
+line-height:1.7;
+
+}
+
+
+
+
+
+.match{
+
+max-width:1400px;
+
+margin:auto;
+
+text-align:center;
+
+}
+
+
+
+
+.teams{
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+gap:60px;
+
+font-size:30px;
+
+margin:20px;
+
+}
+
+
+
+#score{
+
+font-size:55px;
+
+background:white;
+
+color:black;
+
+padding:15px 30px;
+
+border-radius:15px;
+
+}
+
+
+
+
+#minute{
+
+font-size:32px;
+
+background:#222;
+
+padding:10px;
+
+border-radius:10px;
+
+}
+
+
+
+
+
+.stats{
+
+display:grid;
+
+grid-template-columns:repeat(4,1fr);
+
+gap:15px;
+
+margin:25px 0;
+
+}
+
+
+
+
+.stats div{
+
+background:#222;
+
+padding:15px;
+
+border-radius:10px;
+
+font-size:18px;
+
+}
+
+
+
+
+
+#events{
+
+height:350px;
+
+overflow-y:auto;
+
+background:#050505;
+
+border-radius:10px;
+
+padding:15px;
+
+text-align:left;
+
+line-height:1.8;
+
+}
+
+
+
+
+
+.goal{
+
+color:#00ff66;
+
+font-weight:bold;
+
+font-size:20px;
+
+}
+
+
+
+
+.card{
+
+color:#ffd700;
+
+font-weight:bold;
+
+}
+
+
+
+
+
+.editor{
+
+max-width:1500px;
+
+margin:auto;
+
+display:grid;
+
+grid-template-columns:repeat(3,1fr);
+
+gap:20px;
+
+}
+
+
+
+
+.teamCard{
+
+background:#111;
+
+border:2px solid #444;
+
+border-radius:15px;
+
+padding:20px;
+
+}
+
+
+
+.teamCard h3{
+
+text-align:center;
+
+font-size:22px;
+
+}
+
+
+
+.teamCard label{
+
+display:block;
+
+font-size:13px;
+
+color:#aaa;
+
+margin-top:8px;
+
+}
+
+
+
+
+
+.form{
+
+display:grid;
+
+grid-template-columns:repeat(5,1fr);
+
+gap:5px;
+
+}
+
+
+
+.form select{
+
+width:100%;
+
+}
+
+
+
+
+@media(max-width:900px){
+
+
+.main{
+
+grid-template-columns:1fr;
+
+}
+
+
+.editor{
+
+grid-template-columns:1fr;
+
+}
+
+
+.stats{
+
+grid-template-columns:repeat(2,1fr);
+
+}
+
+
+.teams{
+
+flex-direction:column;
+
+gap:15px;
+
+}
+
+
+
+}
+// ==========================================
+// BUNDESLIGA SIMULATOR
+// ALLE EINGABEN WERDEN BERECHNET
+// ==========================================
+
+
+const teams = {
+
+
+FCB:{
+name:"Bayern München",
+short:"FCB",
+strength:92,
+attack:94,
+defense:90,
+home:6,
+stadium:"Allianz Arena",
+fans:75000,
+form:["S","S","S","U","S"]
+},
+
+
+BVB:{
+name:"Borussia Dortmund",
+short:"BVB",
+strength:85,
+attack:86,
+defense:82,
+home:5,
+stadium:"Signal Iduna Park",
+fans:81000,
+form:["S","U","S","N","S"]
+},
+
+
+B04:{
+name:"Bayer Leverkusen",
+short:"B04",
+strength:90,
+attack:91,
+defense:88,
+home:5,
+stadium:"BayArena",
+fans:30000,
+form:["S","S","U","S","S"]
+},
+
+
+RBL:{
+name:"RB Leipzig",
+short:"RBL",
+strength:84,
+attack:85,
+defense:83,
+home:4,
+stadium:"Red Bull Arena",
+fans:47000,
+form:["S","U","S","N","S"]
+},
+
+
+VFB:{
+name:"VfB Stuttgart",
+short:"VFB",
+strength:82,
+attack:84,
+defense:80,
+home:4,
+stadium:"MHPArena",
+fans:60000,
+form:["S","S","U","N","S"]
+},
+
+
+SGE:{
+name:"Eintracht Frankfurt",
+short:"SGE",
+strength:80,
+attack:81,
+defense:79,
+home:4,
+stadium:"Deutsche Bank Park",
+fans:58000,
+form:["U","S","N","S","U"]
+},
+
+
+SCF:{
+name:"SC Freiburg",
+short:"SCF",
+strength:78,
+attack:78,
+defense:80,
+home:4,
+stadium:"Europa Park Stadion",
+fans:34000,
+form:["S","U","N","S","U"]
+},
+
+
+SVW:{
+name:"Werder Bremen",
+short:"SVW",
+strength:76,
+attack:77,
+defense:74,
+home:4,
+stadium:"Weserstadion",
+fans:42000,
+form:["N","S","U","S","N"]
+},
+
+
+BMG:{
+name:"Borussia Mönchengladbach",
+short:"BMG",
+strength:75,
+attack:76,
+defense:73,
+home:4,
+stadium:"Borussia Park",
+fans:54000,
+form:["U","N","S","N","U"]
+},
+
+
+M05:{
+name:"Mainz 05",
+short:"M05",
+strength:74,
+attack:73,
+defense:75,
+home:4,
+stadium:"MEWA Arena",
+fans:33000,
+form:["S","U","N","U","S"]
+},
+
+
+FCU:{
+name:"Union Berlin",
+short:"FCU",
+strength:74,
+attack:72,
+defense:76,
+home:6,
+stadium:"Alte Försterei",
+fans:22000,
+form:["N","U","S","N","S"]
+},
+
+
+TSG:{
+name:"Hoffenheim",
+short:"TSG",
+strength:74,
+attack:76,
+defense:72,
+home:3,
+stadium:"PreZero Arena",
+fans:30000,
+form:["U","S","N","U","N"]
+},
+
+
+FCA:{
+name:"Augsburg",
+short:"FCA",
+strength:72,
+attack:72,
+defense:72,
+home:4,
+stadium:"WWK Arena",
+fans:30000,
+form:["N","U","S","N","U"]
+},
+
+
+KOE:{
+name:"Köln",
+short:"KOE",
+strength:71,
+attack:70,
+defense:72,
+home:5,
+stadium:"RheinEnergie Stadion",
+fans:50000,
+form:["U","N","S","U","N"]
+},
+
+
+S04:{
+name:"Schalke 04",
+short:"S04",
+strength:70,
+attack:71,
+defense:69,
+home:5,
+stadium:"Veltins Arena",
+fans:62000,
+form:["S","N","U","N","S"]
+},
+
+
+HSV:{
+name:"Hamburger SV",
+short:"HSV",
+strength:70,
+attack:72,
+defense:68,
+home:5,
+stadium:"Volksparkstadion",
+fans:57000,
+form:["S","U","S","N","U"]
+},
+
+
+SCP:{
+name:"Paderborn",
+short:"SCP",
+strength:68,
+attack:67,
+defense:69,
+home:3,
+stadium:"Home Deluxe Arena",
+fans:15000,
+form:["N","U","S","N","U"]
+},
+
+
+ELV:{
+name:"Elversberg",
+short:"ELV",
+strength:67,
+attack:67,
+defense:67,
+home:3,
+stadium:"URSAPHARM Arena",
+fans:10000,
+form:["S","N","U","N","S"]
+}
 
 };
 
@@ -613,111 +857,65 @@ form:["S","U","S","N","U"]
 
 
 
-// AUSWAHL FÜLLEN
+let running=false;
+
+let timer;
+
+let homeGoals=0;
+
+let awayGoals=0;
 
 
-function fillTeams(){
+let stats={
+
+hs:0,
+as:0,
+hc:0,
+ac:0,
+hcard:0,
+acard:0
+
+};
 
 
-let h=document.getElementById("homeTeam");
-
-let a=document.getElementById("awayTeam");
 
 
-Object.keys(teams).forEach(t=>{
+
+
+function loadTeams(){
+
+
+let h=document.getElementById("homeSelect");
+
+let a=document.getElementById("awaySelect");
+
+
+
+Object.keys(teams).forEach(id=>{
 
 
 h.innerHTML+=
 
-`
-<option value="${t}">
-${teams[t].short} - ${teams[t].name}
-</option>
-`;
+`<option value="${id}">
+${teams[id].short} - ${teams[id].name}
+</option>`;
 
 
 a.innerHTML+=
 
-`
-<option value="${t}">
-${teams[t].short} - ${teams[t].name}
-</option>
-`;
+`<option value="${id}">
+${teams[id].short} - ${teams[id].name}
+</option>`;
 
 
 });
 
 
-a.selectedIndex=1;
+
+createEditor();
 
 
-}
-
-
-
-fillTeams();
-
-
-// =====================================
-// SPIELBERECHNUNG
-// =====================================
-
-
-// Zufallswert nach Poisson-Verteilung
-function poisson(lambda){
-
-let L=Math.exp(-lambda);
-
-let p=1;
-
-let k=0;
-
-
-do{
-
-k++;
-
-p*=Math.random();
-
-
-}while(p>L);
-
-
-return k-1;
-
-}
-
-
-
-
-
-// Form berechnen
-
-function formBonus(team){
-
-
-let wert=0;
-
-
-team.form.forEach(f=>{
-
-
-if(f=="S")
-wert+=1;
-
-
-if(f=="U")
-wert+=0;
-
-
-if(f=="N")
-wert-=1;
-
-
-});
-
-
-return wert/5;
+updateInfo();
 
 
 }
@@ -728,493 +926,74 @@ return wert/5;
 
 
 
-// Wahrscheinlichkeiten automatisch berechnen
+function createEditor(){
 
 
-function berechneWahrscheinlichkeit(){
+let box=document.getElementById("teamEditor");
 
 
+Object.keys(teams).forEach(id=>{
 
-let home=
-teams[
-document.getElementById("homeTeam").value
-];
 
+let t=teams[id];
 
-let away=
-teams[
-document.getElementById("awayTeam").value
-];
 
 
+box.innerHTML+=`
 
-let heimKraft=
+<div class="teamCard">
 
-home.strength
-+
-home.homeBonus
-+
-formBonus(home);
 
+<h3>${t.short} ${t.name}</h3>
 
 
-let gastKraft=
+<label>Stärke</label>
+<input type="number" value="${t.strength}"
+onchange="teams.${id}.strength=Number(this.value)">
 
-away.strength
-+
-formBonus(away);
 
 
+<label>Angriff</label>
+<input type="number" value="${t.attack}"
+onchange="teams.${id}.attack=Number(this.value)">
 
-let unterschied=
 
-heimKraft-gastKraft;
 
+<label>Defensive</label>
+<input type="number" value="${t.defense}"
+onchange="teams.${id}.defense=Number(this.value)">
 
 
-let heim=
 
-50+unterschied*1.5;
+<label>Heimbonus</label>
+<input type="number" value="${t.home}"
+onchange="teams.${id}.home=Number(this.value)">
 
 
-let gast=
 
-25-unterschied*0.8;
+<label>Form</label>
 
+<div class="form">
 
-let remis=
+${t.form.map((x,i)=>`
 
-100-heim-gast;
+<select onchange="teams.${id}.form[${i}]=this.value">
 
+<option ${x=="S"?"selected":""}>S</option>
+<option ${x=="U"?"selected":""}>U</option>
+<option ${x=="N"?"selected":""}>N</option>
 
+</select>
 
-// Grenzen
+`).join("")}
 
-heim=Math.max(15,Math.min(85,heim));
+</div>
 
-gast=Math.max(5,Math.min(50,gast));
 
-remis=100-heim-gast;
-
-
-
-document.getElementById("homeProb").value=
-heim.toFixed(0);
-
-
-
-document.getElementById("drawProb").value=
-remis.toFixed(0);
-
-
-
-document.getElementById("awayProb").value=
-gast.toFixed(0);
-
-
-
-return{
-
-
-heim:heim,
-
-remis:remis,
-
-gast:gast
-
-
-};
-
-
-
-}
-
-
-
-
-
-
-
-
-// Ergebnis erstellen
-
-
-function erstelleErgebnis(){
-
-
-
-let home=
-
-teams[
-homeTeam.value
-];
-
-
-let away=
-
-teams[
-awayTeam.value
-];
-
-
-
-let wahrscheinlichkeit=
-
-berechneWahrscheinlichkeit();
-
-
-
-
-
-let zufall=
-
-Math.random()*100;
-
-
-
-let ergebnis;
-
-
-
-// Erwartete Tore
-
-
-let heimTore=
-
-1.35
-
-+
-
-(home.attack-away.defense)/35
-
-+
-
-home.homeBonus/5;
-
-
-
-let gastTore=
-
-1.05
-
-+
-
-(away.attack-home.defense)/35;
-
-
-
-
-
-// Wetter / Zufall
-
-
-heimTore*=
-
-0.85+
-
-Math.random()*0.3;
-
-
-gastTore*=
-
-0.85+
-
-Math.random()*0.3;
-
-
-
-heimTore=Math.max(
-0.2,
-heimTore
-);
-
-
-gastTore=Math.max(
-0.2,
-gastTore
-);
-
-
-
-
-
-if(zufall < wahrscheinlichkeit.heim){
-
-
-// Heim gewinnt
-
-let h=
-
-poisson(heimTore);
-
-let a=
-
-poisson(gastTore);
-
-
-
-if(h<=a)
-h=a+1;
-
-
-
-ergebnis={
-
-home:h,
-
-away:a
-
-};
-
-
-
-}
-
-
-
-else if(
-zufall <
-wahrscheinlichkeit.heim+
-wahrscheinlichkeit.remis
-){
-
-
-// Unentschieden
-
-
-let tor=
-
-Math.floor(
-Math.random()*3
-);
-
-
-
-ergebnis={
-
-home:tor,
-
-away:tor
-
-};
-
-
-
-}
-
-
-
-else{
-
-
-// Gast gewinnt
-
-
-let h=
-
-poisson(heimTore);
-
-
-let a=
-
-poisson(gastTore);
-
-
-
-if(a<=h)
-a=h+1;
-
-
-
-ergebnis={
-
-home:h,
-
-away:a
-
-};
-
-
-
-}
-
-
-
-
-
-// unrealistische Ergebnisse reduzieren
-
-
-if(ergebnis.home>5)
-ergebnis.home=5;
-
-
-if(ergebnis.away>5)
-ergebnis.away=5;
-
-
-
-return ergebnis;
-
-
-}
-
-
-
-
-
-
-
-
-
-
-// =====================================
-// START FUNKTION
-// =====================================
-
-
-function startGame(){
-
-
-
-let home=
-
-teams[
-homeTeam.value
-];
-
-
-let away=
-
-teams[
-awayTeam.value
-];
-
-
-
-document.getElementById("homeView").innerHTML=
-home.short;
-
-
-document.getElementById("awayView").innerHTML=
-away.short;
-
-
-
-
-let result=
-
-erstelleErgebnis();
-
-
-
-
-
-document.getElementById("score").innerHTML=
-
-result.home+
-" : "+
-result.away;
-
-
-
-
-document.getElementById("status").innerHTML=
-
-"🏁 Spiel beendet";
-
-
-
-
-
-document.getElementById("ticker").innerHTML=
-
-
-`
-
-🏟 ${home.stadium}
-
-<br><br>
-
-👥 Zuschauer:
-
-${Math.floor(home.capacity*(0.85+Math.random()*0.15)).toLocaleString("de-DE")}
-
-
-<br><br>
-
-
-⚽ Endergebnis
-
-<br>
-
-${home.short}
-
-<b>
-${result.home}
-</b>
-
-:
-
-<b>
-${result.away}
-</b>
-
-${away.short}
+</div>
 
 `;
 
-
-
-
-
-}
-     // =====================================
-// LIVE SPIEL SIMULATION
-// =====================================
-
-
-let liveTimer;
-
-let spielMinute=0;
-
-let liveHeimTore=0;
-
-let liveGastTore=0;
-
-let liveEvents=[];
-
-
-
-
-
-
-
-function erstelleLiveEvents(){
-
-
-let ergebnis=
-
-erstelleErgebnis();
-
-
-
-liveEvents=[];
-
-
-
-for(let i=0;i<ergebnis.home;i++){
-
-
-liveEvents.push({
-
-minute:
-Math.floor(Math.random()*85)+1,
-
-team:"home",
-
-art:"Tor"
-
 });
 
 
@@ -1223,172 +1002,25 @@ art:"Tor"
 
 
 
-for(let i=0;i<ergebnis.away;i++){
 
 
-liveEvents.push({
+function formValue(t){
 
-minute:
-Math.floor(Math.random()*85)+1,
 
-team:"away",
+let x=0;
 
-art:"Tor"
 
-});
+t.form.forEach(f=>{
 
+if(f=="S")x+=2;
 
-}
-
-
-
-
-// Karten
-
-if(Math.random()<0.5){
-
-
-liveEvents.push({
-
-minute:
-Math.floor(Math.random()*90)+1,
-
-art:"Gelbe Karte",
-
-team:
-Math.random()<0.5?"home":"away"
-
-});
-
-
-}
-
-
-
-
-liveEvents.sort((a,b)=>
-a.minute-b.minute
-);
-
-
-
-return ergebnis;
-
-
-}
-
-
-
-
-
-
-
-
-
-function aktualisiereLiveAnzeige(){
-
-
-
-let home=
-
-teams[
-homeTeam.value
-];
-
-
-let away=
-
-teams[
-awayTeam.value
-];
-
-
-
-document.getElementById("time").innerHTML=
-
-spielMinute+"'";
-
-
-
-document.getElementById("score").innerHTML=
-
-liveHeimTore+
-" : "+
-liveGastTore;
-
-
-
-let ticker="";
-
-
-
-liveEvents.forEach(e=>{
-
-
-if(e.minute<=spielMinute){
-
-
-
-if(e.art=="Tor"){
-
-
-
-if(e.team=="home"){
-
-ticker+=
-
-"<div class='goal'>⚽ "+
-e.minute+
-"' "+
-home.short+
-" TOR</div>";
-
-}
-
-
-else{
-
-
-ticker+=
-
-"<div class='goal'>⚽ "+
-e.minute+
-"' "+
-away.short+
-" TOR</div>";
-
-}
-
-
-
-}
-
-
-
-if(e.art=="Gelbe Karte"){
-
-
-ticker+=
-
-"<div>🟨 "+
-e.minute+
-"' Gelbe Karte</div>";
-
-}
-
-
-}
-
+if(f=="N")x-=2;
 
 
 });
 
 
-
-document.getElementById("ticker").innerHTML=
-
-ticker;
-
+return x;
 
 }
 
@@ -1398,570 +1030,12 @@ ticker;
 
 
 
+function strength(){
 
 
-function startLiveGame(){
+let h=teams[homeSelect.value];
 
-
-
-clearInterval(liveTimer);
-
-
-
-spielMinute=0;
-
-liveHeimTore=0;
-
-liveGastTore=0;
-
-
-
-document.getElementById("status").innerHTML=
-
-"⚽ ANPFIFF";
-
-
-
-let endErgebnis=
-
-erstelleLiveEvents();
-
-
-
-liveTimer=setInterval(function(){
-
-
-
-spielMinute++;
-
-
-
-liveEvents.forEach(e=>{
-
-
-
-if(e.minute==spielMinute){
-
-
-
-if(e.art=="Tor"){
-
-
-
-if(e.team=="home")
-liveHeimTore++;
-
-
-else
-liveGastTore++;
-
-
-}
-
-
-
-}
-
-
-
-});
-
-
-
-aktualisiereLiveAnzeige();
-
-
-
-
-
-if(spielMinute>=90){
-
-
-
-clearInterval(liveTimer);
-
-
-
-document.getElementById("status").innerHTML=
-
-"🏁 ABPFIFF";
-
-
-
-}
-
-
-
-},120);
-
-
-
-}
-
-
-
-
-
-
-
-// START Button verbindet jetzt Live-Spiel
-
-document.querySelector(".start").onclick=
-
-startLiveGame;
-     // =====================================
-// BUNDESLIGA TABELLE
-// =====================================
-
-
-let ligaTabelle=[];
-
-
-let aktuellerSpieltag=1;
-
-
-
-
-
-
-
-function erstelleTabelle(){
-
-
-
-ligaTabelle=[];
-
-
-
-Object.keys(teams).forEach(t=>{
-
-
-
-ligaTabelle.push({
-
-
-short:t,
-
-
-name:teams[t].name,
-
-
-punkte:0,
-
-
-spiele:0,
-
-
-siege:0,
-
-
-remis:0,
-
-
-niederlagen:0,
-
-
-tore:0,
-
-
-gegentore:0
-
-
-});
-
-
-
-});
-
-
-
-}
-
-
-
-erstelleTabelle();
-
-
-
-
-
-
-
-
-
-
-// =====================================
-// ERGEBNIS EINTRAGEN
-// =====================================
-
-
-function trageSpielEin(
-heim,
-gast,
-heimTore,
-gastTore
-){
-
-
-
-let h=
-
-ligaTabelle.find(
-x=>x.short==heim
-);
-
-
-
-let a=
-
-ligaTabelle.find(
-x=>x.short==gast
-);
-
-
-
-
-h.spiele++;
-
-a.spiele++;
-
-
-h.tore+=heimTore;
-
-a.tore+=gastTore;
-
-
-h.gegentore+=gastTore;
-
-a.gegentore+=heimTore;
-
-
-
-
-
-if(heimTore>gastTore){
-
-
-h.punkte+=3;
-
-h.siege++;
-
-
-a.niederlagen++;
-
-
-}
-
-
-else if(gastTore>heimTore){
-
-
-a.punkte+=3;
-
-a.siege++;
-
-
-h.niederlagen++;
-
-
-}
-
-
-else{
-
-
-h.punkte++;
-
-a.punkte++;
-
-
-h.remis++;
-
-a.remis++;
-
-
-}
-
-
-
-}
-
-
-
-
-
-
-
-
-
-// =====================================
-// TABELLE ANZEIGEN
-// =====================================
-
-
-function zeigeTabelle(){
-
-
-
-ligaTabelle.sort(function(a,b){
-
-
-
-if(b.punkte!=a.punkte)
-
-return b.punkte-a.punkte;
-
-
-
-return
-
-(b.tore-b.gegentore)
-
--
-
-(a.tore-a.gegentore);
-
-
-
-});
-
-
-
-
-
-let html=
-
-`
-
-<h2>🏆 Bundesliga Tabelle</h2>
-
-<table width="100%">
-
-<tr>
-
-<th>Platz</th>
-
-<th>Team</th>
-
-<th>Punkte</th>
-
-<th>Tore</th>
-
-</tr>
-
-`;
-
-
-
-ligaTabelle.forEach(function(t,index){
-
-
-
-html+=
-
-`
-
-<tr>
-
-<td>
-${index+1}
-</td>
-
-<td>
-${t.short}
-</td>
-
-<td>
-${t.punkte}
-</td>
-
-<td>
-${t.tore}:${t.gegentore}
-</td>
-
-
-</tr>
-
-`;
-
-
-
-});
-
-
-
-html+="</table>";
-
-
-
-let box=
-
-document.getElementById("tabelleBox");
-
-
-
-if(box)
-
-box.innerHTML=html;
-
-
-
-else{
-
-
-let neu=
-
-document.createElement("div");
-
-
-neu.id="tabelleBox";
-
-neu.className="box";
-
-
-neu.innerHTML=html;
-
-
-document.body.appendChild(neu);
-
-
-}
-
-
-
-}
-
-
-
-
-
-
-
-
-
-// =====================================
-// EINEN SPIELTAG SIMULIEREN
-// =====================================
-
-
-function simuliereSpieltag(){
-
-
-
-let vereine=
-
-Object.keys(teams);
-
-
-
-vereine.sort(()=>Math.random()-0.5);
-
-
-
-for(let i=0;i<vereine.length;i+=2){
-
-
-
-let heim=
-
-vereine[i];
-
-
-let gast=
-
-vereine[i+1];
-
-
-
-let ergebnis=
-
-
-
-erstelleErgebnisFuerTeam(
-heim,
-gast
-);
-
-
-
-trageSpielEin(
-
-heim,
-
-gast,
-
-ergebnis.home,
-
-ergebnis.away
-
-);
-
-
-
-}
-
-
-
-zeigeTabelle();
-
-
-
-aktuellerSpieltag++;
-
-
-
-alert(
-
-"Spieltag "
-+
-(aktuellerSpieltag-1)
-+
-" beendet"
-
-);
-
-
-
-}
-
-
-
-
-
-
-
-
-
-// eigene Ergebnisfunktion für Saison
-
-function erstelleErgebnisFuerTeam(
-heim,
-gast
-){
-
-
-
-let h=teams[heim];
-
-let a=teams[gast];
-
-
-
-let heimX=
-
-1.4+
-
-(h.attack-a.defense)/40+
-
-h.homeBonus/5;
-
-
-
-let gastX=
-
-1.1+
-
-(a.attack-h.defense)/40;
+let a=teams[awaySelect.value];
 
 
 
@@ -1970,19 +1044,18 @@ return{
 
 home:
 
-Math.min(
-5,
-poisson(heimX)
-),
+h.attack*0.45+
+h.strength*0.35+
+h.home+
+formValue(h),
+
 
 
 away:
 
-Math.min(
-5,
-poisson(gastX)
-)
-
+a.attack*0.45+
+a.strength*0.35+
+formValue(a)
 
 };
 
@@ -1995,63 +1068,13 @@ poisson(gastX)
 
 
 
-// Saison starten
-
-function neueSaison(){
+function chance(power,defense){
 
 
-
-erstelleTabelle();
-
+let value=(power-defense)/300;
 
 
-aktuellerSpieltag=1;
-
-
-
-zeigeTabelle();
-
-
-alert(
-"Neue Bundesliga Saison gestartet"
-);
-
-
-}
-     // =====================================
-// MANNSCHAFTS EDITOR
-// =====================================
-
-
-function erstelleTeamEditor(){
-
-
-
-let box=document.createElement("div");
-
-
-box.className="box";
-
-
-box.innerHTML=
-
-`
-
-<h2>
-⚙️ Mannschaftsdaten bearbeiten
-</h2>
-
-<div id="teamEditor"></div>
-
-`;
-
-
-
-document.body.appendChild(box);
-
-
-
-zeigeTeamEditor();
+return Math.random()<value;
 
 
 }
@@ -2062,124 +1085,72 @@ zeigeTeamEditor();
 
 
 
-function zeigeTeamEditor(){
+
+function startSimulation(){
+
+
+if(running)return;
+
+
+running=true;
+
+
+homeGoals=0;
+awayGoals=0;
+
+
+stats.hs=0;
+stats.as=0;
+
+
+events.innerHTML="";
 
 
 
-let editor=document.getElementById(
-"teamEditor"
-);
+let p=strength();
+
+
+let minute=0;
 
 
 
-if(!editor)return;
+timer=setInterval(()=>{
+
+
+minute++;
+
+document.getElementById("minute").innerHTML=
+minute+"'";
 
 
 
-let html="";
+let h=teams[homeSelect.value];
+
+let a=teams[awaySelect.value];
 
 
 
-Object.keys(teams).forEach(function(t){
 
 
-
-let team=teams[t];
-
+if(Math.random()<0.35){
 
 
-html+=
+stats.hs++;
 
 
-`
-
-<div style="
-background:#250909;
-padding:10px;
-margin:10px;
-border-radius:10px;
-">
+if(chance(p.home,a.defense)
+&&homeGoals<5){
 
 
-<h3>
-${team.short}
--
-${team.name}
-</h3>
+homeGoals++;
 
 
-Stärke
+events.innerHTML+=
+`<div class="goal">
+⚽ ${minute}' Tor ${h.short}
+</div>`;
 
-<input 
-type="number"
-value="${team.strength}"
-onchange="
-teams['${t}'].strength=this.value
-">
-
-
-Angriff
-
-<input 
-type="number"
-value="${team.attack}"
-onchange="
-teams['${t}'].attack=this.value
-">
-
-
-Defensive
-
-<input 
-type="number"
-value="${team.defense}"
-onchange="
-teams['${t}'].defense=this.value
-">
-
-
-Heimbonus
-
-<input 
-type="number"
-value="${team.homeBonus}"
-onchange="
-teams['${t}'].homeBonus=this.value
-">
-
-
-Stadion
-
-<input 
-value="${team.stadium}"
-onchange="
-teams['${t}'].stadium=this.value
-">
-
-
-Zuschauer
-
-<input 
-type="number"
-value="${team.capacity}"
-onchange="
-teams['${t}'].capacity=this.value
-">
-
-
-</div>
-
-
-`;
-
-
-
-});
-
-
-
-editor.innerHTML=html;
-
+}
 
 
 }
@@ -2187,746 +1158,23 @@ editor.innerHTML=html;
 
 
 
+if(Math.random()<0.33){
 
 
+stats.as++;
 
-erstelleTeamEditor();
 
+if(chance(p.away,h.defense)
+&&awayGoals<5){
 
 
+awayGoals++;
 
 
-
-
-
-
-// =====================================
-// DATEN SPEICHERN
-// =====================================
-
-
-function speichereTeams(){
-
-
-
-localStorage.setItem(
-
-"BundesligaTeams",
-
-JSON.stringify(teams)
-
-);
-
-
-
-alert(
-"✅ Mannschaftsdaten gespeichert"
-);
-
-
-
-}
-
-
-
-
-
-
-
-
-
-function ladeTeams(){
-
-
-
-let daten=
-
-localStorage.getItem(
-"BundesligaTeams"
-);
-
-
-
-if(daten){
-
-
-Object.assign(
-
-teams,
-
-JSON.parse(daten)
-
-);
-
-
-
-zeigeTeamEditor();
-
-
-
-alert(
-"✅ Daten geladen"
-);
-
-
-
-}
-
-
-}
-     // =====================================
-// DRÜCK-KICK MATCH ENGINE
-// =====================================
-
-
-function wetterEffekt(){
-
-let wetter=[
-
-"Sonne",
-"Regen",
-"Wind",
-"Schnee",
-"Normal"
-
-];
-
-
-return wetter[
-Math.floor(
-Math.random()*wetter.length
-)
-];
-
-
-}
-
-
-
-
-
-
-
-
-
-function formStärke(team){
-
-
-let wert=0;
-
-
-team.form.forEach(function(f){
-
-
-
-if(f=="S")
-wert+=2;
-
-
-if(f=="U")
-wert+=0;
-
-
-if(f=="N")
-wert-=2;
-
-
-
-});
-
-
-
-return wert;
-
-
-}
-
-
-
-
-
-
-
-
-
-function zuschauerBonus(team){
-
-
-
-let auslastung=
-
-team.capacity/85000;
-
-
-
-return auslastung*3;
-
-
-}
-
-
-
-
-
-
-
-
-
-function berechneDrueckKick(
-heim,
-gast
-){
-
-
-
-let h=teams[heim];
-
-let a=teams[gast];
-
-
-
-
-
-// Grundwerte
-
-
-let heimPower=
-
-
-h.attack
-
-+
-
-(h.strength/2)
-
-+
-
-h.homeBonus
-
-+
-
-formStärke(h)
-
-+
-
-zuschauerBonus(h);
-
-
-
-
-
-let gastPower=
-
-
-a.attack
-
-+
-
-(a.strength/2)
-
-+
-
-formStärke(a);
-
-
-
-
-
-
-// Defensive einrechnen
-
-
-let heimChance=
-
-
-heimPower
-
--
-
-(a.defense/2);
-
-
-
-
-
-let gastChance=
-
-
-gastPower
-
--
-
-(h.defense/2);
-
-
-
-
-
-
-// Wetter
-
-
-let wetter=
-
-wetterEffekt();
-
-
-
-if(
-wetter=="Regen"
-){
-
-
-heimChance*=0.95;
-
-gastChance*=0.95;
-
-
-}
-
-
-
-if(
-wetter=="Wind"
-){
-
-
-heimChance*=0.9;
-
-gastChance*=0.9;
-
-
-}
-
-
-
-
-
-
-
-// Ballbesitz
-
-
-let ball=
-
-50+
-
-(
-heimChance-gastChance
-)
-*
-0.25;
-
-
-
-ball=Math.max(
-30,
-Math.min(
-70,
-ball
-)
-);
-
-
-
-
-
-
-// Torchancen
-
-
-let heimChancen=
-
-Math.round(
-
-heimChance/8
-
-);
-
-
-
-let gastChancen=
-
-Math.round(
-
-gastChance/8
-
-);
-
-
-
-
-
-
-// Tore aus Chancen
-
-
-let heimTore=0;
-
-
-let gastTore=0;
-
-
-
-
-
-for(
-let i=0;
-i<heimChancen;
-i++
-){
-
-
-if(Math.random()<0.16)
-
-heimTore++;
-
-
-}
-
-
-
-
-
-for(
-let i=0;
-i<gastChancen;
-i++
-){
-
-
-if(Math.random()<0.14)
-
-gastTore++;
-
-
-}
-
-
-
-
-
-// Begrenzen
-
-
-heimTore=Math.min(
-5,
-heimTore
-);
-
-
-
-gastTore=Math.min(
-5,
-gastTore
-);
-
-
-
-
-
-
-
-
-return{
-
-
-heimTore:heimTore,
-
-
-gastTore:gastTore,
-
-
-ballBesitzHeim:
-Math.round(ball),
-
-
-ballBesitzGast:
-100-Math.round(ball),
-
-
-wetter:wetter,
-
-
-heimChancen:heimChancen,
-
-
-gastChancen:gastChancen
-
-
-};
-
-
-
-}
-
-
-
-
-
-
-
-
-
-
-// TEST FUNKTION
-
-
-function drueckKickTest(){
-
-
-
-let ergebnis=
-
-berechneDrueckKick(
-
-homeTeam.value,
-
-awayTeam.value
-
-);
-
-
-
-
-document.getElementById("ticker").innerHTML=
-
-
-`
-
-🌦 Wetter:
-${ergebnis.wetter}
-
-<br><br>
-
-⚽ Ergebnis:
-
-${ergebnis.heimTore}
-
-:
-
-${ergebnis.gastTore}
-
-
-<br><br>
-
-📊 Ballbesitz:
-
-${ergebnis.ballBesitzHeim}%
-
-:
-
-${ergebnis.ballBesitzGast}%
-
-
-<br><br>
-
-🎯 Chancen:
-
-${ergebnis.heimChancen}
-
-:
-
-${ergebnis.gastChancen}
-
-
-`;
-
-
-
-}
-     // =====================================
-// PROFESSIONELLER LIVE TICKER
-// =====================================
-
-
-let liveSpiel=null;
-
-let liveMinute=0;
-
-let liveInterval=null;
-
-let statistik={
-
-heimSchuesse:0,
-gastSchuesse:0,
-
-heimTorSchuesse:0,
-gastTorSchuesse:0,
-
-heimEcken:0,
-gastEcken:0,
-
-heimKarten:0,
-gastKarten:0
-
-};
-
-
-
-
-
-
-
-
-function resetStatistik(){
-
-
-statistik={
-
-heimSchuesse:0,
-gastSchuesse:0,
-
-heimTorSchuesse:0,
-gastTorSchuesse:0,
-
-heimEcken:0,
-gastEcken:0,
-
-heimKarten:0,
-gastKarten:0
-
-};
-
-
-}
-
-
-
-
-
-
-
-
-
-function startProfiSpiel(){
-
-
-
-clearInterval(liveInterval);
-
-
-
-resetStatistik();
-
-
-
-liveMinute=0;
-
-
-
-let heim=
-
-homeTeam.value;
-
-
-let gast=
-
-awayTeam.value;
-
-
-
-
-liveSpiel=
-
-berechneDrueckKick(
-
-heim,
-gast
-
-);
-
-
-
-
-document.getElementById("score").innerHTML=
-
-"0 : 0";
-
-
-document.getElementById("time").innerHTML=
-
-"0'";
-
-
-
-document.getElementById("status").innerHTML=
-
-"⚽ Anpfiff";
-
-
-
-let heimTore=0;
-
-let gastTore=0;
-
-
-
-let ticker="";
-
-
-
-
-
-
-liveInterval=setInterval(function(){
-
-
-
-liveMinute++;
-
-
-
-// Chancen Heim
-
-if(
-Math.random()
-<
-0.35
-){
-
-
-
-statistik.heimSchuesse++;
-
-
-
-if(
-Math.random()<0.45
-)
-
-statistik.heimTorSchuesse++;
-
-
-
-
-if(
-Math.random()<0.12
-){
-
-
-
-heimTore++;
-
-
-
-ticker+=
-
-
-`
-
-<div class="goal">
-
-⚽ ${liveMinute}' 
-${teams[heim].short}
-TOR!
-
-</div>
-
-
-`;
-
-
+events.innerHTML+=
+`<div class="goal">
+⚽ ${minute}' Tor ${a.short}
+</div>`;
 
 }
 
@@ -2937,204 +1185,55 @@ TOR!
 
 
 
+if(Math.random()<0.03){
 
+stats.hcard++;
 
-// Chancen Gast
-
-
-if(
-Math.random()
-<
-0.30
-){
-
-
-
-statistik.gastSchuesse++;
-
-
-
-if(
-Math.random()<0.4
-)
-
-statistik.gastTorSchuesse++;
-
-
-
-
-if(
-Math.random()<0.11
-){
-
-
-
-gastTore++;
-
-
-
-ticker+=
-
-
-`
-
-<div class="goal">
-
-⚽ ${liveMinute}' 
-${teams[gast].short}
-TOR!
-
-</div>
-
-
-`;
-
-
-
-}
-
+events.innerHTML+=
+`<div class="card">
+🟨 ${minute}' Gelbe Karte ${h.short}
+</div>`;
 
 }
 
 
 
+if(Math.random()<0.03){
 
+stats.acard++;
 
-
-
-
-// Ecken
-
-
-if(Math.random()<0.15)
-
-statistik.heimEcken++;
-
-
-if(Math.random()<0.15)
-
-statistik.gastEcken++;
-
-
-
-
-
-
-
-// Karten
-
-
-if(Math.random()<0.04){
-
-statistik.heimKarten++;
-
-ticker+="🟨 Gelbe Karte "+teams[heim].short+"<br>";
+events.innerHTML+=
+`<div class="card">
+🟨 ${minute}' Gelbe Karte ${a.short}
+</div>`;
 
 }
 
 
 
-if(Math.random()<0.04){
-
-statistik.gastKarten++;
-
-ticker+="🟨 Gelbe Karte "+teams[gast].short+"<br>";
-
-}
+score.innerHTML=
+homeGoals+" : "+awayGoals;
 
 
+shots.innerHTML=
+stats.hs+" : "+stats.as;
 
 
-
-
-document.getElementById("score").innerHTML=
-
-heimTore+
-" : "+
-gastTore;
+cards.innerHTML=
+stats.hcard+" : "+stats.acard;
 
 
 
-document.getElementById("time").innerHTML=
-
-liveMinute+"'";
+if(minute>=90){
 
 
+clearInterval(timer);
 
-document.getElementById("ticker").innerHTML=
-
-ticker+
-
-
-`
-
-<hr>
-
-📊 Statistik
-
-<br><br>
-
-Schüsse:
-
-${statistik.heimSchuesse}
-
--
-
-${statistik.gastSchuesse}
+running=false;
 
 
-<br>
-
-Ecken:
-
-${statistik.heimEcken}
-
--
-
-${statistik.gastEcken}
-
-
-<br>
-
-Schüsse aufs Tor:
-
-${statistik.heimTorSchuesse}
-
--
-
-${statistik.gastTorSchuesse}
-
-
-<br>
-
-🟨 Karten:
-
-${statistik.heimKarten}
-
--
-
-${statistik.gastKarten}
-
-`;
-
-
-
-
-
-
-
-if(liveMinute>=90){
-
-
-
-clearInterval(liveInterval);
-
-
-
-document.getElementById("status").innerHTML=
-
-"🏁 Abpfiff";
-
+events.innerHTML+=
+"<br>🏁 Spiel beendet";
 
 
 }
@@ -3154,78 +1253,22 @@ document.getElementById("status").innerHTML=
 
 
 
-
-// START BUTTON AUF PROFI-SPIEL UMSTELLEN
-
-
-document.querySelector(".start").onclick=
-
-startProfiSpiel;
-     // =====================================
-// SAISON SYSTEM
-// =====================================
+function resetSimulation(){
 
 
-let saison={
+clearInterval(timer);
 
-spieltag:1,
+running=false;
 
-jahr:2026,
+homeGoals=0;
 
-aktiv:false
+awayGoals=0;
 
-};
+score.innerHTML="0 : 0";
 
+minute.innerHTML="0'";
 
-
-let tabelle=[];
-
-
-
-
-
-
-
-function erstelleLiga(){
-
-
-
-tabelle=[];
-
-
-
-Object.keys(teams).forEach(function(t){
-
-
-
-tabelle.push({
-
-
-id:t,
-
-name:teams[t].short,
-
-punkte:0,
-
-spiele:0,
-
-siege:0,
-
-remis:0,
-
-niederlagen:0,
-
-tore:0,
-
-gegentore:0
-
-
-});
-
-
-
-});
-
+events.innerHTML="";
 
 
 }
@@ -3237,607 +1280,43 @@ gegentore:0
 
 
 
+function updateInfo(){
 
 
-function findeTeam(id){
+let h=teams[homeSelect.value];
 
+let a=teams[awaySelect.value];
 
 
-return tabelle.find(
-
-x=>x.id==id
-
-);
-
-
-
-}
-
-
-
-
-
-
-
-
-function verbucheErgebnis(
-
-heim,
-
-gast,
-
-hTore,
-
-gTore
-
-){
-
-
-
-let h=
-
-findeTeam(heim);
-
-
-
-let g=
-
-findeTeam(gast);
-
-
-
-
-h.spiele++;
-
-g.spiele++;
-
-
-h.tore+=hTore;
-
-g.tore+=gTore;
-
-
-h.gegentore+=gTore;
-
-g.gegentore+=hTore;
-
-
-
-
-
-
-if(hTore>gTore){
-
-
-h.punkte+=3;
-
-h.siege++;
-
-
-g.niederlagen++;
-
-
-}
-
-
-else if(gTore>hTore){
-
-
-g.punkte+=3;
-
-g.siege++;
-
-
-h.niederlagen++;
-
-
-}
-
-
-else{
-
-
-h.punkte++;
-
-g.punkte++;
-
-
-h.remis++;
-
-g.remis++;
-
-
-}
-
-
-
-}
-
-
-
-
-
-
-
-
-
-function sortiereTabelle(){
-
-
-
-tabelle.sort(function(a,b){
-
-
-
-if(
-b.punkte!=a.punkte
-)
-
-return b.punkte-a.punkte;
-
-
-
-return
-
-(b.tore-b.gegentore)
-
--
-
-(a.tore-a.gegentore);
-
-
-
-});
-
-
-
-}
-
-
-
-
-
-
-
-
-
-function zeigeLigatabelle(){
-
-
-
-sortiereTabelle();
-
-
-
-let html=
+homeInfo.innerHTML=
 
 `
-
-<h2>
-🏆 Bundesliga Tabelle
-</h2>
-
-
-<table width="100%">
-
-
-<tr>
-
-<th>
-Platz
-</th>
-
-<th>
-Team
-</th>
-
-<th>
-Sp
-</th>
-
-<th>
-Punkte
-</th>
-
-<th>
-Tore
-</th>
-
-</tr>
-
-
+🏟 ${h.stadium}<br>
+👥 ${h.fans}<br>
+Stärke ${h.strength}<br>
+Angriff ${h.attack}<br>
+Defensive ${h.defense}
 `;
 
 
 
-
-tabelle.forEach(function(t,index){
-
-
-
-html+=
-
+awayInfo.innerHTML=
 
 `
-
-<tr>
-
-<td>
-${index+1}
-</td>
-
-
-<td>
-${t.name}
-</td>
-
-
-<td>
-${t.spiele}
-</td>
-
-
-<td>
-${t.punkte}
-</td>
-
-
-<td>
-${t.tore}:${t.gegentore}
-</td>
-
-
-</tr>
-
-
+🏟 ${a.stadium}<br>
+👥 ${a.fans}<br>
+Stärke ${a.strength}<br>
+Angriff ${a.attack}<br>
+Defensive ${a.defense}
 `;
 
-
-
-});
-
-
-
-html+="</table>";
-
-
-
-
-
-let box=document.getElementById(
-"ligaAnzeige"
-);
-
-
-
-if(!box){
-
-
-box=document.createElement("div");
-
-
-box.id="ligaAnzeige";
-
-
-box.className="box";
-
-
-document.body.appendChild(box);
-
-
-
 }
 
 
+homeSelect.onchange=updateInfo;
 
-box.innerHTML=html;
+awaySelect.onchange=updateInfo;
 
 
 
-}
-
-
-
-
-
-
-
-
-
-// =====================================
-// SAISON SPIELTAG
-// =====================================
-
-
-function spieleSpieltag(){
-
-
-
-let clubs=
-
-Object.keys(teams);
-
-
-
-clubs.sort(()=>Math.random()-0.5);
-
-
-
-
-for(
-let i=0;
-i<clubs.length;
-i+=2
-){
-
-
-
-let h=clubs[i];
-
-let g=clubs[i+1];
-
-
-
-let ergebnis=
-
-berechneDrueckKick(
-h,
-g
-);
-
-
-
-verbucheErgebnis(
-
-h,
-
-g,
-
-ergebnis.heimTore,
-
-ergebnis.gastTore
-
-);
-
-
-
-}
-
-
-
-saison.spieltag++;
-
-
-
-zeigeLigatabelle();
-
-
-
-speichern();
-
-
-
-}
-
-
-
-
-
-
-
-
-
-
-function neueSaison(){
-
-
-
-erstelleLiga();
-
-
-saison.spieltag=1;
-
-
-saison.aktiv=true;
-
-
-zeigeLigatabelle();
-
-
-
-alert(
-"⚽ Neue Bundesliga Saison gestartet"
-);
-
-
-
-}
-
-
-
-
-
-
-
-
-
-// =====================================
-// SPEICHERN
-// =====================================
-
-
-function speichern(){
-
-
-
-let daten={
-
-
-
-teams:teams,
-
-
-tabelle:tabelle,
-
-
-saison:saison
-
-
-
-};
-
-
-
-localStorage.setItem(
-
-"BundesligaManager",
-
-JSON.stringify(daten)
-
-);
-
-
-
-}
-
-
-
-
-
-
-
-
-
-function laden(){
-
-
-
-let daten=
-
-localStorage.getItem(
-"BundesligaManager"
-);
-
-
-
-if(!daten)
-
-return;
-
-
-
-daten=
-
-JSON.parse(daten);
-
-
-
-Object.assign(
-teams,
-daten.teams
-);
-
-
-
-tabelle=daten.tabelle;
-
-
-saison=daten.saison;
-
-
-
-zeigeLigatabelle();
-
-
-
-alert(
-"💾 Spielstand geladen"
-);
-
-
-
-}
-
-
-
-
-
-
-
-
-
-
-// =====================================
-// MANAGER MENÜ
-// =====================================
-
-
-
-function erstelleManagerMenu(){
-
-
-
-let box=document.createElement("div");
-
-box.className="box";
-
-
-
-box.innerHTML=
-
-`
-
-<h2>
-👔 Manager Menü
-</h2>
-
-
-<button onclick="neueSaison()">
-
-Neue Saison
-
-</button>
-
-
-
-<button onclick="spieleSpieltag()">
-
-Spieltag simulieren
-
-</button>
-
-
-<button onclick="speichern()">
-
-Speichern
-
-</button>
-
-
-<button onclick="laden()">
-
-Laden
-
-</button>
-
-
-`;
-
-
-
-document.body.appendChild(box);
-
-
-
-}
-
-
-
-erstelleManagerMenu();
-
-</script>
-
-
-</body>
-
-</html>
+window.onload=loadTeams;
