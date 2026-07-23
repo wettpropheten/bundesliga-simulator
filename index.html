@@ -1014,20 +1014,19 @@ high:15
 };
 
 
-// gespeicherte Mannschaftsdaten laden
+/ gespeicherte Mannschaftsdaten laden
 
 Object.keys(teams).forEach(name=>{
 
-let saved = localStorage.getItem("team_"+name);
+    let saved = localStorage.getItem("team_"+name);
 
-if(saved){
+    if(saved){
 
-teams[name] = JSON.parse(saved);
+        teams[name] = JSON.parse(saved);
 
-}
+    }
 
 });
-
 
 };
 // =======================================
