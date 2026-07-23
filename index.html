@@ -1889,33 +1889,20 @@ startSimulation();
 
 function resetSimulation(){
 
+    clearInterval(timer);
 
+    timer = null;
 
-clearInterval(timer);
-
-
-
-timer=null;
-
-
-
-resetGame();
-
-
+    resetGame();
 
 }
-<script>
-
-// HIER stehen Teil 1 bis Teil 7
 
 
-// letzter Start
+// erster Start
 updateMatch();
-
+createCards();
 
 </script>
 
-
 </body>
-
 </html>
