@@ -1,75 +1,241 @@
-// ======================================
-// BUNDESLIGA MANAGER PRO 7.0
-// SPIELER SYSTEM
-// TEIL 1/6
-// ======================================
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>
+Bundesliga Manager PRO 7.0 3D
+</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
 
 
-let players={
+<body>
 
 
+<div class="stadium">
+
+
+<header>
+
+<h1>
+🏆 Bundesliga Manager PRO 7.0
+</h1>
+
+<p>
+3D Football Management Simulation
+</p>
+
+</header>
+
+
+
+<section class="dashboard">
+
+
+<div class="panel">
+
+<h2>
+Vereine
+</h2>
+
+
+<div id="clubList"></div>
+
+
+</div>
+
+
+
+<div class="panel">
+
+
+<h2>
+Kader
+</h2>
+
+
+<div id="squad">
+
+Bitte Verein wählen
+
+</div>
+
+
+</div>
+
+
+
+</section>
+
+
+
+</div>
+
+
+<script src="clubs.js"></script>
+<script src="players.js"></script>
+<script src="storage.js"></script>
+<script src="main.js"></script>
+
+
+const CLUBS = {
+
+
+"Bayern München":{
+
+short:"FCB",
+
+budget:150,
+
+attack:92,
+
+defense:86,
+
+stadium:"Allianz Arena"
+
+},
+
+
+"Bayer Leverkusen":{
+
+short:"B04",
+
+budget:90,
+
+attack:88,
+
+defense:85,
+
+stadium:"BayArena"
+
+},
+
+
+"Borussia Dortmund":{
+
+short:"BVB",
+
+budget:85,
+
+attack:86,
+
+defense:82,
+
+stadium:"Signal Iduna Park"
+
+},
+
+
+"RB Leipzig":{
+
+short:"RBL",
+
+budget:70,
+
+attack:84,
+
+defense:83,
+
+stadium:"Red Bull Arena"
+
+}
+
+
+
+};
+const PLAYERS = {
 
 
 "Bayern München":[
 
 
 {
+id:1,
+
 name:"Manuel Neuer",
-pos:"TW",
+
+position:"TW",
+
 rating:88,
+
+age:39,
+
 value:8000000,
+
 fitness:95,
-form:90,
-injury:false
+
+form:90
+
 },
 
 
 {
+id:2,
+
 name:"Joshua Kimmich",
-pos:"DM",
+
+position:"DM",
+
 rating:87,
+
+age:30,
+
 value:50000000,
+
 fitness:92,
-form:86,
-injury:false
+
+form:86
+
 },
 
 
 {
+id:3,
+
 name:"Jamal Musiala",
-pos:"OM",
+
+position:"OM",
+
 rating:90,
+
+age:22,
+
 value:120000000,
+
 fitness:96,
-form:92,
-injury:false
+
+form:92
+
 },
 
 
 {
+id:4,
+
 name:"Harry Kane",
-pos:"ST",
+
+position:"ST",
+
 rating:91,
+
+age:32,
+
 value:100000000,
+
 fitness:94,
-form:93,
-injury:false
-},
 
+form:93
 
-{
-name:"Leroy Sané",
-pos:"FL",
-rating:84,
-value:45000000,
-fitness:90,
-form:82,
-injury:false
 }
 
 
 ],
-
 
 
 
@@ -78,52 +244,48 @@ injury:false
 
 
 {
-name:"Lukas Hradecky",
-pos:"TW",
-rating:82,
-value:6000000,
-fitness:95,
-form:84,
-injury:false
-},
 
+id:5,
 
-{
 name:"Florian Wirtz",
-pos:"OM",
+
+position:"OM",
+
 rating:91,
+
+age:22,
+
 value:130000000,
+
 fitness:97,
-form:94,
-injury:false
+
+form:94
+
 },
 
 
 {
+
+id:6,
+
 name:"Granit Xhaka",
-pos:"DM",
+
+position:"DM",
+
 rating:83,
+
+age:32,
+
 value:15000000,
+
 fitness:90,
-form:85,
-injury:false
-},
 
+form:85
 
-{
-name:"Victor Boniface",
-pos:"ST",
-rating:82,
-value:40000000,
-fitness:88,
-form:80,
-injury:false
 }
 
 
 ],
-
-
 
 
 
@@ -132,46 +294,44 @@ injury:false
 
 
 {
+
+id:7,
+
 name:"Gregor Kobel",
-pos:"TW",
+
+position:"TW",
+
 rating:85,
+
+age:27,
+
 value:35000000,
+
 fitness:94,
-form:86,
-injury:false
+
+form:86
+
 },
 
 
 {
-name:"Julian Brandt",
-pos:"OM",
-rating:82,
-value:25000000,
-fitness:91,
-form:82,
-injury:false
-},
 
+id:8,
 
-{
-name:"Serhou Guirassy",
-pos:"ST",
-rating:84,
-value:18000000,
-fitness:90,
-form:86,
-injury:false
-},
-
-
-{
 name:"Nico Schlotterbeck",
-pos:"IV",
+
+position:"IV",
+
 rating:83,
+
+age:25,
+
 value:40000000,
+
 fitness:95,
-form:84,
-injury:false
+
+form:84
+
 }
 
 
@@ -179,43 +339,29 @@ injury:false
 
 
 
-
-
-
 "RB Leipzig":[
 
 
 {
-name:"Benjamin Sesko",
-pos:"ST",
-rating:80,
-value:50000000,
-fitness:92,
-form:82,
-injury:false
-},
 
+id:9,
 
-{
-name:"David Raum",
-pos:"LV",
-rating:80,
-value:25000000,
-fitness:90,
-form:80,
-injury:false
-},
-
-
-{
 name:"Xavi Simons",
-pos:"OM",
+
+position:"OM",
+
 rating:84,
+
+age:22,
+
 value:70000000,
+
 fitness:95,
-form:88,
-injury:false
+
+form:88
+
 }
+
 
 
 ]
@@ -223,25 +369,157 @@ injury:false
 
 
 };
-
-// ======================================
-// SPIELER SYSTEM
-// KADER EDITOR
-// TEIL 2/6
-// ======================================
+const SAVE_KEY =
+"BM_PRO_7_SAVE";
 
 
 
-let selectedClub=null;
+function saveGame(){
+
+
+const data={
+
+
+players:PLAYERS,
+
+
+date:new Date()
+
+};
+
+
+localStorage.setItem(
+
+SAVE_KEY,
+
+JSON.stringify(data)
+
+);
+
+
+}
 
 
 
+function loadGame(){
+
+
+let save=
+
+localStorage.getItem(
+
+SAVE_KEY
+
+);
 
 
 
-// ======================================
-// KADER ÖFFNEN
-// ======================================
+if(!save)
+
+return;
+
+
+
+let data=
+
+JSON.parse(save);
+
+
+
+if(data.players)
+
+{
+
+Object.assign(
+
+PLAYERS,
+
+data.players
+
+);
+
+}
+
+
+
+}
+  let selectedClub=null;
+
+
+
+function startGame(){
+
+
+loadGame();
+
+
+createClubButtons();
+
+
+}
+
+
+
+function createClubButtons(){
+
+
+let box=
+
+document.getElementById(
+"clubList"
+);
+
+
+
+box.innerHTML="";
+
+
+
+Object.keys(CLUBS)
+
+.forEach(club=>{
+
+
+let button=
+
+document.createElement(
+"button"
+);
+
+
+
+button.className=
+
+"clubButton";
+
+
+button.innerHTML=
+
+CLUBS[club].short+
+"<br>"+
+club;
+
+
+
+button.onclick=()=>{
+
+openSquad(club);
+
+};
+
+
+
+box.appendChild(button);
+
+
+
+});
+
+
+}
+
+
+
 
 
 function openSquad(club){
@@ -250,428 +528,75 @@ function openSquad(club){
 selectedClub=club;
 
 
-renderSquad();
-
-
-}
-
-
-
-
-
-
-
-// ======================================
-// SPIELER ANZEIGEN
-// ======================================
-
-
-function renderSquad(){
-
-
 let box=
 
 document.getElementById(
-
-"squadBox"
-
+"squad"
 );
 
-
-
-if(!box)
-
-return;
-
-
-
-box.innerHTML="";
-
-
-
-if(!players[selectedClub]){
 
 
 box.innerHTML=
 
-"Kein Kader vorhanden";
+`<h3>${club}</h3>`;
 
 
-return;
-
-}
-
-
+PLAYERS[club].forEach(player=>{
 
 
 box.innerHTML+=`
 
-<h2>
-
-${selectedClub}
-
-Kader
-
-</h2>
-
-`;
-
-
-
-
-
-players[selectedClub].forEach((p,index)=>{
-
-
-
-box.innerHTML+=`
 
 <div class="playerCard">
 
 
 <h3>
 
-${p.name}
+${player.name}
 
 </h3>
 
+
+<p>
+
+⭐ Stärke:
+${player.rating}
+
+</p>
 
 
 <p>
 
 Position:
-
-${p.pos}
+${player.position}
 
 </p>
 
 
 <p>
 
-Gesamt:
-
-⭐ ${p.rating}
-
-</p>
-
-
-
-<p>
-
-Marktwert:
-
-💰 ${(p.value/1000000).toFixed(1)}
-
+💰 Wert:
+${player.value/1000000}
 Mio.
 
 </p>
 
 
-<p>
+<div class="bar">
+
+<div style="width:${player.fitness}%">
+
+</div>
+
+</div>
+
 
 Fitness:
-
-${p.fitness}%
-
-</p>
-
-
-
-<p>
-
-Form:
-
-${p.form}
-
-</p>
-
-
-
-<p>
-
-${p.injury ? "🚑 verletzt":"✅ fit"}
-
-</p>
-
-
-
-<button onclick="editPlayer('${selectedClub}',${index})">
-
-Bearbeiten
-
-</button>
+${player.fitness}%
 
 
 </div>
 
-`;
-
-
-
-});
-
-
-
-}
-
-
-
-
-
-
-
-
-
-
-// ======================================
-// SPIELER BEARBEITEN
-// ======================================
-
-
-
-function editPlayer(club,index){
-
-
-
-let p=
-
-players[club][index];
-
-
-
-
-
-let rating=
-
-prompt(
-
-"Spielerstärke 1-99",
-
-p.rating
-
-);
-
-
-
-if(rating!==null)
-
-p.rating=
-
-Number(rating);
-
-
-
-
-
-
-let pos=
-
-prompt(
-
-"Position",
-
-p.pos
-
-);
-
-
-
-if(pos!==null)
-
-p.pos=pos;
-
-
-
-
-
-
-
-let value=
-
-prompt(
-
-"Marktwert",
-
-p.value
-
-);
-
-
-
-if(value!==null)
-
-p.value=
-
-Number(value);
-
-
-
-
-
-
-
-let fitness=
-
-prompt(
-
-"Fitness 0-100",
-
-p.fitness
-
-);
-
-
-
-if(fitness!==null)
-
-p.fitness=
-
-Number(fitness);
-
-
-
-
-
-
-
-let injury=
-
-confirm(
-
-"Spieler verletzt?"
-
-);
-
-
-
-p.injury=injury;
-
-
-
-
-
-
-
-savePlayers();
-
-
-renderSquad();
-
-
-
-}
-
-
-
-
-
-
-
-
-
-// ======================================
-// SPEICHERN
-// ======================================
-
-
-
-function savePlayers(){
-
-
-
-localStorage.setItem(
-
-"bmpro7_players",
-
-JSON.stringify(players)
-
-);
-
-
-
-}
-
-
-
-
-
-
-
-
-function loadPlayers(){
-
-
-
-let data=
-
-localStorage.getItem(
-
-"bmpro7_players"
-
-);
-
-
-
-if(data)
-
-players=
-
-JSON.parse(data);
-
-
-
-}
-
-
-
-
-
-
-
-
-
-// ======================================
-// SPIELER BUTTONS ERZEUGEN
-// ======================================
-
-
-function createSquadButtons(){
-
-
-
-let box=
-
-document.getElementById(
-
-"squadButtons"
-
-);
-
-
-
-if(!box)
-
-return;
-
-
-
-box.innerHTML="";
-
-
-
-
-Object.keys(players).forEach(club=>{
-
-
-box.innerHTML+=`
-
-<button onclick="openSquad('${club}')">
-
-${teams[club]?.short || club}
-
-Kader
-
-</button>
 
 `;
 
@@ -684,242 +609,113 @@ Kader
 
 
 
+window.onload=startGame;
+  *{
+
+box-sizing:border-box;
+
+font-family:
+Arial,Helvetica,sans-serif;
+
+}
 
 
 
+body{
 
 
-window.addEventListener(
+margin:0;
 
-"load",
+background:
 
-()=>{
+radial-gradient(
+circle,
+#334155,
+#020617
+);
 
 
-loadPlayers();
+color:white;
 
-
-createSquadButtons();
-
+min-height:100vh;
 
 
 }
 
-);
 
-// ======================================
-// AUFSTELLUNG & TAKTIK
-// TEIL 3/6
-// ======================================
 
+.stadium{
 
-let tactics={};
 
+padding:30px;
 
+}
 
-Object.keys(teams).forEach(club=>{
 
 
-tactics[club]={
+header{
 
 
-formation:"4-3-3",
+text-align:center;
 
+background:
 
-style:"Ausgeglichen",
+rgba(255,255,255,.08);
 
 
-lineup:[]
+padding:30px;
 
+border-radius:25px;
 
-};
 
+backdrop-filter:blur(15px);
 
-});
 
+box-shadow:
 
+0 20px 50px black;
 
 
+}
 
 
 
+.dashboard{
 
 
-// ======================================
-// FORMATIONEN
-// ======================================
+display:grid;
 
+grid-template-columns:
 
-let formations={
+1fr 2fr;
 
 
+gap:30px;
 
-"4-3-3":[
+margin-top:30px;
 
-"TW",
 
-"LV",
+}
 
-"IV",
 
-"IV",
 
-"RV",
+.panel{
 
-"ZM",
 
-"ZM",
+background:
 
-"OM",
+rgba(15,23,42,.85);
 
-"LF",
 
-"ST",
+padding:25px;
 
-"RF"
 
-],
+border-radius:25px;
 
 
+box-shadow:
 
-
-"4-2-3-1":[
-
-"TW",
-
-"LV",
-
-"IV",
-
-"IV",
-
-"RV",
-
-"DM",
-
-"DM",
-
-"LM",
-
-"OM",
-
-"RM",
-
-"ST"
-
-],
-
-
-
-
-"3-5-2":[
-
-"TW",
-
-"IV",
-
-"IV",
-
-"IV",
-
-"LM",
-
-"DM",
-
-"ZM",
-
-"ZM",
-
-"RM",
-
-"ST",
-
-"ST"
-
-]
-
-
-
-};
-
-
-
-
-
-
-
-
-
-// ======================================
-// BESTE ELF BERECHNEN
-// ======================================
-
-
-
-function calculateLineup(club){
-
-
-
-if(!players[club])
-
-return [];
-
-
-
-
-let squad=
-
-players[club].filter(
-
-p=>!p.injury
-
-);
-
-
-
-
-
-let formation=
-
-formations[
-
-tactics[club].formation
-
-];
-
-
-
-
-
-let lineup=[];
-
-
-
-
-
-formation.forEach(position=>{
-
-
-
-let candidates=
-
-squad.filter(
-
-p=>
-
-p.pos==position
-
-);
-
-
-
-
-
-if(candidates.length==0){
-
-
-
-candidates=squad;
+10px 20px 40px black;
 
 
 }
@@ -927,2368 +723,153 @@ candidates=squad;
 
 
 
+.clubButton{
 
 
-candidates.sort(
+width:100%;
 
-(a,b)=>
+padding:20px;
 
-
-(
-
-b.rating
-
-+
-
-b.form/5
-
-+
-
-b.fitness/5
-
-)
-
--
-
-(
-
-a.rating
-
-+
-
-a.form/5
-
-+
-
-a.fitness/5
-
-)
+margin:10px 0;
 
 
+border:none;
+
+
+border-radius:20px;
+
+
+background:
+
+linear-gradient(
+145deg,
+#2563eb,
+#1e40af
 );
 
 
+color:white;
+
+font-size:18px;
+
+
+cursor:pointer;
+
+
+transform:
+
+perspective(500px)
+rotateX(5deg);
+
+
+transition:.3s;
+
+
+}
+
+
+
+.clubButton:hover{
+
+
+transform:
+
+translateY(-10px)
+scale(1.05);
+
+
+}
 
 
 
 
-let player=candidates[0];
+.playerCard{
+
+
+background:
+
+linear-gradient(
+145deg,
+#1e293b,
+#020617
+);
+
+
+padding:20px;
+
+
+margin:15px 0;
+
+
+border-radius:25px;
+
+
+box-shadow:
+
+8px 12px 30px black;
+
+
+transform:
+
+perspective(600px)
+rotateY(-5deg);
+
+
+transition:.3s;
+
+
+}
 
 
 
+.playerCard:hover{
 
 
-if(player){
+transform:
+
+rotateY(0)
+translateY(-10px);
+
+
+}
 
 
 
-lineup.push(player);
+.bar{
+
+
+height:10px;
+
+background:#111;
+
+border-radius:10px;
+
+
+overflow:hidden;
+
+
+}
 
 
 
-squad=squad.filter(
+.bar div{
 
-x=>x!==player
 
+height:100%;
+
+
+background:
+
+linear-gradient(
+90deg,
+lime,
+green
 );
 
 
 }
+</body>
 
 
 
-});
-
-
-
-
-
-tactics[club].lineup=lineup;
-
-
-
-return lineup;
-
-
-
-}
-
-
-
-
-
-
-
-
-
-// ======================================
-// TAKTIK BONUS
-// ======================================
-
-
-
-function tacticalBonus(club){
-
-
-
-let bonus={
-
-
-
-attack:0,
-
-defense:0
-
-
-
-};
-
-
-
-
-
-let tactic=
-
-tactics[club];
-
-
-
-
-
-if(tactic.style=="Offensiv"){
-
-
-bonus.attack+=5;
-
-bonus.defense-=3;
-
-
-}
-
-
-
-
-
-if(tactic.style=="Defensiv"){
-
-
-bonus.defense+=5;
-
-bonus.attack-=3;
-
-
-}
-
-
-
-
-
-if(tactic.style=="Pressing"){
-
-
-bonus.attack+=3;
-
-bonus.defense+=1;
-
-
-}
-
-
-
-
-
-return bonus;
-
-
-
-}
-
-
-
-
-
-
-
-
-
-// ======================================
-// TAKTIK EDITOR
-// ======================================
-
-
-
-function changeTactic(club){
-
-
-
-let formation=
-
-prompt(
-
-"Formation wählen:\n4-3-3\n4-2-3-1\n3-5-2",
-
-tactics[club].formation
-
-);
-
-
-
-if(
-
-formations[formation]
-
-){
-
-
-tactics[club].formation=
-
-formation;
-
-
-}
-
-
-
-
-
-let style=
-
-prompt(
-
-"Spielstil:\nOffensiv\nAusgeglichen\nDefensiv\nPressing",
-
-tactics[club].style
-
-);
-
-
-
-if(style)
-
-tactics[club].style=style;
-
-
-
-
-
-
-calculateLineup(club);
-
-
-saveTactics();
-
-
-
-}
-
-
-
-
-
-
-
-
-
-// ======================================
-// SPEICHERN
-// ======================================
-
-
-
-function saveTactics(){
-
-
-
-localStorage.setItem(
-
-"bmpro7_tactics",
-
-JSON.stringify(tactics)
-
-);
-
-
-}
-
-
-
-
-
-function loadTactics(){
-
-
-
-let data=
-
-localStorage.getItem(
-
-"bmpro7_tactics"
-
-);
-
-
-
-if(data)
-
-tactics=
-
-JSON.parse(data);
-
-
-
-}
-
-
-
-
-
-
-window.addEventListener(
-
-"load",
-
-()=>{
-
-
-loadTactics();
-
-
-
-Object.keys(teams).forEach(
-
-club=>{
-
-
-calculateLineup(club);
-
-
-}
-
-);
-
-
-}
-
-);
-
-// ======================================
-// MATCH ENGINE 2.0
-// TEIL 4/6
-// ======================================
-
-
-
-
-function calculateTeamStrength(club){
-
-
-
-let lineup=
-
-calculateLineup(club);
-
-
-
-if(lineup.length==0)
-
-return {
-
-attack:50,
-
-defense:50
-
-};
-
-
-
-let attack=0;
-
-let defense=0;
-
-
-
-
-
-lineup.forEach(player=>{
-
-
-
-let value=
-
-player.rating
-
-+
-
-(player.form/10)
-
-+
-
-(player.fitness/10);
-
-
-
-
-
-if(
-
-player.pos=="ST"
-
-||
-
-player.pos=="LF"
-
-||
-
-player.pos=="RF"
-
-||
-
-player.pos=="OM"
-
-){
-
-
-attack+=value;
-
-
-}
-
-
-
-
-
-if(
-
-player.pos=="TW"
-
-||
-
-player.pos=="IV"
-
-||
-
-player.pos=="LV"
-
-||
-
-player.pos=="RV"
-
-){
-
-
-defense+=value;
-
-
-}
-
-
-
-});
-
-
-
-
-
-
-let bonus=
-
-tacticalBonus(club);
-
-
-
-
-
-return {
-
-
-
-attack:
-
-attack/5
-
-+
-
-bonus.attack,
-
-
-
-defense:
-
-defense/5
-
-+
-
-bonus.defense
-
-
-
-};
-
-
-
-}
-
-
-
-
-
-
-
-
-
-
-// ======================================
-// ERWEITERTE WAHRSCHEINLICHKEIT
-// ======================================
-
-
-
-function advancedPrediction(){
-
-
-
-let homeClub=
-
-document.getElementById(
-"homeSelect"
-).value;
-
-
-
-let awayClub=
-
-document.getElementById(
-"awaySelect"
-).value;
-
-
-
-
-
-let home=
-
-calculateTeamStrength(homeClub);
-
-
-
-let away=
-
-calculateTeamStrength(awayClub);
-
-
-
-
-
-let homePower=
-
-home.attack
-
-+
-
-home.defense*0.5
-
-+
-
-teams[homeClub].homeStrength*10;
-
-
-
-
-let awayPower=
-
-away.attack
-
-+
-
-away.defense*0.5;
-
-
-
-
-
-let difference=
-
-homePower-awayPower;
-
-
-
-
-
-let homeChance=
-
-50+(difference*0.6);
-
-
-
-if(homeChance>80)
-
-homeChance=80;
-
-
-
-if(homeChance<10)
-
-homeChance=10;
-
-
-
-
-
-
-let draw=
-
-25-Math.abs(difference)*0.2;
-
-
-
-if(draw<10)
-
-draw=10;
-
-
-
-if(draw>30)
-
-draw=30;
-
-
-
-
-
-
-let awayChance=
-
-100-homeChance-draw;
-
-
-
-
-
-
-document.getElementById(
-
-"homeChance"
-
-).innerHTML=
-
-Math.round(homeChance)+"%";
-
-
-
-document.getElementById(
-
-"drawChance"
-
-).innerHTML=
-
-Math.round(draw)+"%";
-
-
-
-document.getElementById(
-
-"awayChance"
-
-).innerHTML=
-
-Math.round(awayChance)+"%";
-
-
-
-
-
-return{
-
-home:homeChance,
-
-draw:draw,
-
-away:awayChance
-
-};
-
-
-
-}
-
-
-
-
-
-
-
-
-
-// ======================================
-// SPIELEREIGNISSE
-// ======================================
-
-
-
-function playerGoal(club){
-
-
-
-let lineup=
-
-calculateLineup(club);
-
-
-
-let attackers=
-
-lineup.filter(
-
-p=>
-
-p.pos=="ST"
-
-||
-
-p.pos=="LF"
-
-||
-
-p.pos=="RF"
-
-||
-
-p.pos=="OM"
-
-);
-
-
-
-
-
-if(attackers.length==0)
-
-return club;
-
-
-
-attackers.sort(
-
-(a,b)=>
-
-b.rating-a.rating
-
-);
-
-
-
-
-
-return attackers[0].name;
-
-
-
-}
-
-
-
-
-
-
-
-
-
-// ======================================
-// REALISTISCHE MINUTE
-// ======================================
-
-
-
-function simulateMinuteV2(){
-
-
-
-match.minute++;
-
-
-
-document.getElementById(
-
-"clock"
-
-).innerHTML=
-
-match.minute+"'";
-
-
-
-
-
-let home=
-
-calculateTeamStrength(match.home);
-
-
-
-let away=
-
-calculateTeamStrength(match.away);
-
-
-
-
-
-
-let homeChance=
-
-(home.attack/1000)
-
-*
-
-(teams[match.home].xg);
-
-
-
-let awayChance=
-
-(away.attack/1000)
-
-*
-
-(teams[match.away].xg);
-
-
-
-
-
-// Fitness Einfluss
-
-
-homeChance*=
-
-teams[match.home]
-
-?
-
-1
-
-:
-
-0.8;
-
-
-
-awayChance*=
-
-1;
-
-
-
-
-
-
-// Heimaktion
-
-
-
-if(Math.random()<homeChance){
-
-
-
-match.homeShots++;
-
-
-
-match.homeXG+=0.10;
-
-
-
-if(Math.random()<0.30){
-
-
-
-match.homeGoals++;
-
-
-
-let scorer=
-
-playerGoal(match.home);
-
-
-
-addTicker(
-
-match.minute+
-
-"' ⚽ "
-
-+
-
-scorer
-
-+
-
-" trifft!"
-
-);
-
-
-
-document.getElementById(
-
-"homeScore"
-
-).innerHTML=
-
-match.homeGoals;
-
-
-
-}
-
-
-}
-
-
-
-
-
-
-
-
-// Gastaktion
-
-
-if(Math.random()<awayChance){
-
-
-
-match.awayShots++;
-
-
-
-match.awayXG+=0.10;
-
-
-
-if(Math.random()<0.30){
-
-
-
-match.awayGoals++;
-
-
-
-let scorer=
-
-playerGoal(match.away);
-
-
-
-addTicker(
-
-match.minute+
-
-"' ⚽ "
-
-+
-
-scorer
-
-+
-
-" trifft!"
-
-);
-
-
-
-document.getElementById(
-
-"awayScore"
-
-).innerHTML=
-
-match.awayGoals;
-
-
-
-}
-
-
-}
-
-
-
-
-
-
-
-updateLiveStats();
-
-
-
-
-
-
-
-if(match.minute>=90){
-
-
-
-endMatch();
-
-
-
-saveMatchResult();
-
-
-
-}
-
-
-
-}
-
-// ======================================
-// TRANSFERSYSTEM
-// TEIL 5/6
-// ======================================
-
-
-
-let transferMarket=[];
-
-
-
-let clubBudget={};
-
-
-
-
-
-
-
-// ======================================
-// BUDGET ERSTELLEN
-// ======================================
-
-
-
-function createBudgets(){
-
-
-
-Object.keys(teams).forEach(club=>{
-
-
-clubBudget[club]=teams[club].budget*1000000;
-
-
-});
-
-
-}
-
-
-
-
-
-
-
-
-
-// ======================================
-// TRANSFERMARKT ERSTELLEN
-// ======================================
-
-
-
-function createTransferMarket(){
-
-
-
-transferMarket=[
-
-
-{
-name:"Luca Talent",
-pos:"ST",
-rating:72,
-value:8000000,
-age:19
-},
-
-
-{
-name:"Marco Silva",
-pos:"OM",
-rating:76,
-value:15000000,
-age:21
-},
-
-
-{
-name:"Jonas Becker",
-pos:"IV",
-rating:74,
-value:10000000,
-age:20
-},
-
-
-{
-name:"Alex Moreno",
-pos:"TW",
-rating:78,
-value:18000000,
-age:22
-}
-
-
-
-];
-
-
-
-}
-
-
-
-
-
-
-
-
-
-// ======================================
-// TRANSFERMARKT ANZEIGEN
-// ======================================
-
-
-function showTransferMarket(){
-
-
-
-let box=
-
-document.getElementById(
-
-"transferBox"
-
-);
-
-
-
-if(!box)
-
-return;
-
-
-
-box.innerHTML="";
-
-
-
-
-
-transferMarket.forEach((p,index)=>{
-
-
-box.innerHTML+=`
-
-<div class="playerCard">
-
-
-<h3>
-
-${p.name}
-
-</h3>
-
-
-
-<p>
-
-Position:
-
-${p.pos}
-
-</p>
-
-
-<p>
-
-Stärke:
-
-⭐ ${p.rating}
-
-</p>
-
-
-<p>
-
-Alter:
-
-${p.age}
-
-</p>
-
-
-<p>
-
-Wert:
-
-💰 ${p.value/1000000}
-
-Mio.
-
-</p>
-
-
-
-<button onclick="buyPlayer(${index})">
-
-Kaufen
-
-</button>
-
-
-</div>
-
-`;
-
-
-
-});
-
-
-
-}
-
-
-
-
-
-
-
-
-
-// ======================================
-// SPIELER KAUFEN
-// ======================================
-
-
-
-function buyPlayer(index){
-
-
-
-let buyer=
-
-prompt(
-
-"Welcher Verein kauft den Spieler?"
-
-);
-
-
-
-if(!players[buyer])
-
-return alert(
-
-"Verein nicht gefunden"
-
-);
-
-
-
-let p=
-
-transferMarket[index];
-
-
-
-
-
-if(
-
-clubBudget[buyer]
-
-<
-
-p.value
-
-){
-
-
-return alert(
-
-"Nicht genug Budget"
-
-);
-
-
-}
-
-
-
-
-
-
-clubBudget[buyer]-=
-
-p.value;
-
-
-
-
-
-
-players[buyer].push({
-
-
-name:p.name,
-
-pos:p.pos,
-
-rating:p.rating,
-
-value:p.value,
-
-fitness:100,
-
-form:75,
-
-injury:false
-
-
-});
-
-
-
-
-
-transferMarket.splice(
-
-index,
-
-1
-
-);
-
-
-
-
-
-
-savePlayers();
-
-
-
-showTransferMarket();
-
-
-
-}
-
-
-
-
-
-
-
-
-
-
-// ======================================
-// SPIELER VERKAUFEN
-// ======================================
-
-
-
-function sellPlayer(club,index){
-
-
-
-let player=
-
-players[club][index];
-
-
-
-
-
-let price=
-
-player.value*0.8;
-
-
-
-
-
-clubBudget[club]+=price;
-
-
-
-
-
-players[club].splice(
-
-index,
-
-1
-
-);
-
-
-
-
-
-
-savePlayers();
-
-
-
-renderSquad();
-
-
-
-}
-
-
-
-
-
-
-
-
-
-
-// ======================================
-// SCOUTING
-// ======================================
-
-
-
-function scouting(club){
-
-
-
-let positions=[
-
-"ST",
-
-"OM",
-
-"IV",
-
-"TW",
-
-"ZM"
-
-];
-
-
-
-
-
-let names=[
-
-"Leon Wagner",
-
-"Tim Berger",
-
-"Felix Kramer",
-
-"David Rossi",
-
-"Noah Fischer"
-
-];
-
-
-
-
-
-
-let newPlayer={
-
-
-
-name:
-
-names[
-
-Math.floor(
-
-Math.random()*names.length
-
-)
-
-],
-
-
-pos:
-
-positions[
-
-Math.floor(
-
-Math.random()*positions.length
-
-)
-
-],
-
-
-
-rating:
-
-65+
-
-Math.floor(
-
-Math.random()*15
-
-),
-
-
-
-value:
-
-3000000+
-
-Math.floor(
-
-Math.random()*10000000
-
-),
-
-
-
-fitness:100,
-
-
-form:70,
-
-
-injury:false
-
-
-
-};
-
-
-
-
-
-
-players[club].push(
-
-newPlayer
-
-);
-
-
-
-savePlayers();
-
-
-
-alert(
-
-"Neues Talent entdeckt: "
-
-+
-
-newPlayer.name
-
-);
-
-
-
-}
-
-
-
-
-
-
-
-
-
-// ======================================
-// WERTE ENTWICKLUNG
-// ======================================
-
-
-
-function developPlayers(){
-
-
-
-Object.keys(players)
-
-.forEach(club=>{
-
-
-players[club]
-
-.forEach(player=>{
-
-
-
-if(player.age && player.age<23){
-
-
-if(Math.random()<0.4)
-
-player.rating++;
-
-
-}
-
-
-
-});
-
-
-
-});
-
-
-
-savePlayers();
-
-
-
-}
-
-
-
-
-
-
-
-
-
-window.addEventListener(
-
-"load",
-
-()=>{
-
-
-createBudgets();
-
-
-createTransferMarket();
-
-
-
-}
-
-);
-
-// ======================================
-// KARRIEREMODUS
-// TEIL 6/6
-// ======================================
-
-
-
-let career={
-
-
-season:1,
-
-
-matchday:0,
-
-
-running:false,
-
-
-completed:false
-
-
-};
-
-
-
-
-
-
-
-
-
-// ======================================
-// SPIELPLAN ERSTELLEN
-// ======================================
-
-
-
-let schedule=[];
-
-
-
-
-function createSchedule(){
-
-
-
-let clubs=
-
-Object.keys(teams);
-
-
-
-schedule=[];
-
-
-
-for(let r=0;r<34;r++){
-
-
-
-let games=[];
-
-
-
-for(let i=0;i<clubs.length/2;i++){
-
-
-
-let home=
-
-clubs[i];
-
-
-
-let away=
-
-clubs[clubs.length-1-i];
-
-
-
-
-
-if(r%2==0){
-
-
-
-games.push({
-
-home,
-
-away
-
-});
-
-
-}
-
-else{
-
-
-games.push({
-
-home:away,
-
-away:home
-
-});
-
-
-}
-
-
-
-}
-
-
-
-schedule.push(games);
-
-
-
-clubs.splice(
-
-1,
-
-0,
-
-clubs.pop()
-
-);
-
-
-
-}
-
-
-
-}
-
-
-
-
-
-
-
-
-
-
-// ======================================
-// KI SPIEL SIMULATION
-// ======================================
-
-
-
-function simulateAI(home,away){
-
-
-
-let h=
-
-teams[home];
-
-
-
-let a=
-
-teams[away];
-
-
-
-
-
-
-let hp=
-
-h.attack
-
-+
-
-h.defense
-
-+
-
-h.form;
-
-
-
-let ap=
-
-a.attack
-
-+
-
-a.defense
-
-+
-
-a.form;
-
-
-
-
-
-let diff=
-
-hp-ap;
-
-
-
-
-
-let homeGoals=
-
-Math.max(
-
-0,
-
-Math.round(
-
-(h.xg)
-
-+
-
-(diff/50)
-
-+
-
-(Math.random()*2-1)
-
-)
-
-);
-
-
-
-
-
-
-let awayGoals=
-
-Math.max(
-
-0,
-
-Math.round(
-
-(a.xg)
-
--
-
-(diff/60)
-
-+
-
-(Math.random()*2-1)
-
-)
-
-);
-
-
-
-
-
-
-return{
-
-homeGoals,
-
-awayGoals
-
-};
-
-
-
-}
-
-
-
-
-
-
-
-
-
-// ======================================
-// SPIELTAG AUSFÜHREN
-// ======================================
-
-
-
-function playMatchday(){
-
-
-
-if(career.matchday>=34){
-
-
-
-finishSeason();
-
-
-return;
-
-
-}
-
-
-
-
-
-let games=
-
-schedule[
-
-career.matchday
-
-];
-
-
-
-
-
-
-games.forEach(game=>{
-
-
-
-let result=
-
-simulateAI(
-
-game.home,
-
-game.away
-
-);
-
-
-
-
-
-updateSeasonTable(
-
-game.home,
-
-game.away,
-
-result.homeGoals,
-
-result.awayGoals
-
-);
-
-
-
-});
-
-
-
-
-
-
-
-career.matchday++;
-
-
-
-
-
-saveCareer();
-
-
-
-updateTable();
-
-
-
-alert(
-
-"Spieltag "
-
-+
-
-career.matchday
-
-+
-
-" abgeschlossen"
-
-);
-
-
-
-}
-
-
-
-
-
-
-
-
-
-// ======================================
-// TABELLE AKTUALISIEREN
-// ======================================
-
-
-
-function updateSeasonTable(
-
-home,
-
-away,
-
-hg,
-
-ag
-
-){
-
-
-
-if(!season[home])
-
-season[home]={
-
-played:0,
-
-points:0,
-
-goals:0,
-
-against:0
-
-};
-
-
-
-if(!season[away])
-
-season[away]={
-
-played:0,
-
-points:0,
-
-goals:0,
-
-against:0
-
-};
-
-
-
-
-
-
-let h=
-
-season[home];
-
-
-
-let a=
-
-season[away];
-
-
-
-
-
-h.played++;
-
-a.played++;
-
-
-
-h.goals+=hg;
-
-a.goals+=ag;
-
-
-
-h.against+=ag;
-
-a.against+=hg;
-
-
-
-
-
-
-if(hg>ag){
-
-
-h.points+=3;
-
-
-}
-
-else if(ag>hg){
-
-
-a.points+=3;
-
-
-}
-
-else{
-
-
-h.points++;
-
-a.points++;
-
-
-}
-
-
-
-
-}
-
-
-
-
-
-
-
-
-
-// ======================================
-// SAISONENDE
-// ======================================
-
-
-
-function finishSeason(){
-
-
-
-career.completed=true;
-
-
-
-
-let ranking=
-
-Object.keys(season)
-
-.sort(
-
-(a,b)=>
-
-season[b].points-
-
-season[a].points
-
-);
-
-
-
-
-
-alert(
-
-"🏆 Meister: "
-
-+
-
-ranking[0]
-
-+
-
-"\n\n"
-
-+
-
-"Champions League:\n"
-
-+
-
-ranking.slice(0,4).join("\n")
-
-+
-
-"\n\nAbstieg:\n"
-
-+
-
-ranking.slice(-2).join("\n")
-
-);
-
-
-
-
-
-
-career.season++;
-
-
-career.matchday=0;
-
-career.completed=false;
-
-
-
-createSchedule();
-
-
-
-saveCareer();
-
-
-
-}
-
-
-
-
-
-
-
-
-
-// ======================================
-// SPEICHERN
-// ======================================
-
-
-
-function saveCareer(){
-
-
-
-localStorage.setItem(
-
-"bmpro7_career",
-
-JSON.stringify(career)
-
-);
-
-
-}
-
-
-
-
-
-function loadCareer(){
-
-
-
-let data=
-
-localStorage.getItem(
-
-"bmpro7_career"
-
-);
-
-
-
-if(data)
-
-career=
-
-JSON.parse(data);
-
-
-
-}
-
-
-
-
-
-
-
-
-window.addEventListener(
-
-"load",
-
-()=>{
-
-
-createSchedule();
-
-
-
-loadCareer();
-
-
-
-}
-
-);
+</html>
