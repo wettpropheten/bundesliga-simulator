@@ -122,7 +122,6 @@
             z-index: 99;
         }
 
-        /* ZURÜCK ZUR GEFEIERTEN STRUKTUR: Saubere, perfekt aufgeteilte Fahrrad-Speichen */
         .wheel-number {
             position: absolute;
             width: 50%;
@@ -214,11 +213,11 @@
         let isSpinning = false;
 
         const textLayer = document.getElementById('textLayer');
-        outcomes.forEach((text, i) => {
+        outcomes.forEach(function(text, i) {
             const el = document.createElement('div');
             el.className = 'wheel-number';
             el.innerText = text;
-            el.style.transform = `rotate(${(i * degreesPerSegment) + (degreesPerSegment / 2)}deg)`;
+            el.style.transform = 'rotate(' + ((i * degreesPerSegment) + (degreesPerSegment / 2)) + 'deg)';
             textLayer.appendChild(el);
         });
 
@@ -233,30 +232,26 @@
             let finalOutcome = "";
             let targetIndex = 0;
 
-            if (inputVal && outcomes.includes(inputVal)) {
+            if (inputVal && outcomes.indexOf(inputVal) !== -1) {
                 finalOutcome = inputVal;
-                
                 let matchingIndices = [];
-                outcomes.forEach((val, idx) => {
+                outcomes.forEach(function(val, idx) {
                     if (val === finalOutcome) matchingIndices.push(idx);
                 });
-                
                 targetIndex = matchingIndices[Math.floor(Math.random() * matchingIndices.length)];
             } else {
                 targetIndex = Math.floor(Math.random() * totalSegments);
                 finalOutcome = outcomes[targetIndex];
             }
 
-            // MATHEMATISCHER SPIEGEL-FIX: 180-Grad-Umdrehung für die Speichen-Richtung exakt austariert (90 Grad Versatz hinzugefügt statt abgezogen)
             let targetDegree = ((targetIndex * degreesPerSegment) + (degreesPerSegment / 2) + 90) % 360;
-
             const extraSpins = 2160; 
             currentRotation += extraSpins + (targetDegree - (currentRotation % 360));
             
             const wheel = document.getElementById('wheel');
-            wheel.style.transform = `rotate(${currentRotation}deg)`;
+            wheel.style.transform = 'rotate(' + currentRotation + 'deg)';
 
-            setTimeout(() => {
+            setTimeout(function() {
                 display.innerText = finalOutcome;
                 display.classList.add('show');
                 isSpinning = false;
