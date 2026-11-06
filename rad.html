@@ -81,7 +81,7 @@
             width: 500px;
             height: 500px;
             perspective: 1200px;
-            margin-bottom: 35px; /* Erhöhter Abstand für Profi-Look */
+            margin-bottom: 35px;
         }
 
         .pointer {
@@ -165,7 +165,6 @@
             justify-content: center;
         }
 
-        /* PREMIUM EDEL LOOK: Eleganter Button mit weichem Glüheffekt */
         .spin-btn {
             padding: 15px 60px;
             font-size: 1.5rem;
@@ -192,7 +191,7 @@
 
     <div class="admin-panel">
         <label for="rigInput">Wunsch-Tipp:</label>
-        <input type="text" id="rigInput" placeholder="z.B. 2:1">
+        <input type="text" id="rigInput" placeholder="z.B. 4:2">
     </div>
 
     <div id="resultDisplay">X:X</div>
@@ -208,6 +207,7 @@
     <button class="spin-btn" onclick="spinWheel()">Rad Drehen</button>
 
     <script>
+        // Eure exakte, unveränderliche Verteilung der Ergebnisse auf dem Rad (72 Segmente)
         const outcomes = [
             "1:0", "2:1", "0:0", "1:1", "2:0", "3:1", "1:2", "0:1", "2:2", "1:3", "3:0", "0:2", "4:1", "1:4", "2:3", "3:2", "4:0", "0:3", "5:1", "1:5", "2:4", "4:2", "0:0", "1:1",
             "1:0", "2:1", "0:0", "1:1", "2:0", "3:1", "1:2", "0:1", "2:2", "1:3", "3:0", "0:2", "4:1", "1:4", "2:3", "3:2", "4:0", "0:3", "5:1", "1:5", "2:4", "4:2", "2:2", "3:3",
@@ -215,15 +215,17 @@
         ];
         
         const totalSegments = outcomes.length;
-        const degreesPerSegment = 360 / totalSegments; 
+        const degreesPerSegment = 360 / totalSegments; // Exakt 5 Grad pro Feld
         let currentRotation = 0;
         let isSpinning = false;
 
+        // Zeichnet die Zahlen starr auf die Kreissegmente
         const textLayer = document.getElementById('textLayer');
         outcomes.forEach(function(text, i) {
             const el = document.createElement('div');
             el.className = 'wheel-number';
             el.innerHTML = '<div class="wheel-number-inner">' + text + '</div>';
+            // Berechnet die exakte optische Position auf der Scheibe
             el.style.transform = 'rotate(' + ((i * degreesPerSegment) + (degreesPerSegment / 2)) + 'deg) translateX(190px)';
             textLayer.appendChild(el);
         });
@@ -237,8 +239,9 @@
 
             const inputVal = document.getElementById('rigInput').value.trim();
             let finalOutcome = "";
-            let selectedIndex = 0;
+            let selectedIndex = -1;
 
+            // Filtert alle echten Positionen dieses Ergebnisses auf der Scheibe heraus
             let matchingIndices = [];
             outcomes.forEach(function(val, idx) {
                 if (val === inputVal) matchingIndices.push(idx);
@@ -246,15 +249,22 @@
 
             if (inputVal && matchingIndices.length > 0) {
                 finalOutcome = inputVal;
+                // Wählt zufällig eine der drei identischen Positionen auf dem Rad aus
                 selectedIndex = matchingIndices[Math.floor(Math.random() * matchingIndices.length)];
             } else {
                 selectedIndex = Math.floor(Math.random() * totalSegments);
                 finalOutcome = outcomes[selectedIndex];
             }
 
-            // DER UNFEHLBARE 45-GRAD-FIX: Der Versatz von +260 wurde auf exakt +305 Grad angepasst. Zieht das Rad millimetergenau auf die echte Feldmitte!
-            let targetDegree = (360 - (selectedIndex * degreesPerSegment) - (degreesPerSegment / 2) + 305) % 360;
+            // UNERBITTLICHER GEOMETRIE-RECHNER:
+            // Jedes Segment ist genau 'degreesPerSegment' (5 Grad) breit.
+            // Der optische Nullpunkt liegt im CSS oben (0 Grad). 
+            // Um das Segment mit dem Index 'selectedIndex' exakt nach OBEN zum Zeiger zu bringen,
+            // müssen wir das Rad im Uhrzeigersinn um genau (360 - Feld-Mitte-Winkel) drehen.
+            let fieldCenterAngle = (selectedIndex * degreesPerSegment) + (degreesPerSegment / 2);
+            let targetDegree = (360 - fieldCenterAngle) % 360;
             
+            // Fügt 6 volle Umdrehungen (2160 Grad) für den Spannungs-Effekt im Video hinzu
             const extraSpins = 2160; 
             currentRotation += extraSpins + (targetDegree - (currentRotation % 360));
             
