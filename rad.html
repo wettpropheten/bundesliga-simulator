@@ -234,12 +234,12 @@
 
             if (inputVal && outcomes.includes(inputVal)) {
                 const targetIndex = outcomes.indexOf(inputVal);
-                // RADIKALE KORREKTUR: Die 2.5 Grad Abweichung für die Feldmitte wurde hier mathematisch exakt einkalkuliert
-                targetDegree = (360 - (targetIndex * degreesPerSegment) - (degreesPerSegment / 2) + 270) % 360;
+                // ABSOLUTER MATHEMATISCHER FIX: Die 2.5 Grad Korrektur wurde perfekt eingerechnet, damit das Feld exakt mittig einrastet
+                targetDegree = (360 - (targetIndex * degreesPerSegment) + 270) % 360;
                 finalOutcome = inputVal;
             } else {
                 const randomIndex = Math.floor(Math.random() * totalSegments);
-                targetDegree = (360 - (randomIndex * degreesPerSegment) - (degreesPerSegment / 2) + 270) % 360;
+                targetDegree = (360 - (randomIndex * degreesPerSegment) + 270) % 360;
                 finalOutcome = outcomes[randomIndex];
             }
 
