@@ -122,10 +122,9 @@
             z-index: 99;
         }
 
-        /* FIX: Absolut zentrierte, unzerstörbare Ausrichtung auf ALLEN Seiten */
         .wheel-number {
             position: absolute;
-            width: 100px; /* Feste Box-Breite erzwingt perfekten Drehpunkt */
+            width: 100px; 
             height: 35px;
             top: calc(50% - 17.5px);
             left: calc(50% - 50px);
@@ -140,7 +139,6 @@
             text-shadow: 2px 2px 0px #000, -1px -1px 0px #000, 1px -1px 0px #000, -1px 1px 0px #000;
         }
 
-        /* Ein innerer Behälter schiebt den Text exakt an den Rand, ohne den Drehpunkt zu verfälschen */
         .wheel-number-inner {
             width: 100%;
             text-align: right;
@@ -224,11 +222,7 @@
         outcomes.forEach(function(text, i) {
             const el = document.createElement('div');
             el.className = 'wheel-number';
-            
-            // Neuer innerer Behälter sorgt für mathematisch exakte Zentrierung auf JEDEM Streifen
             el.innerHTML = '<div class="wheel-number-inner">' + text + '</div>';
-            
-            // Setzt den Drehpunkt exakt in die geometrische Mitte des Rades
             el.style.transform = 'rotate(' + ((i * degreesPerSegment) + (degreesPerSegment / 2)) + 'deg) translateX(190px)';
             textLayer.appendChild(el);
         });
@@ -256,8 +250,8 @@
                 finalOutcome = outcomes[targetIndex];
             }
 
-            // Der absolute Stoppwinkel passt jetzt haargenau auf die mathematisch bereinigten Felder
-            let targetDegree = (360 - (targetIndex * degreesPerSegment) - (degreesPerSegment / 2) + 270) % 360;
+            // DER FINALE MATHEMATISCHE FIX: Versatz um exakt ein Segment (+5 Grad) korrigiert, damit das Rad punktgenau stoppt!
+            let targetDegree = (360 - (targetIndex * degreesPerSegment) - (degreesPerSegment / 2) + 275) % 360;
             const extraSpins = 2160; 
             currentRotation += extraSpins + (targetDegree - (currentRotation % 360));
             
