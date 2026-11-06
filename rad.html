@@ -151,25 +151,39 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%) translateZ(15px);
-            width: 130px;
-            height: 130px;
+            width: 135px;
+            height: 135px;
             background: linear-gradient(45deg, #bf953f, #fcf6ba, #b38728, #fbf5b7);
             border-radius: 50%;
             border: 6px solid #d4af37;
             box-shadow: 0 6px 20px rgba(0,0,0,0.6);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
             z-index: 5;
             pointer-events: none;
         }
 
-        .center-logo img {
-            width: 85%;
-            height: 85%;
-            object-fit: contain;
-            border-radius: 50%;
+        /* NEU: Kreisförmiger Text im Mittelpunkt */
+        .circular-text {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            animation: rotateBrand 20s linear infinite; /* Sanftes Mitdrehen im Hintergrund */
+        }
+
+        .circular-text span {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform-origin: 0 67px; /* Perfekter Radius im Zentrum */
+            font-size: 0.78rem;
+            font-weight: 900;
+            color: #000;
+            text-transform: uppercase;
+            text-shadow: 1px 1px 0px rgba(255,255,255,0.3);
+        }
+
+        @keyframes rotateBrand {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
 
         .spin-btn {
@@ -211,7 +225,7 @@
         <div class="wheel" id="wheel">
             <div class="text-layer" id="textLayer"></div>
             <div class="center-logo">
-                <img src="https://githubusercontent.com" alt="Wettpropheten Wappen">
+                <div class="circular-text" id="brandText"></div>
             </div>
         </div>
     </div>
@@ -236,10 +250,21 @@
             const el = document.createElement('div');
             el.className = 'segment-text';
             el.innerText = text;
-            // Ausrichtung im Uhrzeigersinn
             el.style.transform = `rotate(${(i * degreesPerSegment) + (degreesPerSegment / 2)}deg)`;
             textLayer.appendChild(el);
         });
+
+        // Generiert die kreisförmige Aufschrift "DAS WETTI RAD" im Mittelpunkt
+        const brandString = "+++ DAS WETTI RAD +++ ";
+        const repeatedBrand = brandString.repeat(3); // Wiederholt den Text für den vollen Kreis
+        const brandContainer = document.getElementById('brandText');
+        
+        for (let i = 0; i < repeatedBrand.length; i++) {
+            const charSpan = document.createElement('span');
+            charSpan.innerText = repeatedBrand[i];
+            charSpan.style.transform = `rotate(${i * (360 / repeatedBrand.length)}deg) translateX(-50%)`;
+            brandContainer.appendChild(charSpan);
+        }
 
         function spinWheel() {
             if (isSpinning) return;
@@ -253,33 +278,11 @@
             let finalOutcome = "";
 
             if (inputVal && outcomes.includes(inputVal)) {
-                // Berechnet das exakte Wunschfeld passend zur Rotationsrichtung
+                // Ermittelt das allererste Vorkommen des Wunschergebnisses
                 const targetIndex = outcomes.indexOf(inputVal);
-                targetDegree = (360 - (targetIndex * degreesPerSegment) - (degreesPerSegment / 2)) % 360;
-                // Mathematischer Fix: Korrektur für die exakte Zeiger-Position oben (90 Grad Versatz im CSS ausgeglichen)
-                targetDegree = (targetDegree + 270) % 360;
+                
+                // Exakter mathematischer Fix für die Ausrichtung oben am Zeiger (270 Grad Versatz perfekt austariert)
+                targetDegree = (360 - (targetIndex * degreesPerSegment) - (degreesPerSegment / 2) + 270) % 360;
                 finalOutcome = inputVal;
             } else {
                 // Reiner Zufall, falls das Feld leer ist
-                const randomIndex = Math.floor(Math.random() * totalSegments);
-                targetDegree = (360 - (randomIndex * degreesPerSegment) - (degreesPerSegment / 2)) % 360;
-                targetDegree = (targetDegree + 270) % 360;
-                finalOutcome = outcomes[randomIndex];
-            }
-
-            const extraSpins = 2160; // 6 volle Umdrehungen
-            currentRotation += extraSpins + (targetDegree - (currentRotation % 360));
-            
-            const wheel = document.getElementById('wheel');
-            wheel.style.transform = `rotate(${currentRotation}deg)`;
-
-            setTimeout(() => {
-                display.innerText = finalOutcome;
-                display.classList.add('show');
-                isSpinning = false;
-            }, 5000);
-        }
-    </script>
-
-</body>
-</html>
