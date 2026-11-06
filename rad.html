@@ -126,15 +126,15 @@
             z-index: 3;
         }
 
-        /* Fette Balkenschrift aufrecht auf den Speichen ausgerichtet */
-        .segment-text {
+        /* BOMBENFEST: Eigenes Design nur für die Zahlen auf den Feldern */
+        .wheel-number {
             position: absolute;
             width: 50%;
             height: 30px;
             top: calc(50% - 15px);
             left: 50%;
             transform-origin: left center;
-            display: flex;
+            display: flex !important;
             align-items: center;
             justify-content: flex-end;
             padding-right: 25px;
@@ -159,26 +159,30 @@
             box-shadow: 0 6px 20px rgba(0,0,0,0.6);
             z-index: 5;
             pointer-events: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        /* NEU: Kreisförmiger Text im Mittelpunkt */
+        /* Kreisförmiger Text im Mittelpunkt */
         .circular-text {
             position: absolute;
             width: 100%;
             height: 100%;
-            animation: rotateBrand 20s linear infinite; /* Sanftes Mitdrehen im Hintergrund */
+            animation: rotateBrand 20s linear infinite;
         }
 
         .circular-text span {
             position: absolute;
             top: 0;
             left: 50%;
-            transform-origin: 0 67px; /* Perfekter Radius im Zentrum */
+            transform-origin: 0 67px; /* Radius perfekt austariert */
             font-size: 0.78rem;
             font-weight: 900;
-            color: #000;
+            color: #000 !important;
             text-transform: uppercase;
             text-shadow: 1px 1px 0px rgba(255,255,255,0.3);
+            display: inline-block;
         }
 
         @keyframes rotateBrand {
@@ -244,11 +248,11 @@
         let currentRotation = 0;
         let isSpinning = false;
 
-        // Generiert den Speichen-Text im Kreis
+        // Generiert die Zahlen auf den Feldern mit der neuen, geschützten Klasse
         const textLayer = document.getElementById('textLayer');
         outcomes.forEach((text, i) => {
             const el = document.createElement('div');
-            el.className = 'segment-text';
+            el.className = 'wheel-number'; // Eigener Name verhindert Überschneidungen!
             el.innerText = text;
             el.style.transform = `rotate(${(i * degreesPerSegment) + (degreesPerSegment / 2)}deg)`;
             textLayer.appendChild(el);
@@ -256,7 +260,7 @@
 
         // Generiert die kreisförmige Aufschrift "DAS WETTI RAD" im Mittelpunkt
         const brandString = "+++ DAS WETTI RAD +++ ";
-        const repeatedBrand = brandString.repeat(3); // Wiederholt den Text für den vollen Kreis
+        const repeatedBrand = brandString.repeat(3); 
         const brandContainer = document.getElementById('brandText');
         
         for (let i = 0; i < repeatedBrand.length; i++) {
@@ -278,11 +282,8 @@
             let finalOutcome = "";
 
             if (inputVal && outcomes.includes(inputVal)) {
-                // Ermittelt das allererste Vorkommen des Wunschergebnisses
                 const targetIndex = outcomes.indexOf(inputVal);
-                
-                // Exakter mathematischer Fix für die Ausrichtung oben am Zeiger (270 Grad Versatz perfekt austariert)
                 targetDegree = (360 - (targetIndex * degreesPerSegment) - (degreesPerSegment / 2) + 270) % 360;
                 finalOutcome = inputVal;
             } else {
-                // Reiner Zufall, falls das Feld leer ist
+                const randomIndex = Math.floor(Math.random() * totalSegments);
