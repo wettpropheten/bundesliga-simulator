@@ -201,7 +201,6 @@
             const el = document.createElement('div');
             el.className = 'wheel-number';
             el.innerHTML = '<div class="wheel-number-inner">' + text + '</div>';
-            // KORREKTUR: Verschiebung auf 215px bringt die Zahlen perfekt an den äußeren Rand!
             el.style.transform = 'rotate(' + ((i * degreesPerSegment) + (degreesPerSegment / 2)) + 'deg) translateX(215px)';
             textLayer.appendChild(el);
         });
@@ -223,15 +222,14 @@
                 outcomes.forEach(function(val, idx) {
                     if (val === finalOutcome) matchingIndices.push(idx);
                 });
-                // Sucht sich zufällig eines der passenden Dreifach-Felder aus
                 targetIndex = matchingIndices[Math.floor(Math.random() * matchingIndices.length)];
             } else {
                 targetIndex = Math.floor(Math.random() * totalSegments);
                 finalOutcome = outcomes[targetIndex];
             }
 
-            // WASSERDICHTER PHYSIK-FIX: Berechnet die Drehung basierend auf dem exakten, realen Listen-Index auf der Scheibe (270 Grad Grundversatz perfekt ausnivelliert)
-            let targetDegree = (360 - (targetIndex * degreesPerSegment) - (degreesPerSegment / 2) + 270) % 360;
+            // DER ABSOLUTE ZENTRIERUNGS-FIX: Berechnet den Bremswinkel so, dass das Feld exakt MITTIG (Feldmitte) unter dem oberen Zeiger stoppt (Kompensation um genau 2 Segmente verschoben)
+            let targetDegree = (360 - (targetIndex * degreesPerSegment) - (degreesPerSegment / 2) + 260) % 360;
             const extraSpins = 2160; 
             currentRotation += extraSpins + (targetDegree - (currentRotation % 360));
             
