@@ -122,22 +122,30 @@
             z-index: 99;
         }
 
+        /* FIX: Absolut zentrierte, unzerstörbare Ausrichtung auf ALLEN Seiten */
         .wheel-number {
             position: absolute;
-            width: 50%;
-            height: 30px;
-            top: calc(50% - 15px);
-            left: 50%;
-            transform-origin: left center;
+            width: 100px; /* Feste Box-Breite erzwingt perfekten Drehpunkt */
+            height: 35px;
+            top: calc(50% - 17.5px);
+            left: calc(50% - 50px);
+            transform-origin: center center;
             display: flex !important;
             align-items: center;
             justify-content: flex-end;
-            padding-right: 25px;
             box-sizing: border-box;
             font-weight: 900;
             font-size: 1.15rem;
             color: #ffffff !important;
             text-shadow: 2px 2px 0px #000, -1px -1px 0px #000, 1px -1px 0px #000, -1px 1px 0px #000;
+        }
+
+        /* Ein innerer Behälter schiebt den Text exakt an den Rand, ohne den Drehpunkt zu verfälschen */
+        .wheel-number-inner {
+            width: 100%;
+            text-align: right;
+            padding-right: 15px; 
+            box-sizing: border-box;
         }
 
         .center-logo {
@@ -216,8 +224,12 @@
         outcomes.forEach(function(text, i) {
             const el = document.createElement('div');
             el.className = 'wheel-number';
-            el.innerText = text;
-            el.style.transform = 'rotate(' + ((i * degreesPerSegment) + (degreesPerSegment / 2)) + 'deg)';
+            
+            // Neuer innerer Behälter sorgt für mathematisch exakte Zentrierung auf JEDEM Streifen
+            el.innerHTML = '<div class="wheel-number-inner">' + text + '</div>';
+            
+            // Setzt den Drehpunkt exakt in die geometrische Mitte des Rades
+            el.style.transform = 'rotate(' + ((i * degreesPerSegment) + (degreesPerSegment / 2)) + 'deg) translateX(190px)';
             textLayer.appendChild(el);
         });
 
@@ -244,7 +256,8 @@
                 finalOutcome = outcomes[targetIndex];
             }
 
-            let targetDegree = ((targetIndex * degreesPerSegment) + (degreesPerSegment / 2) + 90) % 360;
+            // Der absolute Stoppwinkel passt jetzt haargenau auf die mathematisch bereinigten Felder
+            let targetDegree = (360 - (targetIndex * degreesPerSegment) - (degreesPerSegment / 2) + 270) % 360;
             const extraSpins = 2160; 
             currentRotation += extraSpins + (targetDegree - (currentRotation % 360));
             
