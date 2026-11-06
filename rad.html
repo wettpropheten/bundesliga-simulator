@@ -127,7 +127,8 @@
             box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
             text-transform: uppercase;
             transition: transform 0.2s, box-shadow 0.2s;
-            z-index: 20;
+            z-index: 999;
+            position: relative;
         }
 
         .spin-btn:hover {
@@ -145,12 +146,12 @@
         <div class="wheel" id="wheel">
             <div class="text-layer" id="textLayer"></div>
             <div class="center-logo">
-                <!-- Direkte Verknüpfung eures lila-weißen GitHub-Profilbildes -->
                 <img src="https://github.com" alt="Wettpropheten Wappen">
             </div>
         </div>
     </div>
 
+    <!-- DER KNOPF IST JETZT DA -->
     <button class="spin-btn" onclick="spinWheel()">Rad Drehen</button>
 
     <script>
@@ -191,29 +192,25 @@
         });
 
         function spinWheel() {
-            if (isSpinning) return; // Verhindert Mehrfachklicks während des Drehens
+            if (isSpinning) return;
             isSpinning = true;
 
             let targetDegree = 0;
 
             if (riggedOutcome) {
-                // Berechnet exakt, welches Segment oben am Pfeil stehen bleiben muss
                 const targetIndex = outcomes.indexOf(riggedOutcome);
                 targetDegree = (360 - (targetIndex * degreesPerSegment)) % 360;
-                riggedOutcome = null; // Zurücksetzen nach dem Dreh
+                riggedOutcome = null;
             } else {
-                // Reiner Zufall, wenn kein Admin-Eingriff stattgefunden hat
                 targetDegree = Math.floor(Math.random() * 360);
             }
 
-            // 6 volle Umdrehungen (2160 Grad) für die perfekte Spannungskurve im Video
             const extraSpins = 2160;
             currentRotation += extraSpins + (targetDegree - (currentRotation % 360));
             
             const wheel = document.getElementById('wheel');
             wheel.style.transform = `rotate(${currentRotation}deg)`;
 
-            // Setzt den Klick-Schutz nach 5 Sekunden (Dauer der Animation) wieder zurück
             setTimeout(() => {
                 isSpinning = false;
             }, 5000);
