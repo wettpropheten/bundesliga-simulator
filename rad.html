@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Das Wetti Rad Pro - Wettpropheten</title>
+    <style>
+        body {
+            background-color: #0b0b0b;
+            color: #fff;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        h1 {
+            font-size: 3rem;
+            color: #d4af37;
+            text-shadow: 0px 4px 10px rgba(0, 0, 0, 0.9), 0 0 20px rgba(212, 175, 55, 0.4);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .wheel-container {
+            position: relative;
+            width: 550px;
+            height: 550px;
+            perspective: 1200px;
+        }
+
+        /* Der edle goldene Stopper oben */
+        .pointer {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 22px solid transparent;
+            border-right: 22px solid transparent;
+            border-top: 45px solid #d4af37;
+            z-index: 10;
+            filter: drop-shadow(0px 5px 8px rgba(0,0,0,0.7));
+        }
+
+        /* Das Rad im originalen Wettpropheten-Stil */
+        .wheel {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            position: relative;
+            box-shadow: 0 20px 45px rgba(0,0,0,0.9), inset 0 0 40px rgba(0,0,0,0.8);
+            transform-style: preserve-3d;
+            transition: transform 5s cubic-bezier(0.1, 0.8, 0.1, 1);
+            background: repeating-conic-gradient(
+                #8b0000 0deg 5deg,
+                #006400 5deg 10deg
+            );
+            border: 14px solid #d4af37;
+        }
+
+        /* Dynamisch generierter Text-Behälter auf dem Rad */
+        .text-layer {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+        }
+
+        .segment-text {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transform-origin: 50% 50%;
+            padding-top: 25px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #fff;
+            text-shadow: 2px 2px 4px #000;
+        }
+
+        /* Das Wettpropheten Logo in der Mitte */
+        .center-logo {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) translateZ(15px);
+            width: 130px;
+            height: 130px;
+            background: #fff;
+            border-radius: 50%;
+            border: 6px solid #d4af37;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            z-index: 5;
+        }
+
+        .center-logo img {
+            width: 90%;
+            height: 90%;
+            object-fit: contain;
+        }
+
+        .spin-btn {
+            margin-top: 40px;
+            padding: 16px 45px;
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: #000;
+            background: linear-gradient(45deg, #bf953f, #fcf6ba, #b38728, #fbf5b7);
+            border: none;
+            border-radius: 35px;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+            text-transform: uppercase;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .spin-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.6);
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Das Wetti Rad</h1>
+
+    <div class="wheel-container">
+        <div class="pointer"></div>
+        <div class="wheel" id="wheel">
+            <div class="text-layer" id="textLayer"></div>
+            <div class="center-logo">
+                <img src="https://githubusercontent.com" alt="WP Wappen" id="wpLogo">
+            </div>
+        </div>
+    </div>
+
+    <button class="spin-btn" onclick="spinWheel()">Rad Drehen</button>
+
+    <script>
+        // Eure echten Fußball-Ergebnisse auf dem Rad (exakt 72 Segmente passend zu eurem Bild)
+        const outcomes = [
+            "1:0", "2:1", "0:0", "1:1", "2:0", "3:1", "1:2", "0:1", "2:2", "1:3", "3:0", "0:2", "4:1", "1:4", "2:3", "3:2", "4:0", "0:3", "5:1", "1:5", "2:4", "4:2", "0:0", "1:1",
+            "1:0", "2:1", "0:0", "1:1", "2:0", "3:1", "1:2", "0:1", "2:2", "1:3", "3:0", "0:2", "4:1", "1:4", "2:3", "3:2", "4:0", "0:3", "5:1", "1:5", "2:4", "4:2", "2:2", "3:3",
+            "1:0", "2:1", "0:0", "1:1", "2:0", "3:1", "1:2", "0:1", "2:2", "1:3", "3:0", "0:2", "4:1", "1:4", "2:3", "3:2", "4:0", "0:3", "5:1", "1:5", "2:4", "4:2", "1:1", "0:2"
+        ];
+        
+        const totalSegments = outcomes.length;
+        const degreesPerSegment = 360 / totalSegments;
+        let currentRotation = 0;
+        let riggedOutcome = null;
+
+        // Versucht automatisch das Logo aus eurem Repository-Favicon zu laden
+        const repoLogoUrl = window.location.origin + window.location.pathname.replace('rad.html', '') + 'favicon.ico';
+        document.getElementById('wpLogo').src = repoLogoUrl;
+
+        // Generiert die Textsegmente auf dem Rad im Kreis
+        const textLayer = document.getElementById('textLayer');
+        outcomes.forEach((text, i) => {
+            const el = document.createElement('div');
+            el.className = 'segment-text';
+            el.innerText = text;
+            el.style.transform = `rotate(${i * degreesPerSegment}deg)`;
+            textLayer.appendChild(el);
+        });
+
+        // Geheime Steuerung: Klicke auf die Seite und drücke "S" auf der Tastatur
+        window.addEventListener('keydown', (e) => {
+            if (e.key.toLowerCase() === 's') {
+                const target = prompt("Welches Ergebnis soll als nächstes erdreht werden? (z.B. 2:1)");
+                if (target && outcomes.includes(target.trim())) {
+                    riggedOutcome = target.trim();
+                    alert("Rad manipuliert! Nächster Stopp: " + riggedOutcome);
+                } else if (target) {
+                    alert("Dieses Ergebnis existiert nicht in der Liste!");
+                }
+            }
+        });
+
+        function spinWheel() {
+            let targetDegree = 0;
+
+            if (riggedOutcome) {
+                // Berechnet exakt, welches Segment oben am Pfeil stehen bleiben muss
+                const targetIndex = outcomes.indexOf(riggedOutcome);
+                targetDegree = (360 - (targetIndex * degreesPerSegment)) % 360;
+                riggedOutcome = null; // Zurücksetzen nach dem Dreh
+            } else {
+                // Reiner Zufall, wenn kein Admin-Eingriff stattgefunden hat
+                targetDegree = Math.floor(Math.random() * 360);
+            }
+
+            // 6 volle Umdrehungen (2160 Grad) für die perfekte Spannungskurve im Video
+            const extraSpins = 2160;
+            currentRotation += extraSpins + (targetDegree - (currentRotation % 360));
+            
+            const wheel = document.getElementById('wheel');
+            wheel.style.transform = `rotate(${currentRotation}deg)`;
+        }
+    </script>
+
+</body>
+</html>
