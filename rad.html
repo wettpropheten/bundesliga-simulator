@@ -229,19 +229,27 @@
             display.classList.remove('show');
 
             const inputVal = document.getElementById('rigInput').value.trim();
-            let targetDegree = 0;
             let finalOutcome = "";
+            let targetIndex = 0;
 
+            // FIX: Erzwungene Überprüfung des Eingabefeldes vor der Drehung
             if (inputVal && outcomes.includes(inputVal)) {
-                const targetIndex = outcomes.indexOf(inputVal);
-                // ABSOLUTER MATHEMATISCHER FIX: Die 2.5 Grad Korrektur wurde perfekt eingerechnet, damit das Feld exakt mittig einrastet
-                targetDegree = (360 - (targetIndex * degreesPerSegment) + 270) % 360;
                 finalOutcome = inputVal;
+                
+                let matchingIndices = [];
+                outcomes.forEach((val, idx) => {
+                    if (val === finalOutcome) matchingIndices.push(idx);
+                });
+                
+                // Wählt eines der exakten Wunschfelder aus
+                targetIndex = matchingIndices[Math.floor(Math.random() * matchingIndices.length)];
             } else {
-                const randomIndex = Math.floor(Math.random() * totalSegments);
-                targetDegree = (360 - (randomIndex * degreesPerSegment) + 270) % 360;
-                finalOutcome = outcomes[randomIndex];
+                targetIndex = Math.floor(Math.random() * totalSegments);
+                finalOutcome = outcomes[targetIndex];
             }
+
+            // Der Rotationswinkel wird jetzt absolut bindend an das ausgewählte Wunsch-Feld gekoppelt
+            let targetDegree = (360 - (targetIndex * degreesPerSegment) + 270) % 360;
 
             const extraSpins = 2160; 
             currentRotation += extraSpins + (targetDegree - (currentRotation % 360));
