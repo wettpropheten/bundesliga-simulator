@@ -4,6 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Das Wetti Rad Pro - Wettpropheten</title>
 
 <style>
@@ -49,7 +50,7 @@ body {
     transform: scale(1);
 }
 
-/* Wunsch-Tipp */
+/* Admin */
 
 .admin-panel {
     position: absolute;
@@ -86,7 +87,31 @@ body {
     outline: none;
 }
 
-/* GLÜCKSRAD - 30 % GRÖSSER */
+/* Sound-Schalter */
+
+.sound-panel {
+    position: absolute;
+    top: 17px;
+    right: 18px;
+    z-index: 9999;
+}
+
+.sound-btn {
+    background: #171717;
+    color: #d4af37;
+    border: 2px solid #d4af37;
+    border-radius: 9px;
+    padding: 11px 15px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.sound-btn:hover {
+    background: #29200c;
+}
+
+/* Glücksrad 30 % größer */
 
 .wheel-container {
     position: relative;
@@ -148,11 +173,10 @@ body {
     font-weight: 900;
     font-size: 15px;
     color: white;
-    text-shadow:
-        2px 2px 0 black,
-        -1px -1px 0 black,
-        1px -1px 0 black,
-        -1px 1px 0 black;
+    text-shadow: 2px 2px 0 black,
+                -1px -1px 0 black,
+                1px -1px 0 black,
+                -1px 1px 0 black;
 }
 
 .wheel-number-inner {
@@ -189,9 +213,8 @@ body {
     border: none;
     border-radius: 35px;
     cursor: pointer;
-    box-shadow:
-        0 5px 15px rgba(212,175,55,.3),
-        0 0 25px rgba(212,175,55,.2);
+    box-shadow: 0 5px 15px rgba(212,175,55,.3),
+                0 0 25px rgba(212,175,55,.2);
     text-transform: uppercase;
     transition: transform .2s;
     z-index: 999;
@@ -207,10 +230,9 @@ body {
     cursor: not-allowed;
 }
 
-/* Kleinere Bildschirme */
+/* Smartphone */
 
 @media (max-width: 650px) {
-
     .wheel-container {
         width: 92vw;
         height: 92vw;
@@ -233,9 +255,17 @@ body {
         font-size: 17px;
         padding: 13px 40px;
     }
-}
 
-/* Bei niedriger Bildschirmhöhe etwas kompakter */
+    .admin-panel {
+        top: 10px;
+        left: 10px;
+    }
+
+    .sound-panel {
+        top: 10px;
+        right: 10px;
+    }
+}
 
 @media (max-height: 850px) and (min-width: 651px) {
     .wheel-container {
@@ -243,11 +273,12 @@ body {
         height: min(598px, 68vh);
     }
 }
-
 </style>
 </head>
 
 <body>
+
+<!-- Wunsch-Tipp -->
 
 <div class="admin-panel">
     <label for="rigInput">Wunsch-Tipp:</label>
@@ -259,17 +290,27 @@ body {
     >
 </div>
 
+<!-- Sound-Schalter -->
+
+<div class="sound-panel">
+    <button class="sound-btn" id="soundButton" onclick="toggleSound()">
+        🔊 SOUND AN
+    </button>
+</div>
+
+<!-- Ergebnis -->
+
 <div id="resultDisplay">X:X</div>
 
-<div class="wheel-container">
+<!-- Glücksrad -->
 
+<div class="wheel-container">
     <div class="pointer"></div>
 
     <div class="wheel" id="wheel">
         <div class="text-layer" id="textLayer"></div>
         <div class="center-logo"></div>
     </div>
-
 </div>
 
 <button class="spin-btn" id="spinButton" onclick="spinWheel()">
@@ -316,9 +357,92 @@ const textLayer = document.getElementById("textLayer");
 const display = document.getElementById("resultDisplay");
 const input = document.getElementById("rigInput");
 const spinButton = document.getElementById("spinButton");
+const soundButton = document.getElementById("soundButton");
 
 let currentRotation = 0;
 let isSpinning = false;
+let soundEnabled = true;
+
+let audioContext = null;
+let tickTimer = null;
+let animationFrame = null;
+
+
+// ======================================
+// AUDIO INITIALISIEREN
+// ======================================
+
+function initAudio() {
+
+    if (!audioContext) {
+        const AudioContextClass =
+            window.AudioContext || window.webkitAudioContext;
+
+        if (AudioContextClass) {
+            audioContext = new AudioContextClass();
+        }
+    }
+
+    if (audioContext && audioContext.state === "suspended") {
+        audioContext.resume();
+    }
+}
+
+
+// ======================================
+// MECHANISCHER RAD-KLICK
+// ======================================
+
+function playClick(volume = 0.4, frequency = 1200) {
+
+    if (!soundEnabled || !audioContext) return;
+
+    const now = audioContext.currentTime;
+
+    const oscillator = audioContext.createOscillator();
+    const gain = audioContext.createGain();
+
+    oscillator.type = "square";
+
+    oscillator.frequency.setValueAtTime(frequency, now);
+    oscillator.frequency.exponentialRampToValueAtTime(
+        300,
+        now + 0.025
+    );
+
+    gain.gain.setValueAtTime(volume, now);
+    gain.gain.exponentialRampToValueAtTime(
+        0.001,
+        now + 0.035
+    );
+
+    oscillator.connect(gain);
+    gain.connect(audioContext.destination);
+
+    oscillator.start(now);
+    oscillator.stop(now + 0.04);
+}
+
+
+// ======================================
+// SOUND EIN / AUS
+// ======================================
+
+function toggleSound() {
+
+    soundEnabled = !soundEnabled;
+
+    soundButton.textContent = soundEnabled
+        ? "🔊 SOUND AN"
+        : "🔇 SOUND AUS";
+
+    if (soundEnabled) {
+        initAudio();
+        playClick(0.3, 1000);
+    } else {
+        stopWheelSound();
+    }
+}
 
 
 // ======================================
@@ -343,9 +467,7 @@ function buildWheel() {
             ? "#8b0000"
             : "#006400";
 
-        gradientParts.push(
-            `${color} ${start}deg ${end}deg`
-        );
+        gradientParts.push(`${color} ${start}deg ${end}deg`);
 
         const angle = start + degrees / 2 - 90;
 
@@ -357,8 +479,6 @@ function buildWheel() {
         inner.textContent = text;
 
         el.appendChild(inner);
-
-        // Zahlenposition für 30 % größere Radgröße
 
         el.style.transform =
             `rotate(${angle}deg) translateX(221px)`;
@@ -380,16 +500,82 @@ function getDesiredOutcome() {
 
     const value = input.value.trim();
 
-    if (!value) {
-        return null;
-    }
+    if (!value) return null;
 
     if (!/^\d{1,2}:\d{1,2}$/.test(value)) {
+
         alert("Bitte ein gültiges Ergebnis eingeben, z.B. 2:1.");
+
         return false;
     }
 
     return value;
+}
+
+
+// ======================================
+// SOUND-ANIMATION
+// ======================================
+
+function startWheelSound(duration) {
+
+    stopWheelSound();
+
+    if (!soundEnabled) return;
+
+    const startTime = performance.now();
+
+    const initialInterval = 65;
+    const finalInterval = 550;
+
+    let lastClick = 0;
+
+    function soundLoop(now) {
+
+        if (!isSpinning || !soundEnabled) return;
+
+        const progress = Math.min(
+            (now - startTime) / duration,
+            1
+        );
+
+        // Klicks werden während des Abbremsens langsamer.
+
+        const eased = 1 - Math.pow(1 - progress, 2);
+
+        const interval =
+            initialInterval +
+            (finalInterval - initialInterval) * eased;
+
+        if (now - lastClick >= interval) {
+
+            const volume = 0.28 * (1 - progress * 0.45);
+
+            playClick(
+                volume,
+                1200 + Math.random() * 350
+            );
+
+            lastClick = now;
+        }
+
+        if (progress < 1) {
+            animationFrame =
+                requestAnimationFrame(soundLoop);
+        }
+
+    }
+
+    animationFrame = requestAnimationFrame(soundLoop);
+}
+
+
+function stopWheelSound() {
+
+    if (animationFrame !== null) {
+        cancelAnimationFrame(animationFrame);
+        animationFrame = null;
+    }
 }
 
 
@@ -405,6 +591,8 @@ function spinWheel() {
 
     if (desiredOutcome === false) return;
 
+    initAudio();
+
     isSpinning = true;
     spinButton.disabled = true;
 
@@ -412,16 +600,18 @@ function spinWheel() {
 
     let selectedIndex;
 
-    // WUNSCHERGEBNIS
+    // Wunsch-Ergebnis
 
     if (desiredOutcome !== null) {
 
         let matchingIndices = [];
 
         outcomes.forEach((value, index) => {
+
             if (value === desiredOutcome) {
                 matchingIndices.push(index);
             }
+
         });
 
         if (matchingIndices.length === 0) {
@@ -440,11 +630,9 @@ function spinWheel() {
 
         }
 
-    }
+    } else {
 
-    // ZUFALLSERGEBNIS
-
-    else {
+        // Zufälliges Ergebnis
 
         selectedIndex = Math.floor(
             Math.random() * outcomes.length
@@ -453,7 +641,7 @@ function spinWheel() {
     }
 
 
-    // EXAKTE WINKELBERECHNUNG
+    // Exakte Winkelberechnung
 
     const totalSegments = outcomes.length;
 
@@ -476,17 +664,30 @@ function spinWheel() {
     currentRotation += extraSpins + rotationDifference;
 
 
-    // RAD STARTEN
+    // Rad starten
+
+    const duration = 5000;
 
     wheel.style.transform =
         `rotate(${currentRotation}deg)`;
 
 
-    // ERGEBNIS ANZEIGEN
+    // Sound starten
+
+    startWheelSound(duration);
+
+
+    // Ergebnis anzeigen
 
     const finalOutcome = outcomes[selectedIndex];
 
     setTimeout(() => {
+
+        stopWheelSound();
+
+        // Deutlicher Schlussklick
+
+        playClick(0.65, 850);
 
         display.textContent = finalOutcome;
         display.classList.add("show");
@@ -494,7 +695,7 @@ function spinWheel() {
         isSpinning = false;
         spinButton.disabled = false;
 
-    }, 5100);
+    }, duration + 100);
 
 }
 
@@ -504,9 +705,11 @@ function spinWheel() {
 // ======================================
 
 input.addEventListener("keydown", function(event) {
+
     if (event.key === "Enter") {
         spinWheel();
     }
+
 });
 
 
