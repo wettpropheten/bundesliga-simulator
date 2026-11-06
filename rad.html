@@ -4,722 +4,460 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Das Wetti Rad Pro - Wettpropheten</title>
+<title>Das Wetti Rad Pro</title>
 
 <style>
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 body {
-    background: #0b0b0b;
-    color: white;
-    font-family: Arial, sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    margin: 0;
-    overflow: hidden;
-    user-select: none;
+  margin: 0;
+  min-height: 100vh;
+  background: #10131c;
+  color: white;
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 25px 12px;
 }
 
-/* Ergebnisanzeige */
-
-#resultDisplay {
-    font-size: 4.5rem;
-    font-weight: 900;
-    color: #000;
-    background: linear-gradient(45deg,#bf953f,#fcf6ba,#b38728,#fbf5b7);
-    border: 4px solid white;
-    padding: 5px 50px;
-    border-radius: 20px;
-    margin-bottom: 25px;
-    min-width: 180px;
-    text-align: center;
-    box-shadow: 0 10px 30px rgba(0,0,0,.9),
-                0 0 20px rgba(212,175,55,.6);
-    transform: scale(0);
-    transition: transform .5s cubic-bezier(.175,.885,.32,1.275);
-    z-index: 1000;
+.container {
+  width: 100%;
+  max-width: 760px;
+  text-align: center;
 }
 
-#resultDisplay.show {
-    transform: scale(1);
+h1 {
+  font-size: 30px;
+  margin-bottom: 8px;
 }
 
-/* Admin */
-
-.admin-panel {
-    position: absolute;
-    top: 17px;
-    left: 18px;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    z-index: 9999;
-    background: rgba(20,20,20,.95);
-    padding: 12px;
-    border-radius: 10px;
-    border: 1px solid #d4af37;
+.subtitle {
+  color: #aeb6c8;
+  margin-bottom: 25px;
 }
 
-.admin-panel label {
-    font-size: 12px;
-    color: #d4af37;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    font-weight: bold;
+.input-area {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 22px;
 }
 
-.admin-panel input {
-    background: #000;
-    border: 2px solid #d4af37;
-    color: white;
-    padding: 8px;
-    font-size: 17px;
-    font-weight: bold;
-    border-radius: 6px;
-    width: 120px;
-    text-align: center;
-    outline: none;
+input {
+  width: 180px;
+  padding: 13px;
+  border-radius: 9px;
+  border: 1px solid #454d60;
+  background: #202636;
+  color: white;
+  font-size: 18px;
+  text-align: center;
 }
 
-/* Sound-Schalter */
-
-.sound-panel {
-    position: absolute;
-    top: 17px;
-    right: 18px;
-    z-index: 9999;
+button {
+  border: none;
+  border-radius: 9px;
+  padding: 13px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  color: white;
+  background: #e49b23;
 }
 
-.sound-btn {
-    background: #171717;
-    color: #d4af37;
-    border: 2px solid #d4af37;
-    border-radius: 9px;
-    padding: 11px 15px;
-    font-weight: bold;
-    cursor: pointer;
-    font-size: 14px;
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
-.sound-btn:hover {
-    background: #29200c;
+.sound-button {
+  background: #343e53;
+  margin-top: 12px;
 }
 
-/* Glücksrad 30 % größer */
-
-.wheel-container {
-    position: relative;
-    width: 598px;
-    height: 598px;
-    margin-bottom: 25px;
-    flex-shrink: 0;
-}
-
-.pointer {
-    position: absolute;
-    top: -20px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 0;
-    height: 0;
-    border-left: 20px solid transparent;
-    border-right: 20px solid transparent;
-    border-top: 40px solid #d4af37;
-    z-index: 100;
-    filter: drop-shadow(0 5px 8px rgba(0,0,0,.7));
+.wheel-wrapper {
+  position: relative;
+  width: 598px;
+  height: 598px;
+  max-width: 100%;
+  margin: 0 auto;
 }
 
 .wheel {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    position: relative;
-    border: 12px solid #d4af37;
-    box-shadow:
-        0 20px 45px rgba(0,0,0,.9),
-        inset 0 0 40px rgba(0,0,0,.8);
-    transform: rotate(0deg);
-    transition: transform 5s cubic-bezier(.1,.8,.1,1);
-    z-index: 2;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 12px solid #e9b84f;
+  box-shadow:
+    0 0 0 5px #754d16,
+    0 12px 35px rgba(0,0,0,.55);
+  overflow: hidden;
+  transition: transform 5s cubic-bezier(.1,.8,.1,1);
 }
 
 .text-layer {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    border-radius: 50%;
-    z-index: 3;
-    pointer-events: none;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
 }
 
-.wheel-number {
-    position: absolute;
-    width: 90px;
-    height: 30px;
-    top: calc(50% - 15px);
-    left: calc(50% - 45px);
-    transform-origin: center center;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    font-weight: 900;
-    font-size: 15px;
-    color: white;
-    text-shadow: 2px 2px 0 black,
-                -1px -1px 0 black,
-                1px -1px 0 black,
-                -1px 1px 0 black;
+.wheel-label {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 95px;
+  margin-left: -47.5px;
+  margin-top: -13px;
+  transform-origin: center;
+  text-align: right;
+  font-size: 17px;
+  font-weight: bold;
+  text-shadow: 1px 2px 3px black;
+  white-space: nowrap;
 }
-
-.wheel-number-inner {
-    width: 100%;
-    text-align: right;
-    padding-right: 4px;
-}
-
-/* Goldene Mitte */
 
 .center-logo {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-    width: 143px;
-    height: 143px;
-    background: linear-gradient(45deg,#bf953f,#fcf6ba,#b38728,#fbf5b7);
-    border-radius: 50%;
-    border: 6px solid #d4af37;
-    box-shadow: 0 6px 20px rgba(0,0,0,.6);
-    z-index: 5;
-    pointer-events: none;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 143px;
+  height: 143px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff3c2, #d99a28 70%, #754d16);
+  border: 7px solid #fff0bd;
+  box-shadow: 0 4px 15px rgba(0,0,0,.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #39240a;
+  font-size: 21px;
+  font-weight: 900;
+  z-index: 5;
 }
 
-/* Drehbutton */
-
-.spin-btn {
-    padding: 14px 55px;
-    font-size: 21px;
-    font-weight: bold;
-    color: black;
-    background: linear-gradient(45deg,#bf953f,#fcf6ba,#b38728,#fbf5b7);
-    border: none;
-    border-radius: 35px;
-    cursor: pointer;
-    box-shadow: 0 5px 15px rgba(212,175,55,.3),
-                0 0 25px rgba(212,175,55,.2);
-    text-transform: uppercase;
-    transition: transform .2s;
-    z-index: 999;
-    letter-spacing: 1px;
+.pointer {
+  position: absolute;
+  z-index: 10;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 23px solid transparent;
+  border-right: 23px solid transparent;
+  border-top: 48px solid #ffdb68;
+  filter: drop-shadow(0 3px 4px black);
 }
 
-.spin-btn:hover {
-    transform: scale(1.04);
+.controls {
+  margin-top: 28px;
 }
 
-.spin-btn:disabled {
-    opacity: .6;
-    cursor: not-allowed;
+.result {
+  margin-top: 22px;
+  font-size: 28px;
+  font-weight: bold;
+  color: #ffcf55;
+  min-height: 38px;
 }
 
-/* Smartphone */
+.info {
+  color: #aeb6c8;
+  font-size: 13px;
+  margin-top: 15px;
+}
 
 @media (max-width: 650px) {
-    .wheel-container {
-        width: 92vw;
-        height: 92vw;
-        max-width: 598px;
-        max-height: 598px;
-    }
+  .wheel-wrapper {
+    width: min(598px, 94vw);
+    height: min(598px, 94vw);
+  }
 
-    #resultDisplay {
-        font-size: 3rem;
-        padding: 5px 30px;
-    }
+  .wheel-label {
+    font-size: clamp(10px, 2.7vw, 17px);
+  }
 
-    .wheel-number {
-        font-size: 11px;
-        width: 75px;
-        left: calc(50% - 37.5px);
-    }
-
-    .spin-btn {
-        font-size: 17px;
-        padding: 13px 40px;
-    }
-
-    .admin-panel {
-        top: 10px;
-        left: 10px;
-    }
-
-    .sound-panel {
-        top: 10px;
-        right: 10px;
-    }
-}
-
-@media (max-height: 850px) and (min-width: 651px) {
-    .wheel-container {
-        width: min(598px, 68vh);
-        height: min(598px, 68vh);
-    }
+  .center-logo {
+    width: 24%;
+    height: 24%;
+    font-size: clamp(12px, 3.5vw, 21px);
+  }
 }
 </style>
 </head>
 
 <body>
+<div class="container">
 
-<!-- Wunsch-Tipp -->
+  <h1>🎯 Das Wetti Rad Pro</h1>
+  <div class="subtitle">Dreh das Rad und lass den Zufall entscheiden!</div>
 
-<div class="admin-panel">
-    <label for="rigInput">Wunsch-Tipp:</label>
+  <div class="input-area">
     <input
-        type="text"
-        id="rigInput"
-        placeholder="z.B. 2:0"
-        autocomplete="off"
+      id="rigInput"
+      type="text"
+      placeholder="Wunschtipp z. B. 2:1"
+      maxlength="5"
     >
-</div>
+    <button id="spinButton" onclick="spinWheel()">🎡 Drehen</button>
+  </div>
 
-<!-- Sound-Schalter -->
-
-<div class="sound-panel">
-    <button class="sound-btn" id="soundButton" onclick="toggleSound()">
-        🔊 SOUND AN
-    </button>
-</div>
-
-<!-- Ergebnis -->
-
-<div id="resultDisplay">X:X</div>
-
-<!-- Glücksrad -->
-
-<div class="wheel-container">
+  <div class="wheel-wrapper">
     <div class="pointer"></div>
-
     <div class="wheel" id="wheel">
-        <div class="text-layer" id="textLayer"></div>
-        <div class="center-logo"></div>
+      <div class="text-layer" id="textLayer"></div>
     </div>
+    <div class="center-logo">WETTI<br>RAD</div>
+  </div>
+
+  <div class="controls">
+    <button class="sound-button" id="soundButton" onclick="toggleSound()">
+      🔊 Sound: EIN
+    </button>
+  </div>
+
+  <div class="result" id="result">Bereit?</div>
+  <div class="info">Gib einen Wunschtipp ein oder lass das Rad zufällig entscheiden.</div>
+
 </div>
-
-<button class="spin-btn" id="spinButton" onclick="spinWheel()">
-    Rad Drehen
-</button>
-
 
 <script>
-
-// ======================================
-// ERGEBNISSE
-// ======================================
-
-let outcomes = [
-    "1:0", "2:1", "0:0", "1:1",
-    "2:0", "3:1", "1:2", "0:1",
-    "2:2", "1:3", "3:0", "0:2",
-    "4:1", "1:4", "2:3", "3:2",
-    "4:0", "0:3", "5:1", "1:5",
-    "2:4", "4:2", "2:2", "3:3",
-
-    "1:0", "2:1", "0:0", "1:1",
-    "2:0", "3:1", "1:2", "0:1",
-    "2:2", "1:3", "3:0", "0:2",
-    "4:1", "1:4", "2:3", "3:2",
-    "4:0", "0:3", "5:1", "1:5",
-    "2:4", "4:2", "1:1", "0:2",
-
-    "1:0", "2:1", "0:0", "1:1",
-    "2:0", "3:1", "1:2", "0:1",
-    "2:2", "1:3", "3:0", "0:2",
-    "4:1", "1:4", "2:3", "3:2",
-    "4:0", "0:3", "5:1", "1:5",
-    "2:4", "4:2", "1:1", "0:2"
+const initialOutcomes = [
+  "0:0", "1:0", "0:1", "1:1",
+  "2:0", "0:2", "2:1", "1:2",
+  "2:2", "3:0", "0:3", "3:1",
+  "1:3", "3:2", "2:3", "3:3",
+  "4:0", "0:4", "4:1", "1:4",
+  "4:2", "2:4", "4:3", "3:4",
+  "4:4", "5:0", "0:5", "5:1",
+  "1:5", "5:2", "2:5", "5:5"
 ];
 
-
-// ======================================
-// VARIABLEN
-// ======================================
-
-const wheel = document.getElementById("wheel");
-const textLayer = document.getElementById("textLayer");
-const display = document.getElementById("resultDisplay");
-const input = document.getElementById("rigInput");
-const spinButton = document.getElementById("spinButton");
-const soundButton = document.getElementById("soundButton");
-
+let outcomes = [...initialOutcomes];
 let currentRotation = 0;
 let isSpinning = false;
 let soundEnabled = true;
+let audioCtx = null;
+let soundFrame = null;
+let soundActive = false;
 
-let audioContext = null;
-let tickTimer = null;
-let animationFrame = null;
+const wheel = document.getElementById("wheel");
+const textLayer = document.getElementById("textLayer");
+const result = document.getElementById("result");
+const spinButton = document.getElementById("spinButton");
+const soundButton = document.getElementById("soundButton");
 
-
-// ======================================
-// AUDIO INITIALISIEREN
-// ======================================
-
-function initAudio() {
-
-    if (!audioContext) {
-        const AudioContextClass =
-            window.AudioContext || window.webkitAudioContext;
-
-        if (AudioContextClass) {
-            audioContext = new AudioContextClass();
-        }
-    }
-
-    if (audioContext && audioContext.state === "suspended") {
-        audioContext.resume();
-    }
-}
-
-
-// ======================================
-// MECHANISCHER RAD-KLICK
-// ======================================
-
-function playClick(volume = 0.4, frequency = 1200) {
-
-    if (!soundEnabled || !audioContext) return;
-
-    const now = audioContext.currentTime;
-
-    const oscillator = audioContext.createOscillator();
-    const gain = audioContext.createGain();
-
-    oscillator.type = "square";
-
-    oscillator.frequency.setValueAtTime(frequency, now);
-    oscillator.frequency.exponentialRampToValueAtTime(
-        300,
-        now + 0.025
-    );
-
-    gain.gain.setValueAtTime(volume, now);
-    gain.gain.exponentialRampToValueAtTime(
-        0.001,
-        now + 0.035
-    );
-
-    oscillator.connect(gain);
-    gain.connect(audioContext.destination);
-
-    oscillator.start(now);
-    oscillator.stop(now + 0.04);
-}
-
-
-// ======================================
-// SOUND EIN / AUS
-// ======================================
-
-function toggleSound() {
-
-    soundEnabled = !soundEnabled;
-
-    soundButton.textContent = soundEnabled
-        ? "🔊 SOUND AN"
-        : "🔇 SOUND AUS";
-
-    if (soundEnabled) {
-        initAudio();
-        playClick(0.3, 1000);
-    } else {
-        stopWheelSound();
-    }
-}
-
-
-// ======================================
-// RAD AUFBAUEN
-// ======================================
+const colors = [
+  "#c83e45", "#263d70", "#e7a52e", "#237b67",
+  "#7545a5", "#b64c31", "#315f9c", "#a17b24"
+];
 
 function buildWheel() {
+  const segmentAngle = 360 / outcomes.length;
 
-    const total = outcomes.length;
-    const degrees = 360 / total;
+  const gradient = outcomes.map((_, i) => {
+    const start = i * segmentAngle;
+    const end = (i + 1) * segmentAngle;
+    return `${colors[i % colors.length]} ${start}deg ${end}deg`;
+  }).join(", ");
 
-    textLayer.innerHTML = "";
+  wheel.style.background = `conic-gradient(from 0deg, ${gradient})`;
 
-    const gradientParts = [];
+  textLayer.innerHTML = "";
 
-    outcomes.forEach((text, i) => {
+  outcomes.forEach((outcome, i) => {
+    const angle = i * segmentAngle + segmentAngle / 2 - 90;
+    const label = document.createElement("div");
 
-        const start = i * degrees;
-        const end = (i + 1) * degrees;
+    label.className = "wheel-label";
+    label.textContent = outcome;
+    label.style.transform =
+      `rotate(${angle}deg) translateX(221px) rotate(90deg)`;
 
-        const color = i % 2 === 0
-            ? "#8b0000"
-            : "#006400";
-
-        gradientParts.push(`${color} ${start}deg ${end}deg`);
-
-        const angle = start + degrees / 2 - 90;
-
-        const el = document.createElement("div");
-        el.className = "wheel-number";
-
-        const inner = document.createElement("div");
-        inner.className = "wheel-number-inner";
-        inner.textContent = text;
-
-        el.appendChild(inner);
-
-        el.style.transform =
-            `rotate(${angle}deg) translateX(221px)`;
-
-        textLayer.appendChild(el);
-
-    });
-
-    wheel.style.background =
-        `conic-gradient(from 0deg, ${gradientParts.join(",")})`;
+    textLayer.appendChild(label);
+  });
 }
 
+function initAudio() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
 
-// ======================================
-// WUNSCHERGEBNIS PRÜFEN
-// ======================================
+  if (audioCtx.state === "suspended") {
+    audioCtx.resume();
+  }
+}
 
-function getDesiredOutcome() {
+// Mechanischer Doppelklick mit tiefem Anschlag und hellem Klick
+function playClick(intensity = 1) {
+  if (!audioCtx || !soundActive) return;
 
-    const value = input.value.trim();
+  const now = audioCtx.currentTime;
 
-    if (!value) return null;
+  // Tiefer, kurzer Anschlag
+  const body = audioCtx.createOscillator();
+  const bodyGain = audioCtx.createGain();
 
-    if (!/^\d{1,2}:\d{1,2}$/.test(value)) {
+  body.type = "triangle";
+  body.frequency.setValueAtTime(180, now);
+  body.frequency.exponentialRampToValueAtTime(65, now + 0.045);
 
-        alert("Bitte ein gültiges Ergebnis eingeben, z.B. 2:1.");
+  bodyGain.gain.setValueAtTime(0.0001, now);
+  bodyGain.gain.exponentialRampToValueAtTime(
+    0.22 * intensity, now + 0.003
+  );
+  bodyGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.055);
 
-        return false;
+  body.connect(bodyGain);
+  bodyGain.connect(audioCtx.destination);
+
+  body.start(now);
+  body.stop(now + 0.06);
+
+  // Heller mechanischer Klick
+  const click = audioCtx.createOscillator();
+  const clickGain = audioCtx.createGain();
+
+  click.type = "square";
+  click.frequency.setValueAtTime(1250, now);
+  click.frequency.exponentialRampToValueAtTime(420, now + 0.018);
+
+  clickGain.gain.setValueAtTime(0.0001, now);
+  clickGain.gain.exponentialRampToValueAtTime(
+    0.12 * intensity, now + 0.002
+  );
+  clickGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.025);
+
+  click.connect(clickGain);
+  clickGain.connect(audioCtx.destination);
+
+  click.start(now);
+  click.stop(now + 0.03);
+}
+
+function startWheelSound(duration = 5000) {
+  if (!soundEnabled) return;
+
+  initAudio();
+  soundActive = true;
+
+  const start = performance.now();
+  let lastClick = start - 100;
+
+  function tick(now) {
+    if (!soundActive || !soundEnabled) return;
+
+    const progress = Math.min((now - start) / duration, 1);
+
+    // Das Klackern wird beim Abbremsen langsamer
+    const interval = 55 + Math.pow(progress, 2.8) * 520;
+
+    if (now - lastClick >= interval) {
+      const intensity = 1 - progress * 0.25;
+      playClick(intensity);
+      lastClick = now;
     }
 
-    return value;
-}
-
-
-// ======================================
-// SOUND-ANIMATION
-// ======================================
-
-function startWheelSound(duration) {
-
-    stopWheelSound();
-
-    if (!soundEnabled) return;
-
-    const startTime = performance.now();
-
-    const initialInterval = 65;
-    const finalInterval = 550;
-
-    let lastClick = 0;
-
-    function soundLoop(now) {
-
-        if (!isSpinning || !soundEnabled) return;
-
-        const progress = Math.min(
-            (now - startTime) / duration,
-            1
-        );
-
-        // Klicks werden während des Abbremsens langsamer.
-
-        const eased = 1 - Math.pow(1 - progress, 2);
-
-        const interval =
-            initialInterval +
-            (finalInterval - initialInterval) * eased;
-
-        if (now - lastClick >= interval) {
-
-            const volume = 0.28 * (1 - progress * 0.45);
-
-            playClick(
-                volume,
-                1200 + Math.random() * 350
-            );
-
-            lastClick = now;
+    if (progress < 1) {
+      soundFrame = requestAnimationFrame(tick);
+    } else {
+      setTimeout(() => {
+        if (soundActive && soundEnabled) {
+          playClick(1.5);
         }
-
-        if (progress < 1) {
-            animationFrame =
-                requestAnimationFrame(soundLoop);
-        }
-
+      }, 100);
     }
+  }
 
-    animationFrame = requestAnimationFrame(soundLoop);
+  soundFrame = requestAnimationFrame(tick);
 }
-
 
 function stopWheelSound() {
+  soundActive = false;
 
-    if (animationFrame !== null) {
-        cancelAnimationFrame(animationFrame);
-        animationFrame = null;
-    }
+  if (soundFrame) {
+    cancelAnimationFrame(soundFrame);
+    soundFrame = null;
+  }
 }
 
+function toggleSound() {
+  soundEnabled = !soundEnabled;
 
-// ======================================
-// GLÜCKSRAD DREHEN
-// ======================================
+  if (!soundEnabled) {
+    stopWheelSound();
+  }
+
+  soundButton.textContent = soundEnabled
+    ? "🔊 Sound: EIN"
+    : "🔇 Sound: AUS";
+
+  if (soundEnabled && audioCtx) {
+    initAudio();
+  }
+}
 
 function spinWheel() {
+  if (isSpinning) return;
 
-    if (isSpinning) return;
+  let requested = document.getElementById("rigInput").value.trim();
 
-    const desiredOutcome = getDesiredOutcome();
+  if (requested && !/^\d{1,2}:\d{1,2}$/.test(requested)) {
+    result.textContent = "Bitte einen Tipp wie 2:1 eingeben!";
+    return;
+  }
 
-    if (desiredOutcome === false) return;
+  let selectedIndex;
 
-    initAudio();
+  if (requested) {
+    selectedIndex = outcomes.indexOf(requested);
 
-    isSpinning = true;
-    spinButton.disabled = true;
-
-    display.classList.remove("show");
-
-    let selectedIndex;
-
-    // Wunsch-Ergebnis
-
-    if (desiredOutcome !== null) {
-
-        let matchingIndices = [];
-
-        outcomes.forEach((value, index) => {
-
-            if (value === desiredOutcome) {
-                matchingIndices.push(index);
-            }
-
-        });
-
-        if (matchingIndices.length === 0) {
-
-            outcomes.push(desiredOutcome);
-
-            buildWheel();
-
-            selectedIndex = outcomes.length - 1;
-
-        } else {
-
-            selectedIndex = matchingIndices[
-                Math.floor(Math.random() * matchingIndices.length)
-            ];
-
-        }
-
-    } else {
-
-        // Zufälliges Ergebnis
-
-        selectedIndex = Math.floor(
-            Math.random() * outcomes.length
-        );
-
+    if (selectedIndex === -1) {
+      outcomes.push(requested);
+      buildWheel();
+      selectedIndex = outcomes.length - 1;
     }
+  } else {
+    selectedIndex = Math.floor(Math.random() * outcomes.length);
+  }
 
+  isSpinning = true;
+  spinButton.disabled = true;
+  result.textContent = "Das Rad dreht sich ...";
 
-    // Exakte Winkelberechnung
+  const segmentAngle = 360 / outcomes.length;
+  const segmentCenter = selectedIndex * segmentAngle + segmentAngle / 2;
 
-    const totalSegments = outcomes.length;
+  // Segmentmitte genau unter den oberen Zeiger drehen
+  const targetMod = (360 - segmentCenter) % 360;
+  const currentMod = ((currentRotation % 360) + 360) % 360;
+  const correction = (targetMod - currentMod + 360) % 360;
 
-    const degreesPerSegment = 360 / totalSegments;
+  const extraTurns = 360 * 7;
+  currentRotation += extraTurns + correction;
 
-    const fieldCenterAngle =
-        (selectedIndex + 0.5) * degreesPerSegment;
+  wheel.style.transform = `rotate(${currentRotation}deg)`;
 
-    const targetAngle =
-        (360 - fieldCenterAngle + 360) % 360;
+  startWheelSound(5000);
 
-    const currentAngle =
-        ((currentRotation % 360) + 360) % 360;
+  setTimeout(() => {
+    stopWheelSound();
 
-    const rotationDifference =
-        (targetAngle - currentAngle + 360) % 360;
+    result.textContent = "🎉 Ergebnis: " + outcomes[selectedIndex];
 
-    const extraSpins = 6 * 360;
-
-    currentRotation += extraSpins + rotationDifference;
-
-
-    // Rad starten
-
-    const duration = 5000;
-
-    wheel.style.transform =
-        `rotate(${currentRotation}deg)`;
-
-
-    // Sound starten
-
-    startWheelSound(duration);
-
-
-    // Ergebnis anzeigen
-
-    const finalOutcome = outcomes[selectedIndex];
-
-    setTimeout(() => {
-
-        stopWheelSound();
-
-        // Deutlicher Schlussklick
-
-        playClick(0.65, 850);
-
-        display.textContent = finalOutcome;
-        display.classList.add("show");
-
-        isSpinning = false;
-        spinButton.disabled = false;
-
-    }, duration + 100);
-
+    isSpinning = false;
+    spinButton.disabled = false;
+  }, 5100);
 }
 
-
-// ======================================
-// ENTER-TASTE
-// ======================================
-
-input.addEventListener("keydown", function(event) {
-
-    if (event.key === "Enter") {
-        spinWheel();
-    }
-
-});
-
-
-// ======================================
-// INITIALISIERUNG
-// ======================================
-
 buildWheel();
-
 </script>
-
 </body>
 </html>
