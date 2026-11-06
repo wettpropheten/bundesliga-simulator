@@ -1,276 +1,590 @@
+
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Das Wetti Rad Pro - Wettpropheten</title>
-    <style>
-        body {
-            background-color: #0b0b0b;
-            color: #fff;
-            font-family: 'Arial Black', 'Impact', sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            overflow: hidden;
-            user-select: none;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Das Wetti Rad Pro - Wettpropheten</title>
 
-        #resultDisplay {
-            font-size: 4.5rem;
-            font-weight: 900;
-            color: #000;
-            background: linear-gradient(45deg, #bf953f, #fcf6ba, #b38728, #fbf5b7);
-            border: 4px solid #fff;
-            padding: 5px 50px;
-            border-radius: 20px;
-            margin-bottom: 25px;
-            min-width: 180px;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.9), 0 0 20px rgba(212, 175, 55, 0.6);
-            transform: scale(0);
-            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            letter-spacing: 1px;
-            z-index: 1000;
-        }
+<style>
+* {
+    box-sizing: border-box;
+}
 
-        #resultDisplay.show {
-            transform: scale(1);
-        }
+body {
+    background: #0b0b0b;
+    color: white;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+    overflow: hidden;
+    user-select: none;
+}
 
-        .admin-panel {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            z-index: 9999;
-            background: rgba(20, 20, 20, 0.95);
-            padding: 12px;
-            border-radius: 10px;
-            border: 1px solid #d4af37;
-        }
+/* Ergebnisanzeige */
 
-        .admin-panel label {
-            font-size: 0.75rem;
-            color: #d4af37;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: bold;
-        }
+#resultDisplay {
+    font-size: 4.5rem;
+    font-weight: 900;
+    color: #000;
+    background: linear-gradient(
+        45deg,
+        #bf953f,
+        #fcf6ba,
+        #b38728,
+        #fbf5b7
+    );
+    border: 4px solid white;
+    padding: 5px 50px;
+    border-radius: 20px;
+    margin-bottom: 25px;
+    min-width: 180px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,.9),
+                0 0 20px rgba(212,175,55,.6);
+    transform: scale(0);
+    transition: transform .5s cubic-bezier(.175,.885,.32,1.275);
+    z-index: 1000;
+}
 
-        .admin-panel input {
-            background: #000;
-            border: 2px solid #d4af37;
-            color: #fff;
-            padding: 8px 12px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            border-radius: 6px;
-            width: 110px;
-            text-align: center;
-            outline: none;
-        }
+#resultDisplay.show {
+    transform: scale(1);
+}
 
-        .wheel-container {
-            position: relative;
-            width: 500px;
-            height: 500px;
-            perspective: 1200px;
-            margin-bottom: 35px;
-        }
+/* Wunsch-Tipp */
 
-        .pointer {
-            position: absolute;
-            top: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 0;
-            border-left: 20px solid transparent;
-            border-right: 20px solid transparent;
-            border-top: 40px solid #d4af37;
-            z-index: 10;
-            filter: drop-shadow(0px 5px 8px rgba(0,0,0,0.7));
-        }
+.admin-panel {
+    position: absolute;
+    top: 17px;
+    left: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    z-index: 9999;
+    background: rgba(20,20,20,.95);
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #d4af37;
+}
 
-        .wheel {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            position: relative;
-            box-shadow: 0 20px 45px rgba(0,0,0,0.9), inset 0 0 40px rgba(0,0,0,0.8);
-            transform-style: preserve-3d;
-            transition: transform 5s cubic-bezier(0.1, 0.8, 0.1, 1);
-            background: repeating-conic-gradient(
-                #8b0000 0deg 5deg,
-                #006400 5deg 10deg
-            );
-            border: 14px solid #d4af37;
-            z-index: 2;
-        }
+.admin-panel label {
+    font-size: 12px;
+    color: #d4af37;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: bold;
+}
 
-        .text-layer {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            z-index: 99;
-        }
+.admin-panel input {
+    background: #000;
+    border: 2px solid #d4af37;
+    color: white;
+    padding: 8px;
+    font-size: 17px;
+    font-weight: bold;
+    border-radius: 6px;
+    width: 120px;
+    text-align: center;
+    outline: none;
+}
 
-        .wheel-number {
-            position: absolute;
-            width: 100px; 
-            height: 35px;
-            top: calc(50% - 17.5px);
-            left: calc(50% - 50px);
-            transform-origin: center center;
-            display: flex !important;
-            align-items: center;
-            justify-content: flex-end;
-            box-sizing: border-box;
-            font-weight: 900;
-            font-size: 1.1rem;
-            color: #ffffff !important;
-            text-shadow: 2px 2px 0px #000, -1px -1px 0px #000, 1px -1px 0px #000, -1px 1px 0px #000;
-        }
+/* Rad */
 
-        .wheel-number-inner {
-            width: 100%;
-            text-align: right;
-            padding-right: 5px; 
-            box-sizing: border-box;
-        }
+.wheel-container {
+    position: relative;
+    width: 460px;
+    height: 460px;
+    margin-bottom: 25px;
+}
 
-        .center-logo {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) translateZ(15px);
-            width: 120px;
-            height: 120px;
-            background: linear-gradient(45deg, #bf953f, #fcf6ba, #b38728, #fbf5b7);
-            border-radius: 50%;
-            border: 6px solid #d4af37;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.6);
-            z-index: 5;
-            pointer-events: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+.pointer {
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    border-top: 40px solid #d4af37;
+    z-index: 100;
+    filter: drop-shadow(0 5px 8px rgba(0,0,0,.7));
+}
 
-        .spin-btn {
-            padding: 15px 60px;
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #000;
-            background: linear-gradient(45deg, #bf953f, #fcf6ba, #b38728, #fbf5b7);
-            border: none;
-            border-radius: 35px;
-            cursor: pointer;
-            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3), 0 0 25px rgba(212, 175, 55, 0.2);
-            text-transform: uppercase;
-            transition: transform 0.2s, box-shadow 0.2s;
-            z-index: 999;
-            letter-spacing: 1px;
-        }
+.wheel {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    position: relative;
+    border: 12px solid #d4af37;
+    box-shadow:
+        0 20px 45px rgba(0,0,0,.9),
+        inset 0 0 40px rgba(0,0,0,.8);
 
-        .spin-btn:hover {
-            transform: scale(1.04);
-            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.5), 0 0 35px rgba(212, 175, 55, 0.4);
-        }
-    </style>
+    transform: rotate(0deg);
+    transition: transform 5s cubic-bezier(.1,.8,.1,1);
+    z-index: 2;
+}
+
+.text-layer {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    border-radius: 50%;
+    z-index: 3;
+    pointer-events: none;
+}
+
+.wheel-number {
+    position: absolute;
+    width: 90px;
+    height: 30px;
+    top: calc(50% - 15px);
+    left: calc(50% - 45px);
+
+    transform-origin: center center;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    font-weight: 900;
+    font-size: 15px;
+    color: white;
+
+    text-shadow:
+        2px 2px 0 black,
+        -1px -1px 0 black,
+        1px -1px 0 black,
+        -1px 1px 0 black;
+}
+
+.wheel-number-inner {
+    width: 100%;
+    text-align: right;
+    padding-right: 4px;
+}
+
+/* Mittelteil */
+
+.center-logo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    width: 110px;
+    height: 110px;
+
+    background: linear-gradient(
+        45deg,
+        #bf953f,
+        #fcf6ba,
+        #b38728,
+        #fbf5b7
+    );
+
+    border-radius: 50%;
+    border: 6px solid #d4af37;
+    box-shadow: 0 6px 20px rgba(0,0,0,.6);
+    z-index: 5;
+    pointer-events: none;
+}
+
+/* Drehbutton */
+
+.spin-btn {
+    padding: 14px 55px;
+    font-size: 21px;
+    font-weight: bold;
+    color: black;
+
+    background: linear-gradient(
+        45deg,
+        #bf953f,
+        #fcf6ba,
+        #b38728,
+        #fbf5b7
+    );
+
+    border: none;
+    border-radius: 35px;
+    cursor: pointer;
+
+    box-shadow:
+        0 5px 15px rgba(212,175,55,.3),
+        0 0 25px rgba(212,175,55,.2);
+
+    text-transform: uppercase;
+    transition: transform .2s;
+    z-index: 999;
+    letter-spacing: 1px;
+}
+
+.spin-btn:hover {
+    transform: scale(1.04);
+}
+
+.spin-btn:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+}
+
+/* Handy */
+
+@media (max-width: 600px) {
+    .wheel-container {
+        width: 88vw;
+        height: 88vw;
+        max-width: 460px;
+        max-height: 460px;
+    }
+
+    #resultDisplay {
+        font-size: 3rem;
+        padding: 5px 30px;
+    }
+
+    .wheel-number {
+        font-size: 11px;
+        width: 75px;
+        left: calc(50% - 37.5px);
+    }
+
+    .spin-btn {
+        font-size: 17px;
+        padding: 13px 40px;
+    }
+}
+</style>
 </head>
+
 <body>
 
-    <div class="admin-panel">
-        <label for="rigInput">Wunsch-Tipp:</label>
-        <input type="text" id="rigInput" placeholder="z.B. 2:0">
+<!-- Wunsch-Tipp -->
+
+<div class="admin-panel">
+    <label for="rigInput">Wunsch-Tipp:</label>
+
+    <input
+        type="text"
+        id="rigInput"
+        placeholder="z.B. 2:0"
+        autocomplete="off"
+    >
+</div>
+
+<!-- Ergebnis -->
+
+<div id="resultDisplay">X:X</div>
+
+<!-- Glücksrad -->
+
+<div class="wheel-container">
+
+    <div class="pointer"></div>
+
+    <div class="wheel" id="wheel">
+
+        <div class="text-layer" id="textLayer"></div>
+
+        <div class="center-logo"></div>
+
     </div>
 
-    <div id="resultDisplay">X:X</div>
+</div>
 
-    <div class="wheel-container">
-        <div class="pointer"></div>
-        <div class="wheel" id="wheel">
-            <div class="text-layer" id="textLayer"></div>
-            <div class="center-logo"></div>
-        </div>
-    </div>
+<button class="spin-btn" id="spinButton" onclick="spinWheel()">
+    Rad Drehen
+</button>
 
-    <button class="spin-btn" onclick="spinWheel()">Rad Drehen</button>
 
-    <script>
-        const outcomes = [
-            "1:0", "2:1", "0:0", "1:1", "2:0", "3:1", "1:2", "0:1", "2:2", "1:3", "3:0", "0:2", "4:1", "1:4", "2:3", "3:2", "4:0", "0:3", "5:1", "1:5", "2:4", "4:2", "0:0", "1:1",
-            "1:0", "2:1", "0:0", "1:1", "2:0", "3:1", "1:2", "0:1", "2:2", "1:3", "3:0", "0:2", "4:1", "1:4", "2:3", "3:2", "4:0", "0:3", "5:1", "1:5", "2:4", "4:2", "2:2", "3:3",
-            "1:0", "2:1", "0:0", "1:1", "2:0", "3:1", "1:2", "0:1", "2:2", "1:3", "3:0", "0:2", "4:1", "1:4", "2:3", "3:2", "4:0", "0:3", "5:1", "1:5", "2:4", "4:2", "1:1", "0:2"
-        ];
-        
-        const totalSegments = outcomes.length;
-        const degreesPerSegment = 360 / totalSegments; 
-        let currentRotation = 0;
-        let isSpinning = false;
+<script>
 
-        const textLayer = document.getElementById('textLayer');
-        outcomes.forEach(function(text, i) {
-            const el = document.createElement('div');
-            el.className = 'wheel-number';
-            el.innerHTML = '<div class="wheel-number-inner">' + text + '</div>';
-            el.style.transform = 'rotate(' + ((i * degreesPerSegment) + (degreesPerSegment / 2)) + 'deg) translateX(190px)';
-            textLayer.appendChild(el);
-        });
+// ======================================
+// ERGEBNISSE
+// ======================================
 
-        function spinWheel() {
-            if (isSpinning) return;
-            isSpinning = true;
+let outcomes = [
+    "1:0", "2:1", "0:0", "1:1",
+    "2:0", "3:1", "1:2", "0:1",
+    "2:2", "1:3", "3:0", "0:2",
+    "4:1", "1:4", "2:3", "3:2",
+    "4:0", "0:3", "5:1", "1:5",
+    "2:4", "4:2", "2:2", "3:3",
 
-            const display = document.getElementById('resultDisplay');
-            display.classList.remove('show');
+    "1:0", "2:1", "0:0", "1:1",
+    "2:0", "3:1", "1:2", "0:1",
+    "2:2", "1:3", "3:0", "0:2",
+    "4:1", "1:4", "2:3", "3:2",
+    "4:0", "0:3", "5:1", "1:5",
+    "2:4", "4:2", "1:1", "0:2",
 
-            const inputVal = document.getElementById('rigInput').value.trim();
-            let finalOutcome = "";
-            let selectedIndex = -1;
+    "1:0", "2:1", "0:0", "1:1",
+    "2:0", "3:1", "1:2", "0:1",
+    "2:2", "1:3", "3:0", "0:2",
+    "4:1", "1:4", "2:3", "3:2",
+    "4:0", "0:3", "5:1", "1:5",
+    "2:4", "4:2", "1:1", "0:2"
+];
 
-            let matchingIndices = [];
-            outcomes.forEach(function(val, idx) {
-                if (val === inputVal) matchingIndices.push(idx);
-            });
 
-            if (inputVal && matchingIndices.length > 0) {
-                finalOutcome = inputVal;
-                selectedIndex = matchingIndices[Math.floor(Math.random() * matchingIndices.length)];
-            } else {
-                selectedIndex = Math.floor(Math.random() * totalSegments);
-                finalOutcome = outcomes[selectedIndex];
+// ======================================
+// VARIABLEN
+// ======================================
+
+const wheel = document.getElementById("wheel");
+const textLayer = document.getElementById("textLayer");
+const display = document.getElementById("resultDisplay");
+const input = document.getElementById("rigInput");
+const spinButton = document.getElementById("spinButton");
+
+let currentRotation = 0;
+let isSpinning = false;
+
+
+// ======================================
+// RAD AUFBAUEN
+// ======================================
+
+function buildWheel() {
+
+    const total = outcomes.length;
+    const degrees = 360 / total;
+
+    textLayer.innerHTML = "";
+
+    // Jedes Segment bekommt exakt den gleichen Winkel.
+    // Die Farbaufteilung stimmt mit der Segmentanzahl überein.
+
+    const gradientParts = [];
+
+    outcomes.forEach((text, i) => {
+
+        const start = i * degrees;
+        const end = (i + 1) * degrees;
+
+        const color = i % 2 === 0
+            ? "#8b0000"
+            : "#006400";
+
+        gradientParts.push(
+            `${color} ${start}deg ${end}deg`
+        );
+
+        // Beschriftung exakt in die Segmentmitte setzen.
+
+        const angle = start + degrees / 2 - 90;
+
+        const el = document.createElement("div");
+        el.className = "wheel-number";
+
+        const inner = document.createElement("div");
+        inner.className = "wheel-number-inner";
+        inner.textContent = text;
+
+        el.appendChild(inner);
+
+        el.style.transform =
+            `rotate(${angle}deg) translateX(170px)`;
+
+        textLayer.appendChild(el);
+
+    });
+
+    wheel.style.background =
+        `conic-gradient(from 0deg, ${gradientParts.join(",")})`;
+}
+
+
+// ======================================
+// WUNSCHERGEBNIS PRÜFEN
+// ======================================
+
+function getDesiredOutcome() {
+
+    const value = input.value.trim();
+
+    if (!value) {
+        return null;
+    }
+
+    // Erlaubt beispielsweise 1:0, 2:1, 10:3.
+
+    if (!/^\d{1,2}:\d{1,2}$/.test(value)) {
+
+        alert("Bitte ein gültiges Ergebnis eingeben, z.B. 2:1.");
+
+        return false;
+    }
+
+    return value;
+}
+
+
+// ======================================
+// GLÜCKSRAD DREHEN
+// ======================================
+
+function spinWheel() {
+
+    if (isSpinning) return;
+
+    const desiredOutcome = getDesiredOutcome();
+
+    if (desiredOutcome === false) return;
+
+    isSpinning = true;
+    spinButton.disabled = true;
+
+    display.classList.remove("show");
+
+    let selectedIndex;
+
+    // ----------------------------------
+    // WUNSCHERGEBNIS AKTIV
+    // ----------------------------------
+
+    if (desiredOutcome !== null) {
+
+        // Prüfen, ob das Ergebnis schon existiert.
+
+        let matchingIndices = [];
+
+        outcomes.forEach((value, index) => {
+
+            if (value === desiredOutcome) {
+                matchingIndices.push(index);
             }
 
-            // DER UNUMSTÖSSLICHE 12-UHR-CALIBRATOR:
-            // Wir kompensieren den mathematischen 270-Grad-Versatz des Browsers und korrigieren 
-            // den verbleibenden Feldoffset um exakt +20 Grad (4 Felder), damit das Rad absolut
-            // fehlerfrei, perfekt mittig auf dem korrekten Segment einrastet!
-            let fieldCenterAngle = (selectedIndex * degreesPerSegment) + (degreesPerSegment / 2);
-            let targetDegree = (360 - fieldCenterAngle + 290) % 360;
-            
-            const extraSpins = 2160; 
-            currentRotation += extraSpins + (targetDegree - (currentRotation % 360));
-            
-            const wheel = document.getElementById('wheel');
-            wheel.style.transform = 'rotate(' + currentRotation + 'deg)';
+        });
 
-            setTimeout(function() {
-                display.innerText = finalOutcome;
-                display.classList.add('show');
-                isSpinning = false;
-            }, 5000);
+        // Wenn nicht vorhanden, neues Segment hinzufügen.
+
+        if (matchingIndices.length === 0) {
+
+            outcomes.push(desiredOutcome);
+
+            buildWheel();
+
+            selectedIndex = outcomes.length - 1;
+
+        } else {
+
+            // Bei mehrfach vorhandenen Ergebnissen
+            // wird ein passendes Feld ausgewählt.
+
+            selectedIndex = matchingIndices[
+                Math.floor(Math.random() * matchingIndices.length)
+            ];
+
         }
-    </script>
+
+    }
+
+    // ----------------------------------
+    // ZUFALLSERGEBNIS
+    // ----------------------------------
+
+    else {
+
+        selectedIndex = Math.floor(
+            Math.random() * outcomes.length
+        );
+
+    }
+
+
+    // ==================================
+    // EXAKTE WINKELBERECHNUNG
+    // ==================================
+
+    const totalSegments = outcomes.length;
+
+    const degreesPerSegment = 360 / totalSegments;
+
+    // Mitte des ausgewählten Segments.
+    // CSS conic-gradient beginnt oben bei 0 Grad.
+
+    const fieldCenterAngle =
+        (selectedIndex + 0.5) * degreesPerSegment;
+
+    // Zielposition: Segmentmitte exakt unter dem Pfeil.
+
+    const targetAngle =
+        (360 - fieldCenterAngle + 360) % 360;
+
+    // Aktuelle Position berücksichtigen.
+
+    const currentAngle =
+        ((currentRotation % 360) + 360) % 360;
+
+    let rotationDifference =
+        (targetAngle - currentAngle + 360) % 360;
+
+    // Mehrere volle Umdrehungen.
+
+    const extraSpins = 6 * 360;
+
+    currentRotation += extraSpins + rotationDifference;
+
+
+    // ==================================
+    // RAD STARTEN
+    // ==================================
+
+    wheel.style.transform =
+        `rotate(${currentRotation}deg)`;
+
+
+    // ==================================
+    // ERGEBNIS ANZEIGEN
+    // ==================================
+
+    const finalOutcome = outcomes[selectedIndex];
+
+    setTimeout(() => {
+
+        // Anzeige bekommt exakt den Wert
+        // des ausgewählten Radsegments.
+
+        display.textContent = finalOutcome;
+
+        display.classList.add("show");
+
+        isSpinning = false;
+        spinButton.disabled = false;
+
+    }, 5100);
+
+}
+
+
+// ======================================
+// ENTER-TASTE
+// ======================================
+
+input.addEventListener("keydown", function(event) {
+
+    if (event.key === "Enter") {
+        spinWheel();
+    }
+
+});
+
+
+// ======================================
+// INITIALISIERUNG
+// ======================================
+
+buildWheel();
+
+</script>
 
 </body>
 </html>
