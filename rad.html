@@ -8,7 +8,7 @@
         body {
             background-color: #0b0b0b;
             color: #fff;
-            font-family: 'Arial', sans-serif;
+            font-family: 'Arial Black', sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -35,7 +35,7 @@
             perspective: 1200px;
         }
 
-        /* Der edle goldene Stopper oben */
+        /* Goldener Zeiger oben */
         .pointer {
             position: absolute;
             top: -25px;
@@ -66,7 +66,6 @@
             border: 14px solid #d4af37;
         }
 
-        /* Dynamisch generierter Text-Behälter auf dem Rad */
         .text-layer {
             position: absolute;
             width: 100%;
@@ -75,17 +74,24 @@
             left: 0;
         }
 
+        /* Perfekte Ausrichtung: Von innen nach außen geschrieben */
         .segment-text {
             position: absolute;
-            width: 100%;
-            height: 100%;
-            text-align: center;
-            transform-origin: 50% 50%;
-            padding-top: 25px;
-            font-weight: bold;
+            width: 50%;
+            height: 30px;
+            top: calc(50% - 15px);
+            left: 50%;
+            transform-origin: left center;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 25px;
+            box-sizing: border-box;
+            font-weight: 900;
             font-size: 1.1rem;
             color: #fff;
-            text-shadow: 2px 2px 4px #000;
+            text-shadow: 2px 2px 4px #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
+            letter-spacing: 1px;
         }
 
         /* Das originale lila-weiße Wettpropheten Logo in der Mitte */
@@ -96,7 +102,7 @@
             transform: translate(-50%, -50%) translateZ(15px);
             width: 130px;
             height: 130px;
-            background: #fff;
+            background: #a040a0; /* Euer Lila als Ausfallschutz */
             border-radius: 50%;
             border: 6px solid #d4af37;
             box-shadow: 0 6px 20px rgba(0,0,0,0.6);
@@ -105,7 +111,7 @@
             justify-content: center;
             overflow: hidden;
             z-index: 5;
-            pointer-events: none; /* Verhindert, dass das Logo Klicks abfängt */
+            pointer-events: none;
         }
 
         .center-logo img {
@@ -146,16 +152,16 @@
         <div class="wheel" id="wheel">
             <div class="text-layer" id="textLayer"></div>
             <div class="center-logo">
-                <img src="https://github.com" alt="Wettpropheten Wappen">
+                <!-- Direkter, sicherer Import eures echten lila Wappens -->
+                <img src="https://githubusercontent.com" alt="Wettpropheten Wappen" onerror="this.style.display='none'">
             </div>
         </div>
     </div>
 
-    <!-- DER KNOPF IST JETZT DA -->
     <button class="spin-btn" onclick="spinWheel()">Rad Drehen</button>
 
     <script>
-        // Eure echten Fußball-Ergebnisse auf dem Rad (exakt 72 Segmente)
+        // Genau 72 exakt ausgerichtete Felder (jeweils genau 5 Grad breit)
         const outcomes = [
             "1:0", "2:1", "0:0", "1:1", "2:0", "3:1", "1:2", "0:1", "2:2", "1:3", "3:0", "0:2", "4:1", "1:4", "2:3", "3:2", "4:0", "0:3", "5:1", "1:5", "2:4", "4:2", "0:0", "1:1",
             "1:0", "2:1", "0:0", "1:1", "2:0", "3:1", "1:2", "0:1", "2:2", "1:3", "3:0", "0:2", "4:1", "1:4", "2:3", "3:2", "4:0", "0:3", "5:1", "1:5", "2:4", "4:2", "2:2", "3:3",
@@ -163,30 +169,31 @@
         ];
         
         const totalSegments = outcomes.length;
-        const degreesPerSegment = 360 / totalSegments;
+        const degreesPerSegment = 360 / totalSegments; // Exakt 5 Grad
         let currentRotation = 0;
         let riggedOutcome = null;
         let isSpinning = false;
 
-        // Generiert die Textsegmente auf dem Rad im Kreis
+        // Schreibt den Text sauber wie Speichen von der Mitte nach außen
         const textLayer = document.getElementById('textLayer');
         outcomes.forEach((text, i) => {
             const el = document.createElement('div');
             el.className = 'segment-text';
             el.innerText = text;
-            el.style.transform = `rotate(${i * degreesPerSegment}deg)`;
+            // Verschiebt den Text exakt in die Mitte des jeweiligen Farbstreifens (2.5 Grad Versatz)
+            el.style.transform = `rotate(${(i * degreesPerSegment) + 2.5}deg)`;
             textLayer.appendChild(el);
         });
 
-        // Geheime Steuerung: Klicke auf die Seite und drücke "S" auf der Tastatur
+        // Geheime Steuerung mit der "S"-Taste
         window.addEventListener('keydown', (e) => {
             if (e.key.toLowerCase() === 's') {
-                const target = prompt("Welches Ergebnis soll als nächstes erdreht werden? (z.B. 2:1)");
+                const target = prompt("Welches Ergebnis soll das Rad anzeigen? (z.B. 2:1)");
                 if (target && outcomes.includes(target.trim())) {
                     riggedOutcome = target.trim();
-                    alert("Rad manipuliert! Nächster Stopp: " + riggedOutcome);
+                    alert("Eingestellt! Nächster Stopp: " + riggedOutcome);
                 } else if (target) {
-                    alert("Dieses Ergebnis existiert nicht in der Liste!");
+                    alert("Dieses Ergebnis steht nicht auf dem Rad!");
                 }
             }
         });
@@ -199,10 +206,11 @@
 
             if (riggedOutcome) {
                 const targetIndex = outcomes.indexOf(riggedOutcome);
-                targetDegree = (360 - (targetIndex * degreesPerSegment)) % 360;
+                // Berechnet den Winkel so, dass die Speiche exakt oben unter dem Pfeil einrastet
+                targetDegree = (360 - (targetIndex * degreesPerSegment) - 2.5) % 360;
                 riggedOutcome = null;
             } else {
-                targetDegree = Math.floor(Math.random() * 360);
+                targetDegree = Math.floor(Math.random() * totalSegments) * degreesPerSegment;
             }
 
             const extraSpins = 2160;
