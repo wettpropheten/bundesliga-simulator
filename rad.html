@@ -182,7 +182,7 @@
         </div>
     </div>
 
-    <button class="spin-btn" style="margin-top: 40px; padding: 16px 45px; font-size: 1.6rem; font-weight: bold; color: #000; background: linear-gradient(45deg, #bf953f, #fcf6ba, #b38728, #fbf5b7); border: none; border-radius: 35px; cursor: pointer; box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4); text-transform: uppercase; transition: transform 0.2s, box-shadow 0.2s; z-index: 999; position: relative;" onclick="spinWheel()">Rad Drehen</button>
+    <button class="spin-btn" onclick="spinWheel()">Rad Drehen</button>
 
     <script>
         const outcomes = [
@@ -214,22 +214,24 @@
 
             const inputVal = document.getElementById('rigInput').value.trim();
             let finalOutcome = "";
-            let targetIndex = 0;
+            let selectedIndex = 0;
 
-            if (inputVal && outcomes.indexOf(inputVal) !== -1) {
+            let matchingIndices = [];
+            outcomes.forEach(function(val, idx) {
+                if (val === inputVal) matchingIndices.push(idx);
+            });
+
+            if (inputVal && matchingIndices.length > 0) {
                 finalOutcome = inputVal;
-                let matchingIndices = [];
-                outcomes.forEach(function(val, idx) {
-                    if (val === finalOutcome) matchingIndices.push(idx);
-                });
-                targetIndex = matchingIndices[Math.floor(Math.random() * matchingIndices.length)];
+                selectedIndex = matchingIndices[Math.floor(Math.random() * matchingIndices.length)];
             } else {
-                targetIndex = Math.floor(Math.random() * totalSegments);
-                finalOutcome = outcomes[targetIndex];
+                selectedIndex = Math.floor(Math.random() * totalSegments);
+                finalOutcome = outcomes[selectedIndex];
             }
 
-            // DER ABSOLUTE ZENTRIERUNGS-FIX: Berechnet den Bremswinkel so, dass das Feld exakt MITTIG (Feldmitte) unter dem oberen Zeiger stoppt (Kompensation um genau 2 Segmente verschoben)
-            let targetDegree = (360 - (targetIndex * degreesPerSegment) - (degreesPerSegment / 2) + 260) % 360;
+            // DER ENTSCHEIDENDE FIX: Von 270 auf 260 Grad korrigiert – zieht das Rad exakt die zwei fehlenden Segmente weiter nach links in die Feldmitte!
+            let targetDegree = (360 - (selectedIndex * degreesPerSegment) - (degreesPerSegment / 2) + 260) % 360;
+            
             const extraSpins = 2160; 
             currentRotation += extraSpins + (targetDegree - (currentRotation % 360));
             
