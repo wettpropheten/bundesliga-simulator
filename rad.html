@@ -16,6 +16,7 @@
             height: 100vh;
             margin: 0;
             overflow: hidden;
+            user-select: none;
         }
 
         h1 {
@@ -87,7 +88,7 @@
             text-shadow: 2px 2px 4px #000;
         }
 
-        /* Das Wettpropheten Logo in der Mitte */
+        /* Das originale lila-weiße Wettpropheten Logo in der Mitte */
         .center-logo {
             position: absolute;
             top: 50%;
@@ -104,12 +105,13 @@
             justify-content: center;
             overflow: hidden;
             z-index: 5;
+            pointer-events: none; /* Verhindert, dass das Logo Klicks abfängt */
         }
 
         .center-logo img {
-            width: 90%;
-            height: 90%;
-            object-fit: contain;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .spin-btn {
@@ -125,6 +127,7 @@
             box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
             text-transform: uppercase;
             transition: transform 0.2s, box-shadow 0.2s;
+            z-index: 20;
         }
 
         .spin-btn:hover {
@@ -142,7 +145,8 @@
         <div class="wheel" id="wheel">
             <div class="text-layer" id="textLayer"></div>
             <div class="center-logo">
-                <img src="https://githubusercontent.com" alt="WP Wappen" id="wpLogo">
+                <!-- Direkte Verknüpfung eures lila-weißen GitHub-Profilbildes -->
+                <img src="https://github.com" alt="Wettpropheten Wappen">
             </div>
         </div>
     </div>
@@ -150,7 +154,7 @@
     <button class="spin-btn" onclick="spinWheel()">Rad Drehen</button>
 
     <script>
-        // Eure echten Fußball-Ergebnisse auf dem Rad (exakt 72 Segmente passend zu eurem Bild)
+        // Eure echten Fußball-Ergebnisse auf dem Rad (exakt 72 Segmente)
         const outcomes = [
             "1:0", "2:1", "0:0", "1:1", "2:0", "3:1", "1:2", "0:1", "2:2", "1:3", "3:0", "0:2", "4:1", "1:4", "2:3", "3:2", "4:0", "0:3", "5:1", "1:5", "2:4", "4:2", "0:0", "1:1",
             "1:0", "2:1", "0:0", "1:1", "2:0", "3:1", "1:2", "0:1", "2:2", "1:3", "3:0", "0:2", "4:1", "1:4", "2:3", "3:2", "4:0", "0:3", "5:1", "1:5", "2:4", "4:2", "2:2", "3:3",
@@ -161,10 +165,7 @@
         const degreesPerSegment = 360 / totalSegments;
         let currentRotation = 0;
         let riggedOutcome = null;
-
-        // Versucht automatisch das Logo aus eurem Repository-Favicon zu laden
-        const repoLogoUrl = window.location.origin + window.location.pathname.replace('rad.html', '') + 'favicon.ico';
-        document.getElementById('wpLogo').src = repoLogoUrl;
+        let isSpinning = false;
 
         // Generiert die Textsegmente auf dem Rad im Kreis
         const textLayer = document.getElementById('textLayer');
@@ -190,6 +191,9 @@
         });
 
         function spinWheel() {
+            if (isSpinning) return; // Verhindert Mehrfachklicks während des Drehens
+            isSpinning = true;
+
             let targetDegree = 0;
 
             if (riggedOutcome) {
@@ -208,6 +212,11 @@
             
             const wheel = document.getElementById('wheel');
             wheel.style.transform = `rotate(${currentRotation}deg)`;
+
+            // Setzt den Klick-Schutz nach 5 Sekunden (Dauer der Animation) wieder zurück
+            setTimeout(() => {
+                isSpinning = false;
+            }, 5000);
         }
     </script>
 
