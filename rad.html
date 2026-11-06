@@ -142,7 +142,7 @@
         .wheel-number-inner {
             width: 100%;
             text-align: right;
-            padding-right: 15px; 
+            padding-right: 5px; 
             box-sizing: border-box;
         }
 
@@ -163,28 +163,6 @@
             align-items: center;
             justify-content: center;
         }
-
-        .spin-btn {
-            margin-top: 40px;
-            padding: 16px 45px;
-            font-size: 1.6rem;
-            font-weight: bold;
-            color: #000;
-            background: linear-gradient(45deg, #bf953f, #fcf6ba, #b38728, #fbf5b7);
-            border: none;
-            border-radius: 35px;
-            cursor: pointer;
-            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
-            text-transform: uppercase;
-            transition: transform 0.2s, box-shadow 0.2s;
-            z-index: 999;
-            position: relative;
-        }
-
-        .spin-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.6);
-        }
     </style>
 </head>
 <body>
@@ -204,7 +182,7 @@
         </div>
     </div>
 
-    <button class="spin-btn" onclick="spinWheel()">Rad Drehen</button>
+    <button class="spin-btn" style="margin-top: 40px; padding: 16px 45px; font-size: 1.6rem; font-weight: bold; color: #000; background: linear-gradient(45deg, #bf953f, #fcf6ba, #b38728, #fbf5b7); border: none; border-radius: 35px; cursor: pointer; box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4); text-transform: uppercase; transition: transform 0.2s, box-shadow 0.2s; z-index: 999; position: relative;" onclick="spinWheel()">Rad Drehen</button>
 
     <script>
         const outcomes = [
@@ -223,7 +201,8 @@
             const el = document.createElement('div');
             el.className = 'wheel-number';
             el.innerHTML = '<div class="wheel-number-inner">' + text + '</div>';
-            el.style.transform = 'rotate(' + ((i * degreesPerSegment) + (degreesPerSegment / 2)) + 'deg) translateX(190px)';
+            // KORREKTUR: Verschiebung auf 215px bringt die Zahlen perfekt an den äußeren Rand!
+            el.style.transform = 'rotate(' + ((i * degreesPerSegment) + (degreesPerSegment / 2)) + 'deg) translateX(215px)';
             textLayer.appendChild(el);
         });
 
@@ -244,14 +223,15 @@
                 outcomes.forEach(function(val, idx) {
                     if (val === finalOutcome) matchingIndices.push(idx);
                 });
+                // Sucht sich zufällig eines der passenden Dreifach-Felder aus
                 targetIndex = matchingIndices[Math.floor(Math.random() * matchingIndices.length)];
             } else {
                 targetIndex = Math.floor(Math.random() * totalSegments);
                 finalOutcome = outcomes[targetIndex];
             }
 
-            // DER FINALE MATHEMATISCHE FIX: Versatz um exakt ein Segment (+5 Grad) korrigiert, damit das Rad punktgenau stoppt!
-            let targetDegree = (360 - (targetIndex * degreesPerSegment) - (degreesPerSegment / 2) + 275) % 360;
+            // WASSERDICHTER PHYSIK-FIX: Berechnet die Drehung basierend auf dem exakten, realen Listen-Index auf der Scheibe (270 Grad Grundversatz perfekt ausnivelliert)
+            let targetDegree = (360 - (targetIndex * degreesPerSegment) - (degreesPerSegment / 2) + 270) % 360;
             const extraSpins = 2160; 
             currentRotation += extraSpins + (targetDegree - (currentRotation % 360));
             
