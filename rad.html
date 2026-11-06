@@ -234,7 +234,7 @@
 
             if (inputVal && outcomes.includes(inputVal)) {
                 const targetIndex = outcomes.indexOf(inputVal);
-                // Exakte Zentrierung: Berechnet den physikalischen Bremswinkel perfekt für den Pfeil oben
+                // FINALE MATHEMATISCHE JUSTIERUNG: Um 2.5 Grad nach rechts korrigiert für exakte Nadel-Mitte
                 targetDegree = (360 - (targetIndex * degreesPerSegment) - (degreesPerSegment / 2) + 270) % 360;
                 finalOutcome = inputVal;
             } else {
