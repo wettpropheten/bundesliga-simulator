@@ -1,307 +1,25 @@
 
-<!DOCTYPE html>
-<html lang="de">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Das Wetti Rad Pro</title>
-
-<style>
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  min-height: 100vh;
-  background: #10131c;
-  color: white;
-  font-family: Arial, sans-serif;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 25px 12px;
-}
-
-.container {
-  width: 100%;
-  max-width: 760px;
-  text-align: center;
-}
-
-h1 {
-  font-size: 30px;
-  margin-bottom: 8px;
-}
-
-.subtitle {
-  color: #aeb6c8;
-  margin-bottom: 25px;
-}
-
-.input-area {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-bottom: 22px;
-}
-
-input {
-  width: 180px;
-  padding: 13px;
-  border-radius: 9px;
-  border: 1px solid #454d60;
-  background: #202636;
-  color: white;
-  font-size: 18px;
-  text-align: center;
-}
-
-button {
-  border: none;
-  border-radius: 9px;
-  padding: 13px 20px;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  color: white;
-  background: #e49b23;
-}
-
-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.sound-button {
-  background: #343e53;
-  margin-top: 12px;
-}
-
-.wheel-wrapper {
-  position: relative;
-  width: 598px;
-  height: 598px;
-  max-width: 100%;
-  margin: 0 auto;
-}
-
-.wheel {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  border: 12px solid #e9b84f;
-  box-shadow:
-    0 0 0 5px #754d16,
-    0 12px 35px rgba(0,0,0,.55);
-  overflow: hidden;
-  transition: transform 5s cubic-bezier(.1,.8,.1,1);
-}
-
-.text-layer {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-
-.wheel-label {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 95px;
-  margin-left: -47.5px;
-  margin-top: -13px;
-  transform-origin: center;
-  text-align: right;
-  font-size: 17px;
-  font-weight: bold;
-  text-shadow: 1px 2px 3px black;
-  white-space: nowrap;
-}
-
-.center-logo {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 143px;
-  height: 143px;
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-  background: radial-gradient(circle, #fff3c2, #d99a28 70%, #754d16);
-  border: 7px solid #fff0bd;
-  box-shadow: 0 4px 15px rgba(0,0,0,.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #39240a;
-  font-size: 21px;
-  font-weight: 900;
-  z-index: 5;
-}
-
-.pointer {
-  position: absolute;
-  z-index: 10;
-  top: -20px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 0;
-  height: 0;
-  border-left: 23px solid transparent;
-  border-right: 23px solid transparent;
-  border-top: 48px solid #ffdb68;
-  filter: drop-shadow(0 3px 4px black);
-}
-
-.controls {
-  margin-top: 28px;
-}
-
-.result {
-  margin-top: 22px;
-  font-size: 28px;
-  font-weight: bold;
-  color: #ffcf55;
-  min-height: 38px;
-}
-
-.info {
-  color: #aeb6c8;
-  font-size: 13px;
-  margin-top: 15px;
-}
-
-@media (max-width: 650px) {
-  .wheel-wrapper {
-    width: min(598px, 94vw);
-    height: min(598px, 94vw);
-  }
-
-  .wheel-label {
-    font-size: clamp(10px, 2.7vw, 17px);
-  }
-
-  .center-logo {
-    width: 24%;
-    height: 24%;
-    font-size: clamp(12px, 3.5vw, 21px);
-  }
-}
-</style>
-</head>
-
-<body>
-<div class="container">
-
-  <h1>🎯 Das Wetti Rad Pro</h1>
-  <div class="subtitle">Dreh das Rad und lass den Zufall entscheiden!</div>
-
-  <div class="input-area">
-    <input
-      id="rigInput"
-      type="text"
-      placeholder="Wunschtipp z. B. 2:1"
-      maxlength="5"
-    >
-    <button id="spinButton" onclick="spinWheel()">🎡 Drehen</button>
-  </div>
-
-  <div class="wheel-wrapper">
-    <div class="pointer"></div>
-    <div class="wheel" id="wheel">
-      <div class="text-layer" id="textLayer"></div>
-    </div>
-    <div class="center-logo">WETTI<br>RAD</div>
-  </div>
-
-  <div class="controls">
-    <button class="sound-button" id="soundButton" onclick="toggleSound()">
-      🔊 Sound: EIN
-    </button>
-  </div>
-
-  <div class="result" id="result">Bereit?</div>
-  <div class="info">Gib einen Wunschtipp ein oder lass das Rad zufällig entscheiden.</div>
-
-</div>
-
-<script>
-const initialOutcomes = [
-  "0:0", "1:0", "0:1", "1:1",
-  "2:0", "0:2", "2:1", "1:2",
-  "2:2", "3:0", "0:3", "3:1",
-  "1:3", "3:2", "2:3", "3:3",
-  "4:0", "0:4", "4:1", "1:4",
-  "4:2", "2:4", "4:3", "3:4",
-  "4:4", "5:0", "0:5", "5:1",
-  "1:5", "5:2", "2:5", "5:5"
-];
-
-let outcomes = [...initialOutcomes];
-let currentRotation = 0;
-let isSpinning = false;
-let soundEnabled = true;
-let audioCtx = null;
-let soundFrame = null;
+let audioCtx;
+let soundTimer;
+let soundFrame;
 let soundActive = false;
-
-const wheel = document.getElementById("wheel");
-const textLayer = document.getElementById("textLayer");
-const result = document.getElementById("result");
-const spinButton = document.getElementById("spinButton");
-const soundButton = document.getElementById("soundButton");
-
-const colors = [
-  "#c83e45", "#263d70", "#e7a52e", "#237b67",
-  "#7545a5", "#b64c31", "#315f9c", "#a17b24"
-];
-
-function buildWheel() {
-  const segmentAngle = 360 / outcomes.length;
-
-  const gradient = outcomes.map((_, i) => {
-    const start = i * segmentAngle;
-    const end = (i + 1) * segmentAngle;
-    return `${colors[i % colors.length]} ${start}deg ${end}deg`;
-  }).join(", ");
-
-  wheel.style.background = `conic-gradient(from 0deg, ${gradient})`;
-
-  textLayer.innerHTML = "";
-
-  outcomes.forEach((outcome, i) => {
-    const angle = i * segmentAngle + segmentAngle / 2 - 90;
-    const label = document.createElement("div");
-
-    label.className = "wheel-label";
-    label.textContent = outcome;
-    label.style.transform =
-      `rotate(${angle}deg) translateX(221px) rotate(90deg)`;
-
-    textLayer.appendChild(label);
-  });
-}
 
 function initAudio() {
   if (!audioCtx) {
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   }
-
   if (audioCtx.state === "suspended") {
     audioCtx.resume();
   }
 }
 
-// Mechanischer Doppelklick mit tiefem Anschlag und hellem Klick
+// Ein knackiges mechanisches Rad-Klicken
 function playClick(intensity = 1) {
   if (!audioCtx || !soundActive) return;
 
   const now = audioCtx.currentTime;
 
-  // Tiefer, kurzer Anschlag
+  // Tiefer, kurzer mechanischer Anschlag
   const body = audioCtx.createOscillator();
   const bodyGain = audioCtx.createGain();
 
@@ -310,9 +28,7 @@ function playClick(intensity = 1) {
   body.frequency.exponentialRampToValueAtTime(65, now + 0.045);
 
   bodyGain.gain.setValueAtTime(0.0001, now);
-  bodyGain.gain.exponentialRampToValueAtTime(
-    0.22 * intensity, now + 0.003
-  );
+  bodyGain.gain.exponentialRampToValueAtTime(0.22 * intensity, now + 0.003);
   bodyGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.055);
 
   body.connect(bodyGain);
@@ -321,7 +37,7 @@ function playClick(intensity = 1) {
   body.start(now);
   body.stop(now + 0.06);
 
-  // Heller mechanischer Klick
+  // Heller Klick für den typischen Glücksrad-Sound
   const click = audioCtx.createOscillator();
   const clickGain = audioCtx.createGain();
 
@@ -330,9 +46,7 @@ function playClick(intensity = 1) {
   click.frequency.exponentialRampToValueAtTime(420, now + 0.018);
 
   clickGain.gain.setValueAtTime(0.0001, now);
-  clickGain.gain.exponentialRampToValueAtTime(
-    0.12 * intensity, now + 0.002
-  );
+  clickGain.gain.exponentialRampToValueAtTime(0.12 * intensity, now + 0.002);
   clickGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.025);
 
   click.connect(clickGain);
@@ -343,20 +57,18 @@ function playClick(intensity = 1) {
 }
 
 function startWheelSound(duration = 5000) {
-  if (!soundEnabled) return;
-
   initAudio();
   soundActive = true;
 
   const start = performance.now();
-  let lastClick = start - 100;
+  let lastClick = 0;
 
   function tick(now) {
-    if (!soundActive || !soundEnabled) return;
+    if (!soundActive) return;
 
     const progress = Math.min((now - start) / duration, 1);
 
-    // Das Klackern wird beim Abbremsen langsamer
+    // Wird beim Abbremsen immer langsamer
     const interval = 55 + Math.pow(progress, 2.8) * 520;
 
     if (now - lastClick >= interval) {
@@ -368,10 +80,9 @@ function startWheelSound(duration = 5000) {
     if (progress < 1) {
       soundFrame = requestAnimationFrame(tick);
     } else {
+      // Satter Abschluss-Klick
       setTimeout(() => {
-        if (soundActive && soundEnabled) {
-          playClick(1.5);
-        }
+        if (soundActive) playClick(1.5);
       }, 100);
     }
   }
@@ -381,83 +92,5 @@ function startWheelSound(duration = 5000) {
 
 function stopWheelSound() {
   soundActive = false;
-
-  if (soundFrame) {
-    cancelAnimationFrame(soundFrame);
-    soundFrame = null;
-  }
+  if (soundFrame) cancelAnimationFrame(soundFrame);
 }
-
-function toggleSound() {
-  soundEnabled = !soundEnabled;
-
-  if (!soundEnabled) {
-    stopWheelSound();
-  }
-
-  soundButton.textContent = soundEnabled
-    ? "🔊 Sound: EIN"
-    : "🔇 Sound: AUS";
-
-  if (soundEnabled && audioCtx) {
-    initAudio();
-  }
-}
-
-function spinWheel() {
-  if (isSpinning) return;
-
-  let requested = document.getElementById("rigInput").value.trim();
-
-  if (requested && !/^\d{1,2}:\d{1,2}$/.test(requested)) {
-    result.textContent = "Bitte einen Tipp wie 2:1 eingeben!";
-    return;
-  }
-
-  let selectedIndex;
-
-  if (requested) {
-    selectedIndex = outcomes.indexOf(requested);
-
-    if (selectedIndex === -1) {
-      outcomes.push(requested);
-      buildWheel();
-      selectedIndex = outcomes.length - 1;
-    }
-  } else {
-    selectedIndex = Math.floor(Math.random() * outcomes.length);
-  }
-
-  isSpinning = true;
-  spinButton.disabled = true;
-  result.textContent = "Das Rad dreht sich ...";
-
-  const segmentAngle = 360 / outcomes.length;
-  const segmentCenter = selectedIndex * segmentAngle + segmentAngle / 2;
-
-  // Segmentmitte genau unter den oberen Zeiger drehen
-  const targetMod = (360 - segmentCenter) % 360;
-  const currentMod = ((currentRotation % 360) + 360) % 360;
-  const correction = (targetMod - currentMod + 360) % 360;
-
-  const extraTurns = 360 * 7;
-  currentRotation += extraTurns + correction;
-
-  wheel.style.transform = `rotate(${currentRotation}deg)`;
-
-  startWheelSound(5000);
-
-  setTimeout(() => {
-    stopWheelSound();
-
-    result.textContent = "🎉 Ergebnis: " + outcomes[selectedIndex];
-
-    isSpinning = false;
-    spinButton.disabled = false;
-  }, 5100);
-}
-
-buildWheel();
-</script>
-</body>
-</html>
