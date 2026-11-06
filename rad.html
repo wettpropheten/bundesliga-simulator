@@ -122,22 +122,26 @@
             z-index: 99;
         }
 
+        /* NEU: Die Zahlen stehen jetzt immer perfekt AUFRECHT wie bei einer Uhr */
         .wheel-number {
             position: absolute;
-            width: 50%;
+            width: 60px;
             height: 30px;
-            top: calc(50% - 15px);
-            left: 50%;
-            transform-origin: left center;
+            top: 30px; /* Perfekter Abstand vom äußeren Rand */
+            left: calc(50% - 30px);
+            transform-origin: 30px 245px; /* Exakter Drehpunkt im Zentrum des Rades */
             display: flex !important;
             align-items: center;
-            justify-content: flex-end;
-            padding-right: 25px;
-            box-sizing: border-box;
+            justify-content: center;
             font-weight: 900;
             font-size: 1.15rem;
             color: #ffffff !important;
             text-shadow: 2px 2px 0px #000, -1px -1px 0px #000, 1px -1px 0px #000, -1px 1px 0px #000;
+        }
+
+        /* Verhindert das Mitdrehen der einzelnen Textzeichen */
+        .wheel-number span {
+            display: inline-block;
         }
 
         .center-logo {
@@ -216,8 +220,12 @@
         outcomes.forEach((text, i) => {
             const el = document.createElement('div');
             el.className = 'wheel-number';
-            el.innerText = text;
-            el.style.transform = `rotate(${(i * degreesPerSegment) + (degreesPerSegment / 2)}deg)`;
+            
+            // Verpackt den Text in ein span, damit er im Kreis rotiert, aber die Buchstaben aufrecht lesbar bleiben
+            const angle = (i * degreesPerSegment) + (degreesPerSegment / 2);
+            el.innerHTML = `<span style="transform: rotate(${-angle}deg);">${text}</span>`;
+            el.style.transform = `rotate(${angle}deg)`;
+            
             textLayer.appendChild(el);
         });
 
@@ -232,7 +240,6 @@
             let finalOutcome = "";
             let targetIndex = 0;
 
-            // FIX: Erzwungene Überprüfung des Eingabefeldes vor der Drehung
             if (inputVal && outcomes.includes(inputVal)) {
                 finalOutcome = inputVal;
                 
@@ -241,15 +248,14 @@
                     if (val === finalOutcome) matchingIndices.push(idx);
                 });
                 
-                // Wählt eines der exakten Wunschfelder aus
                 targetIndex = matchingIndices[Math.floor(Math.random() * matchingIndices.length)];
             } else {
                 targetIndex = Math.floor(Math.random() * totalSegments);
                 finalOutcome = outcomes[targetIndex];
             }
 
-            // Der Rotationswinkel wird jetzt absolut bindend an das ausgewählte Wunsch-Feld gekoppelt
-            let targetDegree = (360 - (targetIndex * degreesPerSegment) + 270) % 360;
+            // Exakter mathematischer Stopp-Winkel für die aufrechte Ziffern-Ausrichtung oben am Pfeil
+            let targetDegree = (360 - (targetIndex * degreesPerSegment) - (degreesPerSegment / 2)) % 360;
 
             const extraSpins = 2160; 
             currentRotation += extraSpins + (targetDegree - (currentRotation % 360));
