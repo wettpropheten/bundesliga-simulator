@@ -20,15 +20,15 @@
         }
 
         #resultDisplay {
-            font-size: 4.5rem;
+            font-size: 3.5rem;
             font-weight: 900;
             color: #000;
             background: linear-gradient(45deg, #bf953f, #fcf6ba, #b38728, #fbf5b7);
             border: 4px solid #fff;
-            padding: 5px 50px;
+            padding: 5px 40px;
             border-radius: 20px;
-            margin-bottom: 30px;
-            min-width: 180px;
+            margin-bottom: 15px;
+            min-width: 150px;
             text-align: center;
             box-shadow: 0 10px 30px rgba(0,0,0,0.9), 0 0 20px rgba(212, 175, 55, 0.6);
             transform: scale(0);
@@ -76,23 +76,25 @@
             outline: none;
         }
 
+        /* Kompakterer Behälter hält alles im sichtbaren Bereich */
         .wheel-container {
             position: relative;
-            width: 550px;
-            height: 550px;
+            width: 500px;
+            height: 500px;
             perspective: 1200px;
+            margin-bottom: 25px;
         }
 
         .pointer {
             position: absolute;
-            top: -25px;
+            top: -20px;
             left: 50%;
             transform: translateX(-50%);
             width: 0;
             height: 0;
-            border-left: 22px solid transparent;
-            border-right: 22px solid transparent;
-            border-top: 45px solid #d4af37;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-top: 40px solid #d4af37;
             z-index: 10;
             filter: drop-shadow(0px 5px 8px rgba(0,0,0,0.7));
         }
@@ -134,7 +136,7 @@
             justify-content: flex-end;
             box-sizing: border-box;
             font-weight: 900;
-            font-size: 1.15rem;
+            font-size: 1.1rem;
             color: #ffffff !important;
             text-shadow: 2px 2px 0px #000, -1px -1px 0px #000, 1px -1px 0px #000, -1px 1px 0px #000;
         }
@@ -151,8 +153,8 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%) translateZ(15px);
-            width: 135px;
-            height: 135px;
+            width: 120px;
+            height: 120px;
             background: linear-gradient(45deg, #bf953f, #fcf6ba, #b38728, #fbf5b7);
             border-radius: 50%;
             border: 6px solid #d4af37;
@@ -162,6 +164,27 @@
             display: flex;
             align-items: center;
             justify-content: center;
+        }
+
+        /* BOMBENSICHER VERANKERT: Der goldene Button bleibt im Sichtfeld */
+        .spin-btn {
+            padding: 14px 45px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #000;
+            background: linear-gradient(45deg, #bf953f, #fcf6ba, #b38728, #fbf5b7);
+            border: none;
+            border-radius: 35px;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+            text-transform: uppercase;
+            transition: transform 0.2s, box-shadow 0.2s;
+            z-index: 999;
+        }
+
+        .spin-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.6);
         }
     </style>
 </head>
@@ -201,7 +224,7 @@
             const el = document.createElement('div');
             el.className = 'wheel-number';
             el.innerHTML = '<div class="wheel-number-inner">' + text + '</div>';
-            el.style.transform = 'rotate(' + ((i * degreesPerSegment) + (degreesPerSegment / 2)) + 'deg) translateX(215px)';
+            el.style.transform = 'rotate(' + ((i * degreesPerSegment) + (degreesPerSegment / 2)) + 'deg) translateX(190px)';
             textLayer.appendChild(el);
         });
 
@@ -229,7 +252,7 @@
                 finalOutcome = outcomes[selectedIndex];
             }
 
-            // DER ENTSCHEIDENDE FIX: Von 270 auf 260 Grad korrigiert – zieht das Rad exakt die zwei fehlenden Segmente weiter nach links in die Feldmitte!
+            // Exakter 10-Grad-Spiegel-Fix integriert für die absolute Feldmitte unter der Nadel
             let targetDegree = (360 - (selectedIndex * degreesPerSegment) - (degreesPerSegment / 2) + 260) % 360;
             
             const extraSpins = 2160; 
