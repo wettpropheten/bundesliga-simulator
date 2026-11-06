@@ -31,13 +31,7 @@ body {
     font-size: 4.5rem;
     font-weight: 900;
     color: #000;
-    background: linear-gradient(
-        45deg,
-        #bf953f,
-        #fcf6ba,
-        #b38728,
-        #fbf5b7
-    );
+    background: linear-gradient(45deg,#bf953f,#fcf6ba,#b38728,#fbf5b7);
     border: 4px solid white;
     padding: 5px 50px;
     border-radius: 20px;
@@ -92,12 +86,12 @@ body {
     outline: none;
 }
 
-/* Glücksrad - 15 % GRÖSSER */
+/* GLÜCKSRAD - 30 % GRÖSSER */
 
 .wheel-container {
     position: relative;
-    width: 529px;
-    height: 529px;
+    width: 598px;
+    height: 598px;
     margin-bottom: 25px;
     flex-shrink: 0;
 }
@@ -125,7 +119,6 @@ body {
     box-shadow:
         0 20px 45px rgba(0,0,0,.9),
         inset 0 0 40px rgba(0,0,0,.8);
-
     transform: rotate(0deg);
     transition: transform 5s cubic-bezier(.1,.8,.1,1);
     z-index: 2;
@@ -148,17 +141,13 @@ body {
     height: 30px;
     top: calc(50% - 15px);
     left: calc(50% - 45px);
-
     transform-origin: center center;
-
     display: flex;
     align-items: center;
     justify-content: flex-end;
-
     font-weight: 900;
     font-size: 15px;
     color: white;
-
     text-shadow:
         2px 2px 0 black,
         -1px -1px 0 black,
@@ -179,17 +168,9 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%,-50%);
-    width: 127px;
-    height: 127px;
-
-    background: linear-gradient(
-        45deg,
-        #bf953f,
-        #fcf6ba,
-        #b38728,
-        #fbf5b7
-    );
-
+    width: 143px;
+    height: 143px;
+    background: linear-gradient(45deg,#bf953f,#fcf6ba,#b38728,#fbf5b7);
     border-radius: 50%;
     border: 6px solid #d4af37;
     box-shadow: 0 6px 20px rgba(0,0,0,.6);
@@ -204,23 +185,13 @@ body {
     font-size: 21px;
     font-weight: bold;
     color: black;
-
-    background: linear-gradient(
-        45deg,
-        #bf953f,
-        #fcf6ba,
-        #b38728,
-        #fbf5b7
-    );
-
+    background: linear-gradient(45deg,#bf953f,#fcf6ba,#b38728,#fbf5b7);
     border: none;
     border-radius: 35px;
     cursor: pointer;
-
     box-shadow:
         0 5px 15px rgba(212,175,55,.3),
         0 0 25px rgba(212,175,55,.2);
-
     text-transform: uppercase;
     transition: transform .2s;
     z-index: 999;
@@ -236,15 +207,15 @@ body {
     cursor: not-allowed;
 }
 
-/* Smartphone */
+/* Kleinere Bildschirme */
 
-@media (max-width: 600px) {
+@media (max-width: 650px) {
 
     .wheel-container {
         width: 92vw;
         height: 92vw;
-        max-width: 529px;
-        max-height: 529px;
+        max-width: 598px;
+        max-height: 598px;
     }
 
     #resultDisplay {
@@ -263,16 +234,23 @@ body {
         padding: 13px 40px;
     }
 }
+
+/* Bei niedriger Bildschirmhöhe etwas kompakter */
+
+@media (max-height: 850px) and (min-width: 651px) {
+    .wheel-container {
+        width: min(598px, 68vh);
+        height: min(598px, 68vh);
+    }
+}
+
 </style>
 </head>
 
 <body>
 
-<!-- Wunsch-Tipp -->
-
 <div class="admin-panel">
     <label for="rigInput">Wunsch-Tipp:</label>
-
     <input
         type="text"
         id="rigInput"
@@ -281,22 +259,15 @@ body {
     >
 </div>
 
-<!-- Ergebnisanzeige -->
-
 <div id="resultDisplay">X:X</div>
-
-<!-- Glücksrad -->
 
 <div class="wheel-container">
 
     <div class="pointer"></div>
 
     <div class="wheel" id="wheel">
-
         <div class="text-layer" id="textLayer"></div>
-
         <div class="center-logo"></div>
-
     </div>
 
 </div>
@@ -387,10 +358,10 @@ function buildWheel() {
 
         el.appendChild(inner);
 
-        // Zahlenposition um 15 % angepasst
+        // Zahlenposition für 30 % größere Radgröße
 
         el.style.transform =
-            `rotate(${angle}deg) translateX(196px)`;
+            `rotate(${angle}deg) translateX(221px)`;
 
         textLayer.appendChild(el);
 
@@ -414,9 +385,7 @@ function getDesiredOutcome() {
     }
 
     if (!/^\d{1,2}:\d{1,2}$/.test(value)) {
-
         alert("Bitte ein gültiges Ergebnis eingeben, z.B. 2:1.");
-
         return false;
     }
 
@@ -450,11 +419,9 @@ function spinWheel() {
         let matchingIndices = [];
 
         outcomes.forEach((value, index) => {
-
             if (value === desiredOutcome) {
                 matchingIndices.push(index);
             }
-
         });
 
         if (matchingIndices.length === 0) {
@@ -501,7 +468,7 @@ function spinWheel() {
     const currentAngle =
         ((currentRotation % 360) + 360) % 360;
 
-    let rotationDifference =
+    const rotationDifference =
         (targetAngle - currentAngle + 360) % 360;
 
     const extraSpins = 6 * 360;
@@ -522,7 +489,6 @@ function spinWheel() {
     setTimeout(() => {
 
         display.textContent = finalOutcome;
-
         display.classList.add("show");
 
         isSpinning = false;
@@ -538,11 +504,9 @@ function spinWheel() {
 // ======================================
 
 input.addEventListener("keydown", function(event) {
-
     if (event.key === "Enter") {
         spinWheel();
     }
-
 });
 
 
